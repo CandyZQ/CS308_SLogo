@@ -1,7 +1,7 @@
 SLOGO_QUESTIONS
 
 
-## Names
+## Names  
 Ryan Mecca (rm358), Cady Zhou (zz160), Ameer Syedibrahim (as877), Sarah Gregorich (seg47)
 
 1) When does parsing need to take place and what does it need to start properly?
