@@ -1,5 +1,9 @@
 SLOGO_QUESTIONS
 
+
+## Names
+Ryan Mecca (rm358), Cady Zhou (zz160), Ameer Syedibrahim (as877), Sarah Gregorich (seg47)
+
 1) When does parsing need to take place and what does it need to start properly?
 
 Parsing will take place after the user saves their program. At this point the program will go through the file created by the prgorammer and see what commands need to be executed and in what order. 

@@ -1,3 +1,7 @@
+
+## Names
+Ryan Mecca (rm358), Cady Zhou (zz160), Ameer Syedibrahim (as877), Sarah Gregorich (seg47)
+
 #### API 1: Backend External
 This APi will communicate between the model, or the back-end of the code, and the controller, or the middle of the code. The controller will call on the differnt classes or sub-classes in the back end in order to set the initial values, change these values every update call, and change values for each case that would warrent them changing. These will be accomplished through method such as getValue(), Update(), setCurrentValue(), getCurrentValue(), setNextValue(), getNextValue(), getNewValue(), and move(). If we had to guess, a lot of these classes will be abstracted from a parent class as each of the different model classes will need to run them. They will also probably all inherit from an inteface for them to be more generalized as well as run for many different types of parameters passed in. The controller sub-package will call on these methods in the classes of the back-end, which will change the values for them to be reported to the front-end.
 

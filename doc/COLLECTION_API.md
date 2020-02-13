@@ -1,4 +1,6 @@
 COLLECTION_API.md
+## Names
+Ryan Mecca (rm358), Cady Zhou (zz160), Ameer Syedibrahim (as877), Sarah Gregorich (seg47)
 
 ## Examining an existing API
 

@@ -1,5 +1,9 @@
 ## API Discovery
 
+## Names
+Ryan Mecca (rm358), Cady Zhou (zz160), Ameer Syedibrahim (as877), Sarah Gregorich (seg47)
+
+
 #### Method should not be part of the API (i.e., it should not be public)
 The update grid method that is in controller. any of the models probably should not be part of the API, or can be simplified to a single method in the controller that can call update for all of the update methods for the different models. This could lessen the number of public methods in the API.
 
