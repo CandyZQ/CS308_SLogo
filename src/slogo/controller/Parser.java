@@ -1,4 +1,4 @@
 package slogo.controller;
 
-public class Parser {
+public class Parser implements BackEndExternalAPI{
 }
