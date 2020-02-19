@@ -2,7 +2,7 @@ package slogo.view;
 
 import javafx.scene.Group;
 
-public class ColorRectangleViewable extends Viewable {
+public class LineViewable extends Viewable {
 
   @Override
   public Group createRootObject(Group root) {

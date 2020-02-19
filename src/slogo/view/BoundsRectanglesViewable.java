@@ -1,7 +1,17 @@
 package slogo.view;
 
 
-public class BoundsRectanglesViewable extends Viewable implements ViewInternalAPI {
+import javafx.scene.Group;
 
+public class BoundsRectanglesViewable extends Viewable {
 
+  @Override
+  public Group createRootObject(Group root) {
+    return null;
+  }
+
+  @Override
+  public Group editRoot(Group root) {
+    return null;
+  }
 }

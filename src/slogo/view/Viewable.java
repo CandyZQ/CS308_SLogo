@@ -1,5 +1,5 @@
 package slogo.view;
 
-public abstract class Viewable {
+public abstract class Viewable implements ViewInternalAPI {
 
 }
