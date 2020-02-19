@@ -1,6 +1,7 @@
 package slogo.model;
 
 import java.util.Random;
+import slogo.exceptions.InvalidArgumentException;
 
 /**
  * This class contains exclusively of static method that perform basic math and boolean operations.
@@ -80,7 +81,10 @@ public interface OperationsAPI {
    * @param max the upper bound of return value
    * @return a non-negative random value smaller than max
    */
-  static double random(double max) {
+  static double random(double max) throws InvalidArgumentException{
+    if (max < 0) {
+      throw new InvalidArgumentException("The argument should be non-negative!");
+    }
     Random rand = new Random();
     return rand.nextDouble() * max;
   }

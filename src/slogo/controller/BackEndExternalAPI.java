@@ -2,6 +2,10 @@ package slogo.controller;
 
 import java.util.Map;
 import java.util.Queue;
+import slogo.exceptions.CommandDoesNotExistException;
+import slogo.exceptions.InvalidArgumentException;
+import slogo.exceptions.LanguageIsNotSupportedException;
+import slogo.exceptions.WrongCommandFormatException;
 import slogo.model.MovingObjectProperties;
 
 /**
@@ -28,7 +32,7 @@ public interface BackEndExternalAPI {
    *
    * @param language the language user inputs will be in
    */
-  void setLanguage(String language) throws ;
+  void setLanguage(String language) throws LanguageIsNotSupportedException;
 
   /**
    * Accepts one command from user input and updates the backend states accordingly
@@ -36,5 +40,6 @@ public interface BackEndExternalAPI {
    * @param command the command that the user inputs
    * @return a {@code Queue} of {@code Map} that represents states of the backend
    */
-  Queue<Map<MovingObjectProperties, Double>> execute(String command);
+  Queue<Map<MovingObjectProperties, Double>> execute(String command)
+      throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException;
 }

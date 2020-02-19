@@ -5,5 +5,6 @@ public enum MovingObjectProperties {
   X,
   Y,
   HEADING,
-  VISIBILITY
+  VISIBILITY,
+  RETURN_VALUE
 }
