@@ -119,6 +119,7 @@ import java.util.Map;
 import java.util.Queue;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import slogo.controller.MovingObjectProperties;
 
 /**
  * The purpose of this interface is to communicate between the controller package and the view
@@ -252,7 +253,7 @@ import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 import slogo.exceptions.WrongCommandFormatException;
-import slogo.model.MovingObjectProperties;
+import slogo.controller.MovingObjectProperties;
 
 /**
  * This is the backend external API for the slogo project.
