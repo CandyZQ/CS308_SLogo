@@ -1,4 +1,4 @@
-package slogo.Model;
+package slogo.model;
 
 public enum MovingObjectProperties {
   ID,

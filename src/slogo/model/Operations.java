@@ -1,4 +1,4 @@
-package slogo.Model;
+package slogo.model;
 
 public class Operations {
 }

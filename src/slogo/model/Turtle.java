@@ -2,9 +2,7 @@
  * @author Sarah Gregorich, Cady Zhou
  */
 
-package slogo.Model;
-
-import java.util.Map;
+package slogo.model;
 
 public class Turtle implements MovingObject{
     private static TurtleState myState;

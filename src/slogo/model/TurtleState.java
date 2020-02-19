@@ -2,7 +2,7 @@
  * @author Sarah Gregorich, Cady Zhou
  */
 
-package slogo.Model;
+package slogo.model;
 
 public class TurtleState {
 

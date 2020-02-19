@@ -1,9 +1,12 @@
-package slogo.Controller;
+package slogo.controller;
 
 import java.util.Map;
 import java.util.Queue;
+import slogo.model.MovingObjectProperties;
 
 /**
+ * This is the backend external API for the slogo project.
+ * <p></p>
  * This class takes user inputs in a specific language as a String and interpret it as one of the
  * pre-set commands, which give specific instructions of on how the backend states need to be
  * updated. This class then correspondingly updates backend states, and returns the current state
@@ -25,7 +28,7 @@ public interface BackEndExternalAPI {
    *
    * @param language the language user inputs will be in
    */
-  void setLanguage(String language);
+  void setLanguage(String language) throws ;
 
   /**
    * Accepts one command from user input and updates the backend states accordingly
@@ -33,5 +36,5 @@ public interface BackEndExternalAPI {
    * @param command the command that the user inputs
    * @return a {@code Queue} of {@code Map} that represents states of the backend
    */
-  Queue<Map> execute(String command);
+  Queue<Map<MovingObjectProperties, Double>> execute(String command);
 }
