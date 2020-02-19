@@ -1,5 +1,4 @@
 package slogo.view;
-
 import javafx.scene.Group;
 
 public class ButtonViewObjects extends ViewObjects {
