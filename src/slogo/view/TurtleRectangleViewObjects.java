@@ -2,7 +2,7 @@ package slogo.view;
 
 import javafx.scene.Group;
 
-public class TurtleRectangleViewable extends Viewable {
+public class TurtleRectangleViewObjects extends ViewObjects {
 
   @Override
   public Group createRootObject(Group root) {
@@ -11,6 +11,11 @@ public class TurtleRectangleViewable extends Viewable {
 
   @Override
   public Group editRoot(Group root) {
+    return null;
+  }
+
+  @Override
+  public Group removeFromRoot(Group root) {
     return null;
   }
 }

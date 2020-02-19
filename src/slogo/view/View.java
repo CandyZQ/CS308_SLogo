@@ -13,4 +13,9 @@ public class View implements ViewInternalAPI {
   public Group editRoot(Group root) {
     return null;
   }
+
+  @Override
+  public Group removeFromRoot(Group root) {
+    return null;
+  }
 }

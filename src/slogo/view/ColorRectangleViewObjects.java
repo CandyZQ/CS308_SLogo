@@ -2,7 +2,7 @@ package slogo.view;
 
 import javafx.scene.Group;
 
-public class InputTextFieldViewable extends Viewable {
+public class ColorRectangleViewObjects extends ViewObjects {
 
   @Override
   public Group createRootObject(Group root) {
@@ -11,6 +11,11 @@ public class InputTextFieldViewable extends Viewable {
 
   @Override
   public Group editRoot(Group root) {
+    return null;
+  }
+
+  @Override
+  public Group removeFromRoot(Group root) {
     return null;
   }
 }

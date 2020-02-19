@@ -1,8 +1,9 @@
 package slogo.view;
 
+
 import javafx.scene.Group;
 
-public class LineViewable extends Viewable {
+public class BoundsRectanglesViewObjects extends ViewObjects {
 
   @Override
   public Group createRootObject(Group root) {
@@ -11,6 +12,11 @@ public class LineViewable extends Viewable {
 
   @Override
   public Group editRoot(Group root) {
+    return null;
+  }
+
+  @Override
+  public Group removeFromRoot(Group root) {
     return null;
   }
 }
