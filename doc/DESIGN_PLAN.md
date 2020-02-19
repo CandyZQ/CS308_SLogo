@@ -3,12 +3,12 @@ DESIGN_PLAN.md
 # PARSER DESIGN PLAN
 #### Team Number: 15
 #### Team Members:
-Ryan Mecca (rm358)
-Cady Zhou (zz160)
-Sarah Gregorich (seg47)
-Ameer Syedibrahim (as877)
+Ryan Mecca (rm358)  
+Cady Zhou (zz160)  
+Sarah Gregorich (seg47)  
+Ameer Syedibrahim (as877)  
 
-## Introduction (cady (thx cady!))
+## Introduction 
 The goal of this project is to create a Java program that allows users to draw and learn programming with simple commands. This project should allow users to input known commands, and returns the desired result. User inputs can either be a command that makes a turtle move and draw on the white background, or a simple programming language (conditional statement, loop, math operation, variable assignment, etc). 
 
 We will use MVC structure as the architecure of this project. This design should be able to be expanded later so that more drawing/operation commands can be accepted.
@@ -17,7 +17,7 @@ We will use MVC structure as the architecure of this project. This design should
 - The controller gets commands from the view. Depending on the command's type, it can call different methods from the model to update the turtle's state, or execute the command as a programming language. 
 - The model saves the state of the turtle, updates it for each command, and passed it back to the controller. 
 
-## Overview (everyone)
+## Overview
 - Internal Backend API will be responsible communicate between the model and the view. It consists of public methods in Model, Turtle.java, which allows the controller to get and set the current status of the Turtle. The status information includes the turtle's x position, y position, angle in which it is heading, and visibility.
 ![Structure of backend](https://i.imgur.com/fL67uOT.png)
 
@@ -33,7 +33,7 @@ We will use MVC structure as the architecure of this project. This design should
 
 With regards to data structures, a Map was chose to hold the Turtle's state as opposed to passing a TurtleState object so that the front end is not required to handle classes implemented in the back end.
 
-## User Interface (ryan and ameer)
+## User Interface 
 
 ![Image of the proposed front end view](https://i.imgur.com/JmHdvK0.jpg)
 
@@ -84,8 +84,7 @@ Error checking
 * This window can then be closed, without the turtle performing the action, and the user can input another action.
 
 
-## Design Details (everyone)
-
+## Design Details 
 - Front End Internal:
     - As mentioned previously, the front-end internal API will contain all classes that communicate with one another in the front-end. 
     - The first class will control the color of the pen chosen. This class will allow the user to click a button and will corresponding set the marker to that color. It is intended to be used as only in the front-end and can be stored in a log for future use (potentially in complete)
@@ -109,7 +108,7 @@ Error checking
     - Controller.Parser.java accepts individual commands as strings from the frontend (View) via Controller.Parser.execute(String command). 
     - The frontend can also call Controller.Parser.setLanguage(String language) which will tell the controller which property files to look at in order to decode the input strings.
 
-## API as Code (everyone)
+## API as Code 
 
 #### Front End
 * External API
@@ -531,7 +530,7 @@ public interface Operations {
 ```
 
 
-## Design Considerations (cady and sarah)
+## Design Considerations
 - Extensibility: We are expecting to add more new commands for user to use in the future. As a result, the extensibility of the parser is very important. Our first desing was to use a large switch case to select the correct backend methods to execute for each command passed in. This design was very intuitive and easy to implement. However, this design would result in a very large method, especially when we added more commands in the future, and is thus not ideal. We then decide to use the Reflect API or Regular Expressions to solve this problem. 
 - Commands Passing: We also spent time discussing the format that commands should be in when passed from the frontend to the controller. Since the user can choose to write a script or execute commands interactively, it is possible that the view reads in more than one command at a time. In our design, the view will be responsible for separating multiple commands and passing them to the controller one by one in a loop. This design decision allows the UI to show an animation of the turtle's movement step by step. It also simplifies the controller's implementattion, and allows it to focus on parsing commands and update the model.
 - Currently our desgin uses a map to store and pass turtle's state information as a whole. An alternative we came up with was to create another class TurtleState.java to hold all necessary information. The pro of the original design was that it saved data in a class and made getting and setting states easier. However, this desing made the MVC structure vague at the same time. The view needed to access TurtleState, which was placed at the backend, to update UI. The pro of our current design solves this problem. Both the model and the view can access a map data structure. As a tradeoff, the operation of getting and setting states on both ends become less intuitive, and additional operations are needed to construct and decode the map. 
@@ -554,12 +553,11 @@ To change the language, the user selects an option from the DropDownViewable obj
     - Use Case #3: Set the background color
 To change the background color, wait for the user to pick a color with some type of an object that enables this functionality. Then, that corresponding portion of the stage will be filled the color that can be handled in t BoundsRectanglesView class. This class will merely set the color of the rectangle with a setColor method
     
-
     - Use Case #4: Pen down and pen up
 The user has the ability to chose whether the pen is placed down or up in the turtle field. A ButtonView object, when triggered with an onClick method will allow change the state of a boolean variable. This information will then be passed to the LineViewable class which will either enable the lines to be displayed or not.
     
  
-## Team Responsibilities (everyone)
+## Team Responsibilities 
 - Sarah: Backend 
     - Updating state of Turtle in Model
     - Creating methods for boolean and mathematical operators
