@@ -4,7 +4,9 @@
 
 package slogo.Model;
 
-public class Turtle {
+import java.util.Map;
+
+public class Turtle implements MovingObject{
     private static TurtleState myState;
     private static double myDistanceTravelled;
 
@@ -111,5 +113,4 @@ public class Turtle {
     public static double setHeading(double x, double y) {
 
     }
-
 }

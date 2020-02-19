@@ -15,14 +15,14 @@ import java.util.Map;
  *   <li>the visibility</li>
  * </ul>
  */
-public interface MovingObject<K> {
+public interface MovingObject {
 
   /**
    * Gets the distance this {@link MovingObject} travelled when the state changes
    *
    * @return the distance travelled
    */
-  K getDistanceTravelled();
+  double getDistanceTravelled();
 
 
   /**
@@ -32,7 +32,7 @@ public interface MovingObject<K> {
    *                 negative value moves it backward
    * @return the distance moved
    */
-  K moveDistance(K distance);
+  double moveDistance(double distance);
 
   /**
    * Sets the new heading of this object
@@ -41,7 +41,7 @@ public interface MovingObject<K> {
    *              from NORTH increases angle
    * @return the number of degree moved
    */
-  K setHeading(K angle);
+  double setHeading(double angle);
 
   /**
    * Sets the position of this object
@@ -50,7 +50,7 @@ public interface MovingObject<K> {
    * @param y the y position
    * @return the distance moved
    */
-  K setCoordinates(K x, K y);
+  double setCoordinates(double x, double y);
 
 
   /**
@@ -63,6 +63,5 @@ public interface MovingObject<K> {
    *
    * @return a {@link Map} containing all state information
    */
-  Map<MovingObjectProperties, K> getState();
-
+  Map<MovingObjectProperties, Double> getState();
 }
