@@ -1,9 +1,8 @@
 package slogo.view;
 
-
 import javafx.scene.Group;
 
-public class BoundsRectanglesViewObjects extends ViewObjects {
+public class LineObjectsViewable extends ObjectsViewable {
 
   @Override
   public Group createRootObject(Group root) {

@@ -2,7 +2,7 @@ package slogo.view;
 
 import javafx.scene.Group;
 
-public class InputTextFieldViewObjects extends ViewObjects {
+public class InputTextFieldObjectsViewable extends ObjectsViewable {
 
   @Override
   public Group createRootObject(Group root) {

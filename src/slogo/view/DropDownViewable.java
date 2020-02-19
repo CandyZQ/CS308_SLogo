@@ -2,7 +2,7 @@ package slogo.view;
 
 import javafx.scene.Group;
 
-public class DropDownViewable extends ViewObjects {
+public class DropDownViewable extends ObjectsViewable {
 
     @Override
     public Group createRootObject(Group root) {

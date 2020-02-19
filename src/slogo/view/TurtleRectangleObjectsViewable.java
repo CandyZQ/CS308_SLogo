@@ -2,7 +2,7 @@ package slogo.view;
 
 import javafx.scene.Group;
 
-public class View implements ViewInternalAPI {
+public class TurtleRectangleObjectsViewable extends ObjectsViewable {
 
   @Override
   public Group createRootObject(Group root) {

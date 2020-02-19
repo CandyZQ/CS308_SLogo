@@ -1,14 +1,14 @@
 package slogo.view;
 
-import javafx.scene.control.TextField;
-
 import java.util.Map;
+import java.util.Queue;
+import javafx.stage.Stage;
 
-public class CommandPrompt implements ViewExternalAPI {
+public class CommandPrompt implements ExternalAPIViewable {
 
 
   @Override
-  public Map<String, Integer> getFinalPosition() {
+  public Queue<Map<String, Integer>> getFinalInformation() {
     return null;
   }
 
@@ -20,5 +20,20 @@ public class CommandPrompt implements ViewExternalAPI {
   @Override
   public void exceptionHandling() throws Exception {
 
+  }
+
+  @Override
+  public Stage setScene() {
+    return null;
+  }
+
+  @Override
+  public void update() {
+
+  }
+
+  @Override
+  public String setLanguage() {
+    return null;
   }
 }

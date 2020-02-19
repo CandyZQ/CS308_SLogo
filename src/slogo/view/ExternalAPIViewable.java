@@ -1,6 +1,9 @@
 package slogo.view;
 
 import java.util.Map;
+import java.util.Queue;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * The purpose of this interface is to communicate between the controller package and the view
@@ -16,16 +19,16 @@ import java.util.Map;
  * view package and handled there where it will create an error window with the tag from the
  * exception displayed.
  */
-public interface ViewExternalAPI {
+public interface ExternalAPIViewable {
 
   /**
    * This will be called by the controller and the view to pass the information of the final
    * position of the object on screen to the view, which will then move the turtle.
    *
-   * @return A Map that stores the x position, y position, heading, and other information about the
-   * turtle
+   * @return A Queue of Maps that store the x position, y position, heading, and other information
+   * about the turtle
    */
-  Map<String, Integer> getFinalPosition();
+  Queue<Map<String, Integer>> getFinalInformation();
 
   /**
    * This method will give the string from the command line to the controller for error handing and
@@ -36,7 +39,7 @@ public interface ViewExternalAPI {
   String giveInputString();
 
   /**
-   * This method will handle the exception that is thrown by the controller if the input information
+   * This method will handle the exception that is caught by the controller if the input information
    * is bad.
    *
    * @throws Exception This is a general exception that is bound to change as the code takes shape,
@@ -44,4 +47,27 @@ public interface ViewExternalAPI {
    *                   as we write our own exception to use.
    */
   void exceptionHandling() throws Exception;
+
+  /**
+   * This method will be called by the controller to initialize and set the scene for the first time
+   * in the initial configuration.
+   *
+   * @return The Stage of the GUI
+   */
+  Stage setScene();
+
+  /**
+   * This method will be called in the loop to constantly update the front end of the code, whether
+   * or not a new command is passed. If a new command is passed, the scene will update and change,
+   * if no command is passed it will update and stay the same.
+   */
+  void update();
+
+  /**
+   * This command will be called constantly in the loop from the controller to always check what
+   * language the commands should be read in for error checking.
+   *
+   * @return The string of the language that was selected to identify the commands in.
+   */
+  String setLanguage();
 }

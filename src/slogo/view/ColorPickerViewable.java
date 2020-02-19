@@ -1,7 +1,8 @@
 package slogo.view;
+
 import javafx.scene.Group;
 
-public class ColorPickerViewable extends Viewable {
+public class ColorPickerViewable extends ObjectsViewable {
 
     @Override
     public Group createRootObject(Group root) {
@@ -10,6 +11,11 @@ public class ColorPickerViewable extends Viewable {
 
     @Override
     public Group editRoot(Group root) {
+        return null;
+    }
+
+    @Override
+    public Group removeFromRoot(Group root) {
         return null;
     }
 }

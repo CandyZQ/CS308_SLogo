@@ -2,7 +2,7 @@ package slogo.view;
 
 import javafx.scene.Group;
 
-public class HelpWindow extends ViewObjects {
+public class HelpWindow extends ObjectsViewable {
 
   @Override
   public Group createRootObject(Group root) {
