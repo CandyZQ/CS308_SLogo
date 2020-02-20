@@ -6,7 +6,6 @@ import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 import slogo.exceptions.WrongCommandFormatException;
-import slogo.model.MovingObjectProperties;
 
 /**
  * This is the backend external API for the slogo project.
