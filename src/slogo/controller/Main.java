@@ -5,7 +5,8 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import slogo.view.ViewManager;
+import slogo.view.ViewScreen;
+
 
 /**
  *
@@ -26,8 +27,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        ViewManager viewManager = new ViewManager(primaryStage);
-        controller = new Controller(viewManager);
+        ViewScreen viewScreen = new ViewScreen(primaryStage);
+        controller = new Controller(viewScreen);
         setTiming();
     }
 

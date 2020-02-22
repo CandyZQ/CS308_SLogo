@@ -1,12 +1,14 @@
 package slogo.view;
 
-import javafx.scene.Group;
+import java.awt.Button;
+import java.util.Map;
+import java.util.Queue;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
 import javafx.stage.Stage;
 
-public class ViewScreen {
+public class ViewScreen implements ExternalAPIViewable {
 
   private Stage stage;
   private Scene scene;
@@ -14,11 +16,32 @@ public class ViewScreen {
 
   public ViewScreen(Stage stage) {
     this.stage = stage;
-    //Will need to make this a border pane and use resource sheets
+    stage.setMaxHeight(ObjectsViewable.STAGE_HEIGHT);
+    stage.setMinHeight(ObjectsViewable.STAGE_HEIGHT);
+    stage.setMaxWidth(ObjectsViewable.STAGE_WIDTH);
+    stage.setMinWidth(ObjectsViewable.STAGE_WIDTH);
+    startView();
+    stage.show();
+  }
+
+  private void startView() {
     this.root = new BorderPane();
     addBoundsRectangle();
     addTextField();
+    addColorPicker();
     setAsScene(new Scene(root, ObjectsViewable.STAGE_WIDTH, ObjectsViewable.STAGE_HEIGHT));
+    stage.setScene(scene);
+
+  }
+
+  private void addButtons(){
+    ButtonObjectsViewable blah = new ButtonObjectsViewable();
+    blah.createRootObject(root);
+  }
+
+  private void addColorPicker() {
+    ColorPickerViewable cp = new ColorPickerViewable();
+    root = cp.createRootObject(root);
 
   }
 
@@ -38,7 +61,33 @@ public class ViewScreen {
   }
 
 
-  public Scene getScene() {
-    return scene;
+//  private Scene getScene() {
+//    return scene;
+//  }
+
+  @Override
+  public Queue<Map<String, Integer>> getFinalInformation() {
+    return null;
+  }
+
+  @Override
+  public String giveInputString() {
+    return null;
+  }
+
+  @Override
+  public void exceptionHandling() throws Exception {
+
+  }
+
+  @Override
+  public Stage setScene() {
+    return null;
+  }
+
+
+  @Override
+  public String setLanguage() {
+    return null;
   }
 }

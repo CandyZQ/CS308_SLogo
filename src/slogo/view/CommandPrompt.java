@@ -28,11 +28,6 @@ public class CommandPrompt implements ExternalAPIViewable {
   }
 
   @Override
-  public void update() {
-
-  }
-
-  @Override
   public String setLanguage() {
     return null;
   }

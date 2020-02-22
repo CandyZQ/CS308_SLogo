@@ -1,14 +1,16 @@
 package slogo.controller;
 
-import slogo.view.ViewManager;
+
+import slogo.view.ExternalAPIViewable;
+import slogo.view.ViewScreen;
 
 public class Controller {
 
-  private ViewManager viewManager;
+  private ViewScreen viewScreen;
   private long time;
 
-  public Controller(ViewManager viewManager) {
-    this.viewManager = viewManager;
+  public Controller(ViewScreen viewScreen) {
+    this.viewScreen = viewScreen;
     time = System.currentTimeMillis();
 
   }
@@ -16,6 +18,6 @@ public class Controller {
 
 
   public void update() {
-    ViewManager.update();
+    ExternalAPIViewable.update();
   }
 }

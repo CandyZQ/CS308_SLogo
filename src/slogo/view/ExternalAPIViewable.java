@@ -61,7 +61,7 @@ public interface ExternalAPIViewable {
    * or not a new command is passed. If a new command is passed, the scene will update and change,
    * if no command is passed it will update and stay the same.
    */
-  void update();
+  static void update() {}
 
   /**
    * This command will be called constantly in the loop from the controller to always check what
