@@ -9,6 +9,8 @@ import slogo.exceptions.InvalidArgumentException;
  */
 public interface Operations {
 
+  static final String NONNEGATIVE_ARG = "The argument should be non-negative!";
+
   /**
    * Adds two numbers together
    *
@@ -83,7 +85,7 @@ public interface Operations {
    */
   static double random(double max) throws InvalidArgumentException{
     if (max < 0) {
-      throw new InvalidArgumentException("The argument should be non-negative!");
+      throw new InvalidArgumentException(NONNEGATIVE_ARG);
     }
     Random rand = new Random();
     return rand.nextDouble() * max;
@@ -96,7 +98,7 @@ public interface Operations {
    * @return the result
    */
   static double sin(double degrees) {
-    return Math.sin(degrees);
+    return Math.sin(Math.toRadians(degrees));
   }
 
   /**
@@ -106,7 +108,7 @@ public interface Operations {
    * @return the result
    */
   static double cos(double degrees) {
-    return Math.cos(degrees);
+    return Math.cos(Math.toRadians(degrees));
   }
 
   /**
@@ -116,7 +118,7 @@ public interface Operations {
    * @return the result
    */
   static double tan(double degrees) {
-    return Math.tan(degrees);
+    return Math.tan(Math.toRadians(degrees));
   }
 
   /**
@@ -126,7 +128,7 @@ public interface Operations {
    * @return the result
    */
   static double atan(double degrees) {
-    return Math.atan(degrees);
+    return Math.atan(Math.toRadians(degrees));
   }
 
   /**
