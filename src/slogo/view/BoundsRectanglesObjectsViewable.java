@@ -4,10 +4,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.Group;
 
+import javafx.scene.layout.BorderPane;
+
 public class BoundsRectanglesObjectsViewable extends ObjectsViewable {
 
   @Override
-  public Group createRootObject(Group root) {
+  public BorderPane createRootObject(BorderPane root) {
     Rectangle boundsRect = new Rectangle();
     boundsRect.setY(STAGE_HEIGHT-(STAGE_HEIGHT - 50));
     boundsRect.setX(STAGE_WIDTH-(STAGE_WIDTH - 50));
@@ -19,12 +21,12 @@ public class BoundsRectanglesObjectsViewable extends ObjectsViewable {
   }
 
   @Override
-  public Group editRoot(Group root) {
+  public BorderPane editRoot(BorderPane root) {
     return null;
   }
 
   @Override
-  public Group removeFromRoot(Group root) {
+  public BorderPane removeFromRoot(BorderPane root) {
     return null;
   }
 }

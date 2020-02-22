@@ -2,7 +2,7 @@ package slogo.view;
 
 import javafx.scene.layout.BorderPane;
 
-public class TurtleRectangleObjectsViewable extends ObjectsViewable {
+public class Viewable implements InternalAPIViewable {
 
   @Override
   public BorderPane createRootObject(BorderPane root) {

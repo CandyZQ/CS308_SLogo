@@ -1,7 +1,7 @@
 package slogo.view;
 
 
-import javafx.scene.Group;
+import javafx.scene.layout.BorderPane;
 
 /**
  * This interface will work between the different classes of the front end of our code. Since this
@@ -22,7 +22,7 @@ public interface InternalAPIViewable {
    * @param root The root for the current scene that is on the stage of the sLogo program.
    * @return The same root that was passed in, just edited from the class to add the objects.
    */
-  Group createRootObject(Group root);
+  BorderPane createRootObject(BorderPane root);
 
   /**
    * This method will be called by the classes every time that something needs to be updated on the
@@ -33,7 +33,7 @@ public interface InternalAPIViewable {
    * @param root The root for the current scene that is on the stage of the sLogo program.
    * @return The same root that was passed in, just edited from the class to add the objects.
    */
-  Group editRoot(Group root);
+  BorderPane editRoot(BorderPane root);
 
   /**
    * This method will be called whenever an object needs to be removed from the scene. Probably will
@@ -42,6 +42,6 @@ public interface InternalAPIViewable {
    * @param root The root for the current scene that is on the stage of the sLogo program.
    * @return The same root that was passed in, just edited from the class to add the objects.
    */
-  Group removeFromRoot(Group root);
+  BorderPane removeFromRoot(BorderPane root);
 
 }
