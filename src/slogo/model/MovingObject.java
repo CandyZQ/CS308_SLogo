@@ -69,9 +69,10 @@ public interface MovingObject {
 
 
   /**
-   * Returns this object to the center of the screen and sets heading ot 0
+   * Moves this object to the center of the screen and sets heading ot 0
+   * @Return total distance travelled by object since instantiated TODO: did they mean distance to get back home??
    */
-  void reset();
+  double reset();
 
   /**
    * Gets all state information of this object as a {@link Map}

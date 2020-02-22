@@ -1,3 +1,7 @@
+/**
+ * @author Sarah Gregorich
+ */
+
 package slogo.test;
 
 import org.junit.Assert;

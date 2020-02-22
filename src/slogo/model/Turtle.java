@@ -1,5 +1,5 @@
 /**
- * @author Sarah Gregorich, Cady Zhou
+ * @author Sarah Gregorich
  */
 
 package slogo.model;
@@ -65,6 +65,7 @@ public class Turtle implements MovingObject {
         this.stateMap.put(MovingObjectProperties.X, x);
         this.stateMap.put(MovingObjectProperties.Y,y);
         updateDistanceTravelled(distance);
+        this.stateMap.put(MovingObjectProperties.RETURN_VALUE,distance);
         return distance;
     }
 
@@ -86,7 +87,9 @@ public class Turtle implements MovingObject {
             newHeading = getCoterminal(newHeading, MIN_ANGLE);
         }
         this.stateMap.put(MovingObjectProperties.HEADING,newHeading);
-        return getRotation(currentHeading, newHeading);
+        double rotation = getRotation(currentHeading, newHeading);
+        this.stateMap.put(MovingObjectProperties.RETURN_VALUE,rotation);
+        return rotation;
     }
 
     /**
@@ -110,6 +113,7 @@ public class Turtle implements MovingObject {
         double currentHeading = (double) this.stateMap.get(MovingObjectProperties.HEADING);
         double newHeading = currentHeading + offset;
         setHeading(newHeading);
+        this.stateMap.put(MovingObjectProperties.RETURN_VALUE,offset);
         return offset;
     }
 
@@ -132,6 +136,7 @@ public class Turtle implements MovingObject {
         this.stateMap.put(MovingObjectProperties.X,currentX+delta[0]);
         this.stateMap.put(MovingObjectProperties.Y,currentY+delta[1]);
         updateDistanceTravelled(distance);
+        this.stateMap.put(MovingObjectProperties.RETURN_VALUE,distance);
         return distance;
     }
 
@@ -139,10 +144,13 @@ public class Turtle implements MovingObject {
      * Returns this object to the center of the screen and sets heading ot 0
      */
     @Override
-    public void reset() { // Does not count this towards distance travelled
+    public double reset() { // Does not count this towards distance travelled
         this.stateMap.put(MovingObjectProperties.X, defaultStateMap.get(MovingObjectProperties.X));
         this.stateMap.put(MovingObjectProperties.Y, defaultStateMap.get(MovingObjectProperties.Y));
         this.stateMap.put(MovingObjectProperties.HEADING, defaultStateMap.get(MovingObjectProperties.HEADING));
+        // Returns distance turtle moved TODO: do they mean to get home? Or total distance for all time?
+        this.stateMap.put(MovingObjectProperties.RETURN_VALUE,myDistanceTravelled);
+        return myDistanceTravelled;
     }
 
     /**
