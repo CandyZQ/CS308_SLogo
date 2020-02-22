@@ -1,21 +1,21 @@
 package slogo.view;
 
-import javafx.scene.Group;
+import javafx.scene.layout.BorderPane;
 
 public class DropDownViewable extends ObjectsViewable {
 
     @Override
-    public Group createRootObject(Group root) {
+    public BorderPane createRootObject(BorderPane root) {
         return null;
     }
 
     @Override
-    public Group editRoot(Group root) {
+    public BorderPane editRoot(BorderPane root) {
         return null;
     }
 
     @Override
-    public Group removeFromRoot(Group root) {
+    public BorderPane removeFromRoot(BorderPane root) {
         return null;
     }
 }
