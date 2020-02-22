@@ -5,6 +5,7 @@
 package slogo.Model;
 
 public class Turtle {
+
     private static TurtleState myState;
     private static double myDistanceTravelled;
 
