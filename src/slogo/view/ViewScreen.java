@@ -1,6 +1,5 @@
 package slogo.view;
 
-import java.awt.Button;
 import java.util.Map;
 import java.util.Queue;
 import javafx.scene.Scene;
@@ -26,9 +25,9 @@ public class ViewScreen implements ExternalAPIViewable {
 
   private void startView() {
     this.root = new BorderPane();
-    addBoundsRectangle();
-    addTextField();
-    addColorPicker();
+    SubScene sc = new SubScene();
+    root.setRight(sc.getRoot());
+
     setAsScene(new Scene(root, ObjectsViewable.STAGE_WIDTH, ObjectsViewable.STAGE_HEIGHT));
     stage.setScene(scene);
 
