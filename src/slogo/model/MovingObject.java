@@ -19,12 +19,18 @@ import slogo.controller.MovingObjectProperties;
 public interface MovingObject {
 
   /**
+   * Rotates turtle by changing heading
+   * @param offset Positive offset is clockwise, negative offset is counterclockwise
+   * @return offset
+   */
+  double rotate(double offset);
+
+  /**
    * Gets the distance this {@link MovingObject} travelled when the state changes
    *
    * @return the distance travelled
    */
   double getDistanceTravelled();
-
 
   /**
    * Moves this object forward/backward certain distance
@@ -45,24 +51,33 @@ public interface MovingObject {
   double setHeading(double angle);
 
   /**
-   * Sets the position of this object
-   *
-   * @param x the x position
-   * @param y the y position
-   * @return the distance moved
+   * Updates Turtle heading to face (x,y)
+   * Does this by calculating angle then called public double setheading(double angle)
+   * @param (x,y) is point turtle has rotated to face.
+   * @return absolute value of number of degrees moved
    */
+  double setHeading(double x, double y);
+
+    /**
+     * Sets the position of this object
+     *
+     * @param x the x position
+     * @param y the y position
+     * @return the distance moved
+     */
   double setCoordinates(double x, double y);
 
 
   /**
-   * Returns this object to the center of the screen and sets heading ot 0
+   * Moves this object to the center of the screen and sets heading ot 0
+   * @Return total distance travelled by object since instantiated TODO: did they mean distance to get back home??
    */
-  void reset();
+  double reset();
 
   /**
    * Gets all state information of this object as a {@link Map}
    *
    * @return a {@link Map} containing all state information
    */
-  Map<MovingObjectProperties, Double> getState();
+  Map<MovingObjectProperties, Object> getState();
 }

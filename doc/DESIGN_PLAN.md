@@ -238,7 +238,7 @@ public interface ViewInternalAPI {
 #### Back End
 * External API
 ```java
-package slogo.Controller;
+package slogo.controller;
 
 /**
  * The purpose of this interface is to communicate between the controller package and the view
@@ -279,7 +279,7 @@ public interface ControllerExternalAPI {
 * Internal API
 
 ```java
-package slogo.Model;
+package slogo.model;
 
 /**
  * The purpose of this interface is to provide the Controller with the ability to
