@@ -9,24 +9,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
-/*
-View Manager will require these simple lines of code to create a textfield object
-
-*         InputTextFieldObjectsViewable textField = new InputTextFieldObjectsViewable();
-        BorderPane root = new BorderPane();
-        root = textField.createRootObject(root);
-        root = textField.editRoot(root);
-        Scene sc = new Scene(root, 800, 800);
-        s.setScene(sc);
-        s.show();
-        *
-        * */
 
 public class InputTextFieldObjectsViewable extends ObjectsViewable {
 
-  private String text;
   private TextField name;
-  private GridPane grid;
   public InputTextFieldObjectsViewable(){
 
   }
@@ -44,11 +30,11 @@ public class InputTextFieldObjectsViewable extends ObjectsViewable {
 
 
     name.getText();
-    root.setTop(name);
+    root.setRight(name);
     //root.getChildren().add(name);
 
     Label label = new Label();
-    root.setLeft(label);
+    root.setBottom(label);
     //root.getChildren().add(label);
 
 
