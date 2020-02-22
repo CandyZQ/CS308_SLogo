@@ -2,10 +2,9 @@
  * @author Sarah Gregorich, Cady Zhou
  */
 
-package slogo.Model;
+package slogo.model;
 
-public class Turtle {
-
+public class Turtle implements MovingObject {
     private static TurtleState myState;
     private static double myDistanceTravelled;
 
@@ -112,5 +111,4 @@ public class Turtle {
     public static double setHeading(double x, double y) {
 
     }
-
 }
