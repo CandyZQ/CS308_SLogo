@@ -144,6 +144,7 @@ public class Turtle implements MovingObject {
         }
         this.stateMap.put(MovingObjectProperties.X,currentX+deltaX);
         this.stateMap.put(MovingObjectProperties.Y,currentY+deltaY);
+        updateDistanceTravelled(distance);
         return distance;
     }
 
@@ -151,7 +152,7 @@ public class Turtle implements MovingObject {
      * Returns this object to the center of the screen and sets heading ot 0
      */
     @Override
-    public void reset() {
+    public void reset() { // Does not count this towards distance travelled
         this.stateMap.put(MovingObjectProperties.X, defaultStateMap.get(MovingObjectProperties.X));
         this.stateMap.put(MovingObjectProperties.Y, defaultStateMap.get(MovingObjectProperties.Y));
         this.stateMap.put(MovingObjectProperties.HEADING, defaultStateMap.get(MovingObjectProperties.HEADING));
