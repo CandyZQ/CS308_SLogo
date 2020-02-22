@@ -15,12 +15,18 @@ public class Turtle implements MovingObject {
     private Map<MovingObjectProperties, Object> defaultStateMap = Map.of(MovingObjectProperties.X, 0, MovingObjectProperties.Y, 0, MovingObjectProperties.HEADING, 0, MovingObjectProperties.VISIBILITY, true, MovingObjectProperties.PEN, true, MovingObjectProperties.RETURN_VALUE, -1);
     private double myDistanceTravelled;
 
-    private boolean RESTRICT_HEADING = true;
-        private double MIN_ANGLE = -360;
-        private double MAX_ANGLE = 360;
-        private double POS_ANGLE = 0;
-    private double INF_ANGLE = 1000000;
-    private String HEADING_TOO_LARGE = "New heading is too large";
+    private static final double UP_ANGLE = 90;
+    private static final double LEFT_ANGLE = 180;
+    private static final double DOWN_ANGLE = 270;
+    private static final double RIGHT_ANGLE = 360;
+
+    private static final boolean RESTRICT_HEADING = true;
+    private static final double MIN_ANGLE = -360;
+    private static final double MAX_ANGLE = 360;
+    private static final double POS_ANGLE = 0;
+
+    private static final double INF_ANGLE = 1000000;
+    private static final String HEADING_TOO_LARGE = "New heading is too large";
     // Default for calculating rotation is difference moving counterclockwise
 
     /**
@@ -122,28 +128,9 @@ public class Turtle implements MovingObject {
         double adjacent = hypotenuse*Math.cos(Math.toRadians(getCoterminal((double) this.stateMap.get(MovingObjectProperties.HEADING), POS_ANGLE)));
         double currentX = (double) this.stateMap.get(MovingObjectProperties.X);
         double currentY = (double) this.stateMap.get(MovingObjectProperties.Y);
-        double deltaX;
-        double deltaY;
-        if (currentHeading <= 90) {
-            deltaX = Math.abs(adjacent);
-            deltaY = Math.abs(opposite);
-        } else if (currentHeading > 90 && currentHeading <= 180) {
-            deltaX = - Math.abs(adjacent);
-            deltaY = Math.abs(opposite);
-        } else if (currentHeading > 180 && currentHeading < 270) {
-            deltaX = - Math.abs(adjacent);
-            deltaY = - Math.abs(opposite);
-        } else {
-            deltaX = Math.abs(adjacent);
-            deltaY = - Math.abs(opposite);
-        }
-        // Before setting, flip according to distance
-        if (distance < 0) {
-            deltaX = -deltaX;
-            deltaY = -deltaY;
-        }
-        this.stateMap.put(MovingObjectProperties.X,currentX+deltaX);
-        this.stateMap.put(MovingObjectProperties.Y,currentY+deltaY);
+        double[] delta = getDeltas(distance, currentHeading, opposite, adjacent);
+        this.stateMap.put(MovingObjectProperties.X,currentX+delta[0]);
+        this.stateMap.put(MovingObjectProperties.Y,currentY+delta[1]);
         updateDistanceTravelled(distance);
         return distance;
     }
@@ -203,19 +190,42 @@ public class Turtle implements MovingObject {
         double hypotenuse = findDistance(from_x,from_y,to_x,to_y);
         double opposite = to_y-from_y;
         double angle = Math.toDegrees(Math.asin(opposite/hypotenuse));
-        boolean x_pos = (to_x-from_x)>=0;
-        boolean angle_pos = angle >=0;
+        boolean x_pos = (to_x-from_x)>=POS_ANGLE;
+        boolean angle_pos = angle >=POS_ANGLE;
 
         if (angle_pos && !x_pos) {
-            return 180-angle;
+            return LEFT_ANGLE-angle;
         } else if (!angle_pos && !x_pos) {
-            return 270+angle;
+            return DOWN_ANGLE+angle;
         } else if (!angle_pos && x_pos) {
-            return 360+angle;
+            return RIGHT_ANGLE+angle;
         } else {
             return angle;
         }
 
+    }
+
+    private double[] getDeltas(double distance, double currentHeading, double opposite, double adjacent) {
+        double[] delta = {0,0};
+        if (currentHeading <= UP_ANGLE) {
+            delta[0] = Math.abs(adjacent);
+            delta[1] = Math.abs(opposite);
+        } else if (currentHeading > UP_ANGLE && currentHeading <= LEFT_ANGLE) {
+            delta[0] = - Math.abs(adjacent);
+            delta[1] = Math.abs(opposite);
+        } else if (currentHeading > LEFT_ANGLE && currentHeading < DOWN_ANGLE) {
+            delta[0] = - Math.abs(adjacent);
+            delta[1] = - Math.abs(opposite);
+        } else {
+            delta[0] = Math.abs(adjacent);
+            delta[1] = - Math.abs(opposite);
+        }
+        // Before setting, flip according to distance
+        if (distance < POS_ANGLE) {
+            delta[0] = -delta[0];
+            delta[1] = -delta[1];
+        }
+        return delta;
     }
 
 
