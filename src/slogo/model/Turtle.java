@@ -4,7 +4,7 @@
 
 package slogo.model;
 
-public class Turtle implements MovingObject{
+public class Turtle {
     private static TurtleState myState;
     private static double myDistanceTravelled;
 
@@ -73,42 +73,42 @@ public class Turtle implements MovingObject{
     public static double getDistanceTravelled() {
         return myDistanceTravelled;
     }
+//
+//    /**
+//     * Sets (x,y) coordinates of Turtle's current state.
+//     * Assumes grid center (0,0).
+//     * @Param x is new x-location of Turtle
+//     * @param y is new y-location of Turtle
+//     */
+//    public static void setCoordinates(double x, double y) {
+//        TurtleState.setCoordinates(x,y);
+//    }
+//
+//    /**
+//     * Sets ABSOLUTE heading of Turtle's current state in degrees.
+//     * Assumes north of (0,0) is 0 degrees.
+//     * Turning clockwise from NORTH increases angle such that:
+//     *      Heading EAST is 90 degrees.
+//     *      Heading WEST is 270 degrees.
+//     * ABSOLUTE - if current heading is 90 and new heading is 95, the total rotation is 5, not 95
+//     * @param angle is new angle heading of turtle
+//     * @return absolute value of number of degrees moved
+//     */
+//    public static double setHeading(double angle) {
+//        if (angle < 0 || angle > 360) {
+//            System.out.println("Angle out of bounds"); // TODO Exception handling for invalid inputs
+//        }
+//        TurtleState.setHeading(angle);
+//        return Math.abs(TurtleState.getHeading() - angle);
+//    }
 
-    /**
-     * Sets (x,y) coordinates of Turtle's current state.
-     * Assumes grid center (0,0).
-     * @Param x is new x-location of Turtle
-     * @param y is new y-location of Turtle
-     */
-    public static void setCoordinates(double x, double y) {
-        TurtleState.setCoordinates(x,y);
-    }
-
-    /**
-     * Sets ABSOLUTE heading of Turtle's current state in degrees.
-     * Assumes north of (0,0) is 0 degrees.
-     * Turning clockwise from NORTH increases angle such that:
-     *      Heading EAST is 90 degrees.
-     *      Heading WEST is 270 degrees.
-     * ABSOLUTE - if current heading is 90 and new heading is 95, the total rotation is 5, not 95
-     * @param angle is new angle heading of turtle
-     * @return absolute value of number of degrees moved
-     */
-    public static double setHeading(double angle) {
-        if (angle < 0 || angle > 360) {
-            System.out.println("Angle out of bounds"); // TODO Exception handling for invalid inputs
-        }
-        TurtleState.setHeading(angle);
-        return Math.abs(TurtleState.getHeading() - angle);
-    }
-
-    /**
-     * Updates Turtle heading to face (x,y)
-     * Does this by calculating angle then called public double setheading(double angle)
-     * @param (x,y) is point turtle has rotated to face.
-     * @return absolute value of number of degrees moved
-     */
-    public static double setHeading(double x, double y) {
-
-    }
+//    /**
+//     * Updates Turtle heading to face (x,y)
+//     * Does this by calculating angle then called public double setheading(double angle)
+//     * @param (x,y) is point turtle has rotated to face.
+//     * @return absolute value of number of degrees moved
+//     */
+//    public static double setHeading(double x, double y) {
+//
+//    }
 }
