@@ -12,7 +12,7 @@ import java.util.Map;
 public class Turtle implements MovingObject {
 
     private EnumMap<MovingObjectProperties, Object> stateMap = new EnumMap<>(MovingObjectProperties.class);
-    private Map<MovingObjectProperties, Object> defaultStateMap = Map.of(MovingObjectProperties.X, 0, MovingObjectProperties.Y, 0, MovingObjectProperties.HEADING, 0, MovingObjectProperties.VISIBILITY, true, MovingObjectProperties.PEN, true, MovingObjectProperties.RETURN_VALUE, -1);
+    private Map<MovingObjectProperties, Object> defaultStateMap = Map.of(MovingObjectProperties.X, 0.0D, MovingObjectProperties.Y, 0.0D, MovingObjectProperties.HEADING, 0.0D, MovingObjectProperties.VISIBILITY, true, MovingObjectProperties.PEN, true, MovingObjectProperties.RETURN_VALUE, 0.0D);
     private double myDistanceTravelled;
 
     private static final double UP_ANGLE = 90;
