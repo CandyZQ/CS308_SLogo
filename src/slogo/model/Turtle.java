@@ -4,73 +4,46 @@
 
 package slogo.model;
 
+import slogo.controller.MovingObjectProperties;
+
+import java.util.EnumMap;
+import java.util.Map;
+
 public class Turtle implements MovingObject {
-    private static TurtleState myState;
-    private static double myDistanceTravelled;
+
+    private EnumMap<MovingObjectProperties, Object> stateMap = new EnumMap<MovingObjectProperties, Object>(MovingObjectProperties.class);
+    private Map<MovingObjectProperties, Object> defaultStateMap = Map.of(MovingObjectProperties.X, 0, MovingObjectProperties.Y, 0, MovingObjectProperties.HEADING, 0, MovingObjectProperties.VISIBILITY, true, MovingObjectProperties.PEN, true, MovingObjectProperties.RETURN_VALUE, -1);
+    private double myDistanceTravelled;
+
+    private boolean RESTRICT_HEADING = true;
+        private double MIN_ANGLE = -360;
+        private double MAX_ANGLE = 360;
+        private double POS_ANGLE = 0;
+    private double INF_ANGLE = 1000000;
+    private String HEADING_TOO_LARGE = "New heading is too large";
+    // Default for calculating rotation is difference moving counterclockwise
 
     /**
      * Turtle.java is updated from Controller according to commands, and returns TurtleState object as needed for View to update display/track history.
      */
-    public Turtle() {
-        myState = new TurtleState();
+    public Turtle(Integer ID) {
         myDistanceTravelled = 0;
+        this.stateMap.put(MovingObjectProperties.ID, ID);
+        this.stateMap.put(MovingObjectProperties.X, defaultStateMap.get(MovingObjectProperties.X));
+        this.stateMap.put(MovingObjectProperties.Y, defaultStateMap.get(MovingObjectProperties.Y));
+        this.stateMap.put(MovingObjectProperties.HEADING, defaultStateMap.get(MovingObjectProperties.HEADING));
+        this.stateMap.put(MovingObjectProperties.VISIBILITY, defaultStateMap.get(MovingObjectProperties.VISIBILITY));
+        this.stateMap.put(MovingObjectProperties.PEN, defaultStateMap.get(MovingObjectProperties.PEN));
+        this.stateMap.put(MovingObjectProperties.RETURN_VALUE, defaultStateMap.get(MovingObjectProperties.RETURN_VALUE));
     }
 
     /**
-     * Returns x-coordinate of Turtle's current state as double value.
-     * Assumes (0,0) is center of grid.
-     * @return double value of x-coordinate
+     * Gets the distance this {@link MovingObject} travelled when the state changes
+     *
+     * @return the distance travelled
      */
-    public static double getX() {
-        return myState.getX();
-    }
-
-    /**
-     * Returns y-coordinate of Turtle's current state as double value.
-     * Assumes (0,0) is center of grid.
-     * @return double value of y-coordinate
-     */
-    public static double getY() {
-        return myState.getY();
-    }
-
-    /**
-     * Returns heading of Turtle's current state in degrees.
-     * Assumes north of (0,0) is 0 degrees.
-     * Turning clockwise from NORTH increases angle such that:
-     *      Heading EAST from north is 90 degrees.
-     *      Heading WEST from north is 270 degrees.
-     * @return double value of current heading in degrees
-     */
-    public static double getHeading() {
-        return myState.getHeading();
-    }
-
-    /**
-     * Returns pen status of Turtle's current state as boolean.
-     * Result is true if pen is down to write, false otherwise.
-     * @return boolean value indicating if pen is down to write.
-     */
-    public static boolean isPenDown() {
-        return myState.isPenDown();
-    }
-
-    /**
-     * Returns visibility of Turtle's current state as boolean.
-     * Result is true if turtle is currently visible, false otherwise.
-     * @return boolean value indicating if turtle is currently visible.
-     */
-    public static boolean isVisible() {
-        return myState.isVisible();
-    }
-
-    /**
-     * Returns total path length Turtle has travelled since Turtle created.
-     * This is not distance from starting point but rather path length:
-     *      i.e. if the Turtle went forward 50, back 50, this returns 100, not 0.
-     * @return double value of total path length Turtle has travelled.
-     */
-    public static double getDistanceTravelled() {
+    @Override
+    public double getDistanceTravelled() {
         return myDistanceTravelled;
     }
 
@@ -80,8 +53,13 @@ public class Turtle implements MovingObject {
      * @Param x is new x-location of Turtle
      * @param y is new y-location of Turtle
      */
-    public static void setCoordinates(double x, double y) {
-        TurtleState.setCoordinates(x,y);
+    @Override
+    public double setCoordinates(double x, double y) {
+        double distance = findDistance((double) stateMap.get(MovingObjectProperties.X), (double) stateMap.get(MovingObjectProperties.Y),x,y);
+        this.stateMap.put(MovingObjectProperties.X, x);
+        this.stateMap.put(MovingObjectProperties.Y,y);
+        updateDistanceTravelled(distance);
+        return distance;
     }
 
     /**
@@ -91,15 +69,18 @@ public class Turtle implements MovingObject {
      *      Heading EAST is 90 degrees.
      *      Heading WEST is 270 degrees.
      * ABSOLUTE - if current heading is 90 and new heading is 95, the total rotation is 5, not 95
-     * @param angle is new angle heading of turtle
-     * @return absolute value of number of degrees moved
+     * @param newHeading is new angle heading of turtle, may be passed as any value but as long as
+     *                  RESTRICTED_HEADING is true the value will be normalized to [0,360]
+     * @return absolute value of number of degrees moved, assume when heading set turtle always moves COUNTERCLOCKWISE
      */
-    public static double setHeading(double angle) {
-        if (angle < 0 || angle > 360) {
-            System.out.println("Angle out of bounds"); // TODO Exception handling for invalid inputs
+    @Override
+    public double setHeading(double newHeading) {
+        double currentHeading = (double) this.stateMap.get(MovingObjectProperties.HEADING);
+        if (RESTRICT_HEADING) {
+            newHeading = getCoterminal(newHeading, MIN_ANGLE);
         }
-        TurtleState.setHeading(angle);
-        return Math.abs(TurtleState.getHeading() - angle);
+        this.stateMap.put(MovingObjectProperties.HEADING,newHeading);
+        return getRotation(currentHeading, newHeading);
     }
 
     /**
@@ -108,7 +89,133 @@ public class Turtle implements MovingObject {
      * @param (x,y) is point turtle has rotated to face.
      * @return absolute value of number of degrees moved
      */
-    public static double setHeading(double x, double y) {
+    @Override
+    public double setHeading(double x, double y) {
+        return setHeading(findAngle(x,y));
+    }
+
+    /**
+     * Rotates turtle by changing heading
+     * @param offset Positive offset is clockwise, negative offset is counterclockwise
+     * @return offset
+     */
+    @Override
+    public double rotate(double offset) {
+        double currentHeading = (double) this.stateMap.get(MovingObjectProperties.HEADING);
+        double newHeading = currentHeading + offset;
+        setHeading(newHeading);
+        return offset;
+    }
+
+    /**
+     * Moves this object forward/backward certain distance
+     *
+     * @param distance the distance to be moved, positive value moves this object forward while
+     *                 negative value moves it backward
+     * @return the distance moved
+     */
+    @Override
+    public double moveDistance(double distance) {
+        double currentHeading = getCoterminal((double) this.stateMap.get(MovingObjectProperties.HEADING), POS_ANGLE);
+        double hypotenuse = Math.abs(distance);
+        double opposite = hypotenuse*Math.sin(Math.toRadians(getCoterminal((double) this.stateMap.get(MovingObjectProperties.HEADING), POS_ANGLE)));
+        double adjacent = hypotenuse*Math.cos(Math.toRadians(getCoterminal((double) this.stateMap.get(MovingObjectProperties.HEADING), POS_ANGLE)));
+        double currentX = (double) this.stateMap.get(MovingObjectProperties.X);
+        double currentY = (double) this.stateMap.get(MovingObjectProperties.Y);
+        double deltaX;
+        double deltaY;
+        if (currentHeading <= 90) {
+            deltaX = Math.abs(adjacent);
+            deltaY = Math.abs(opposite);
+        } else if (currentHeading > 90 && currentHeading <= 180) {
+            deltaX = - Math.abs(adjacent);
+            deltaY = Math.abs(opposite);
+        } else if (currentHeading > 180 && currentHeading < 270) {
+            deltaX = - Math.abs(adjacent);
+            deltaY = - Math.abs(opposite);
+        } else {
+            deltaX = Math.abs(adjacent);
+            deltaY = - Math.abs(opposite);
+        }
+        // Before setting, flip according to distance
+        if (distance < 0) {
+            deltaX = -deltaX;
+            deltaY = -deltaY;
+        }
+        this.stateMap.put(MovingObjectProperties.X,currentX+deltaX);
+        this.stateMap.put(MovingObjectProperties.Y,currentY+deltaY);
+        return distance;
+    }
+
+    /**
+     * Returns this object to the center of the screen and sets heading ot 0
+     */
+    @Override
+    public void reset() {
+        this.stateMap.put(MovingObjectProperties.X, defaultStateMap.get(MovingObjectProperties.X));
+        this.stateMap.put(MovingObjectProperties.Y, defaultStateMap.get(MovingObjectProperties.Y));
+        this.stateMap.put(MovingObjectProperties.HEADING, defaultStateMap.get(MovingObjectProperties.HEADING));
+    }
+
+    /**
+     * Gets all state information of this object as a {@link Map}
+     *
+     * @return a {@link Map} containing all state information
+     */
+    @Override
+    public EnumMap<MovingObjectProperties, Object> getState() {
+        return this.stateMap;
+    }
+
+
+    private void updateDistanceTravelled(double distance) {
+        myDistanceTravelled = myDistanceTravelled + distance;
+    }
+
+    private double findDistance(double x_start, double y_start, double x_end, double y_end) {
+        double root = (x_start-x_end)*(x_start-x_end) + (y_start-y_end)*(y_start-y_end);
+        return Math.sqrt(root);
+    }
+
+    private double getCoterminal(double angle, double lower_bound) {
+        if (Math.abs(angle) > INF_ANGLE) { // Avoid infinite loops, shouldn't need to set outside of 1M
+            throw new IllegalArgumentException(HEADING_TOO_LARGE);
+        }
+        while (angle < lower_bound) {
+            angle = angle + MAX_ANGLE;
+        }
+        while (angle > MAX_ANGLE) {
+            angle = angle - MAX_ANGLE;
+        }
+        return angle;
+    }
+
+    private double getRotation(double currentHeading, double newHeading) {
+        // Assumes movement is counterclockwise for setHeading()
+        return Math.abs(getCoterminal(currentHeading,POS_ANGLE)-getCoterminal(currentHeading,POS_ANGLE));
+    }
+
+    private double findAngle(double to_x, double to_y) {
+
+        double from_x = (double) this.stateMap.get(MovingObjectProperties.X);
+        double from_y = (double) this.stateMap.get(MovingObjectProperties.Y);
+        double hypotenuse = findDistance(from_x,from_y,to_x,to_y);
+        double opposite = to_y-from_y;
+        double angle = Math.toDegrees(Math.asin(opposite/hypotenuse));
+        boolean x_pos = (to_x-from_x)>=0;
+        boolean angle_pos = angle >=0;
+
+        if (angle_pos && !x_pos) {
+            return 180-angle;
+        } else if (!angle_pos && !x_pos) {
+            return 270+angle;
+        } else if (!angle_pos && x_pos) {
+            return 360+angle;
+        } else {
+            return angle;
+        }
 
     }
+
+
 }
