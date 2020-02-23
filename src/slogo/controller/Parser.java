@@ -4,10 +4,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
@@ -16,16 +22,19 @@ import slogo.model.Turtle;
 
 public class Parser implements BackEndExternalAPI {
 
+  public static final String RESOURCE_DIR = "resources/languages/";
+
   private List<Turtle> turtles;
   private List<Languages> supportedLanguages;
   private Languages currnetLan;
   private int turtleOperating = 0;
+  private Map<String, Pattern> commandMap;
 
   public Parser(Turtle... t) {
-    // TODO: potentially change to a list of turtles
     turtles = new ArrayList<Turtle>(Arrays.asList(t));
     supportedLanguages = Arrays.asList(Languages.values());
     currnetLan = null;
+    commandMap = new HashMap<>();
   }
 
   /**
@@ -40,6 +49,7 @@ public class Parser implements BackEndExternalAPI {
     for (Languages l : supportedLanguages) {
       if (l.name().toUpperCase().equals(language.toUpperCase())) {
         currnetLan = l;
+        setUpCommandMap();
         return;
       }
     }
@@ -47,34 +57,65 @@ public class Parser implements BackEndExternalAPI {
         "Input language " + language.toUpperCase() + " is not supported!");
   }
 
+  private void setUpCommandMap() {
+    var resources = ResourceBundle.getBundle(RESOURCE_DIR + currnetLan.name());
+    commandMap = new HashMap<>();
+    for (var key : Collections.list(resources.getKeys())) {
+      String regex = resources.getString(key);
+      commandMap.put(key, Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
+    }
+  }
+
   @Override
   public Queue<EnumMap<MovingObjectProperties, Object>> execute(String command)
       throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException {
-    String engCommand = command;
-    // TODO: lan conversion
-    List<String> commandList = separateCommand(engCommand);
+    String executable = convertUserInput(command);
+
+    List<String> commandList = separateCommand(executable);
     String commandName = commandList.get(0).toLowerCase();
     String[] parameters = commandList.subList(1, commandList.size()).toArray(new String[0]);
 
     Class<?> commandsClass = TurtleCommands.class;
     Method[] commands = commandsClass.getDeclaredMethods();
 
-    boolean hasMethod = false;
+    Method method = findMethod(commands, commandName);
+    checkCommandFormat(parameters, method);
+    callMethod(parameters, method);
+
+    return getTurtleStates();
+  }
+
+  private String convertUserInput(String command)
+      throws CommandDoesNotExistException, LanguageIsNotSupportedException {
+    if (commandMap == null || commandMap.size() == 0) {
+      throw new LanguageIsNotSupportedException(
+          "Cannot find any commands of the given language " + currnetLan.name() + ".");
+    }
+    for (String key : commandMap.keySet()) {
+      if (isMatch(command, commandMap.get(key))) {
+        return key;
+      }
+    }
+    throw new CommandDoesNotExistException(
+        "Cannot recognize command " + command + " for the given language.");
+  }
+
+  private boolean isMatch(String command, Pattern pattern) {
+    return pattern.matcher(command).matches();
+  }
+
+  private Method findMethod(Method[] commands, String commandName)
+      throws CommandDoesNotExistException {
     for (Method method : commands) {
       if (method.getName().toLowerCase().equals(commandName)) {
-        checkCommandFormat(parameters, method);
-        callMethod(parameters, method);
-        hasMethod = true;
-        break;
+        return method;
       }
     }
 
-    if (!hasMethod) {
-      throw new CommandDoesNotExistException(
-          "User input command \"" + commandList.get(0) + "\" is not defined!");
-    }
-    return getTurtleStates();
+    throw new CommandDoesNotExistException(
+        "User input command \"" + commandName + "\" is not defined!");
   }
+
 
   private void checkCommandFormat(String[] parameters, Method method)
       throws WrongCommandFormatException {
@@ -94,14 +135,10 @@ public class Parser implements BackEndExternalAPI {
     for (int i = 0; i < parameters.length; i++) {
       try {
         objects[i] = types[i].getConstructor(String.class).newInstance(parameters[i]);
-      } catch (InstantiationException e) {
-        e.printStackTrace();
-      } catch (IllegalAccessException e) {
-        e.printStackTrace();
-      } catch (InvocationTargetException e) {
-        e.printStackTrace();
-      } catch (NoSuchMethodException e) {
-        e.printStackTrace();
+      } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+        // TODO: can be more specific
+        throw new InvalidArgumentException(
+            "Exception occurred when converting argument type of method call. Check whether arguments are of the correct type!");
       }
     }
 
