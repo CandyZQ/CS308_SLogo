@@ -44,8 +44,8 @@ public interface MovingObject {
   /**
    * Sets the new heading of this object
    *
-   * @param angle the new heading, which assumes north of (0,0) is 0 degree and turning clockwise
-   *              from NORTH increases angle
+   * @param angle the new heading, which assumes EAST of (0,0) is 0 degree and turning counterclockwise
+   *              from EAST increases angle
    * @return the number of degree moved
    */
   double setHeading(double angle);
