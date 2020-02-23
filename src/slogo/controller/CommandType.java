@@ -1,10 +1,10 @@
 package slogo.controller;
 
 public enum CommandType {
-  BasicSyntax,
+//  BasicSyntax,
   TurtleCommands,
-  TurtleQueries,
+//  TurtleQueries,
   MathOperations,
-  BooleanOperations,
-  OtherCommands,
+//  BooleanOperations,
+//  OtherCommands,
 }

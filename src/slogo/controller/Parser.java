@@ -61,17 +61,7 @@ public class Parser implements BackEndExternalAPI {
     fillStack(command);
 
     while (!commandsLeft.empty()) {
-
-      while (current.needMoreParas()) {
-
-      }
-
-//    List<String> commandList = separateCommand(command);
-//    String commandName = commandsMapHelper.convertUserInput(commandList.get(0).toLowerCase());
-//    String[] parameters = commandList.subList(1, commandList.size()).toArray(new String[0]);
-
-      checkCommandFormat(parameters, method);
-      callMethod(parameters, method);
+      getNextCommand();
     }
     return getTurtleStates();
   }
@@ -83,25 +73,34 @@ public class Parser implements BackEndExternalAPI {
     }
   }
 
-  private String getNextCommand() throws CommandDoesNotExistException {
+  private String getNextCommand()
+      throws CommandDoesNotExistException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException {
     String commandName = commandsLeft.pop();
+    commandName = commandsMapHelper.convertUserInput(commandName);
     Pair<Class<?>, Method> pair = findClass(commandName);
     Class<?> c = pair.getKey();
     Method m = pair.getValue();
     CommandStructure current = new CommandStructure(c, m, getNumOfPara(m));
 
-    if (current.needMoreParas()) {
-      getNextPara();
+    while (current.needMoreParas()) {
+      String nextPara = getNextPara(current);
+      current.addPara(nextPara);
     }
+
+    return current.execute(turtles.get(turtleOperating)).toString();
   }
 
-  private String getNextPara(CommandStructure structure) throws WrongCommandFormatException {
+  private String getNextPara(CommandStructure structure)
+      throws WrongCommandFormatException, CommandDoesNotExistException, InvalidArgumentException, LanguageIsNotSupportedException {
     String next = commandsLeft.pop();
     Class<?> nextType = structure.getNextParaType();
+
+    // TODO: potentially add more types if necessary
     if (nextType.equals(Double.class) || nextType.equals(Integer.class)) {
       if (isNumeric(next)) {
         return next;
       }
+      commandsLeft.push(next);
       return getNextCommand();
     } else if (nextType.equals(String.class)) {
       return next;
@@ -131,7 +130,6 @@ public class Parser implements BackEndExternalAPI {
       } catch (ClassNotFoundException e) {
         System.out.println(
             "Internal Error: operation class name defined in CommandType but not implemented.");
-
       }
     }
 
@@ -152,35 +150,11 @@ public class Parser implements BackEndExternalAPI {
     return method.getParameterCount();
   }
 
-
-  private void callMethod(String[] parameters, Method method)
-      throws InvalidArgumentException {
-
-    // TODO: add other operations
-    try {
-      method.invoke(new TurtleCommands(turtles.get(turtleOperating)), objects);
-    } catch (IllegalArgumentException e) {
-      throw new InvalidArgumentException(e);
-    } catch (IllegalAccessException e) {
-      System.out.println("The method called is not accessible");
-    } catch (InvocationTargetException e) {
-      // TODO: do something?
-    }
-  }
-
-  private List<String> separateCommand(String command) {
-    return new ArrayList<>(Arrays.asList(command.split(" ")));
-  }
-
   private Queue<EnumMap<MovingObjectProperties, Object>> getTurtleStates() {
     Queue<EnumMap<MovingObjectProperties, Object>> turtleStates = new LinkedList<>();
     for (Turtle t : turtles) {
       turtleStates.add(t.getState());
     }
     return turtleStates;
-  }
-
-  public Object getReturnValue() {
-    return turtles.get(turtleOperating).getState().get(MovingObjectProperties.RETURN_VALUE);
   }
 }

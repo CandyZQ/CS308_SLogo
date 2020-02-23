@@ -68,5 +68,4 @@ class CommandsMapHelper {
   private boolean isMatch(String command, Pattern pattern) {
     return pattern.matcher(command).matches();
   }
-
 }

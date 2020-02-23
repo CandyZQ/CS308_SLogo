@@ -1,12 +1,15 @@
 package slogo.controller;
 
+import com.sun.security.jgss.GSSUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import slogo.controller.operations.TurtleCommands;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.WrongCommandFormatException;
+import slogo.model.Turtle;
 
 class CommandStructure {
 
@@ -19,6 +22,7 @@ class CommandStructure {
   public CommandStructure(Class<?> c, Method m, int numOfPara) {
     this.c = c;
     this.m = m;
+    paras = new ArrayList<>();
     initializeParaTypes();
     this.numOfPara = numOfPara;
   }
@@ -35,10 +39,10 @@ class CommandStructure {
   }
 
   boolean needMoreParas() {
-    return numOfPara == paras.size();
+    return numOfPara != paras.size();
   }
 
-  public void addPara(String s) throws InvalidArgumentException {
+  void addPara(String s) throws InvalidArgumentException {
     try {
       paras.add(getNextParaType().getConstructor(String.class).newInstance(s));
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -47,19 +51,27 @@ class CommandStructure {
     }
   }
 
-  public String getName() {
+  String getName() {
     return m.getName();
   }
 
-  private void checkCommandFormat(String[] parameters, Method method)
-      throws WrongCommandFormatException {
-    int actualParaNum = parameters.length;
-    int desireParaNum = method.getParameterCount();
-    if (actualParaNum != desireParaNum) {
+  Object execute(Turtle turtle)
+      throws InvalidArgumentException, WrongCommandFormatException {
+    if (needMoreParas()) {
       throw new WrongCommandFormatException(
-          "Expecting " + desireParaNum + " parameters, but found " + actualParaNum
-              + ".");
+          "Internal Error: Still need more parameters before executing");
     }
-  }
 
+    try {
+      m.invoke(new TurtleCommands(turtle), paras.toArray(new Object[0]));
+    } catch (IllegalArgumentException e) {
+      throw new InvalidArgumentException(e);
+    } catch (IllegalAccessException e) {
+      System.out.println("The method called is not accessible");
+    } catch (InvocationTargetException e) {
+      // TODO: do something?
+    }
+
+    return turtle.getState().get(MovingObjectProperties.RETURN_VALUE);
+  }
 }
