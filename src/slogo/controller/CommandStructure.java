@@ -62,16 +62,18 @@ class CommandStructure {
           "Internal Error: Still need more parameters before executing");
     }
 
+    Object res = null;
     try {
-      m.invoke(new TurtleCommands(turtle), paras.toArray(new Object[0]));
+      res = m.invoke(new TurtleCommands(turtle), paras.toArray(new Object[0]));
     } catch (IllegalArgumentException e) {
       throw new InvalidArgumentException(e);
     } catch (IllegalAccessException e) {
-      System.out.println("The method called is not accessible");
+      System.out.println("The method " + m.getName() + " called is not accessible");
     } catch (InvocationTargetException e) {
       // TODO: do something?
     }
 
-    return turtle.getState().get(MovingObjectProperties.RETURN_VALUE);
+
+    return res != null? res: turtle.getState().get(MovingObjectProperties.RETURN_VALUE);
   }
 }

@@ -95,9 +95,9 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("forward forward 50");
-      Assert.assertEquals(100D, q.peek().get(MovingObjectProperties.Y));
-      Assert.assertEquals(50D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
+      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("forward sum 25 50");
+      Assert.assertEquals(75D, q.peek().get(MovingObjectProperties.Y));
+      Assert.assertEquals(75D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
 
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
       e.printStackTrace();

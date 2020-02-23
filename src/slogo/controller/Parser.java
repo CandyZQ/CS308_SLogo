@@ -96,7 +96,7 @@ public class Parser implements BackEndExternalAPI {
     Class<?> nextType = structure.getNextParaType();
 
     // TODO: potentially add more types if necessary
-    if (nextType.equals(Double.class) || nextType.equals(Integer.class)) {
+    if (nextType.equals(Double.class) || nextType.equals(Integer.class) || nextType.equals(double.class) || nextType.equals(int.class)) {
       if (isNumeric(next)) {
         return next;
       }
@@ -105,7 +105,7 @@ public class Parser implements BackEndExternalAPI {
     } else if (nextType.equals(String.class)) {
       return next;
     } else {
-      throw new WrongCommandFormatException("Command " + structure.getName());
+      throw new WrongCommandFormatException("Command " + structure.getName() + " is not in the correct format!");
     }
   }
 
