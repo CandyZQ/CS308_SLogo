@@ -9,60 +9,41 @@ import javafx.stage.Stage;
 
 public class ViewScreen implements ExternalAPIViewable {
 
+  public static final int STAGE_HEIGHT = 800;
+  public static final int STAGE_WIDTH = 1000;
+  public static final String STAGE_TITLE = "SLOGO";
+
+  private static SubSceneLeft scLeft;
+  private static SubScene sc;
   private Stage stage;
   private Scene scene;
   private BorderPane root;
 
   public ViewScreen(Stage stage) {
     this.stage = stage;
-    stage.setMaxHeight(ObjectsViewable.STAGE_HEIGHT);
-    stage.setMinHeight(ObjectsViewable.STAGE_HEIGHT);
-    stage.setMaxWidth(ObjectsViewable.STAGE_WIDTH);
-    stage.setMinWidth(ObjectsViewable.STAGE_WIDTH);
+    stage.setMaxHeight(STAGE_HEIGHT);
+    stage.setMinHeight(STAGE_HEIGHT);
+    stage.setMaxWidth(STAGE_WIDTH);
+    stage.setMinWidth(STAGE_WIDTH);
     startView();
     stage.show();
   }
 
   private void startView() {
     this.root = new BorderPane();
-    SubScene sc = new SubScene();
-    root.setRight(sc.getRoot());
 
+    sc = new SubScene();
+    root.setRight(sc.getRoot());
+    scLeft = new SubSceneLeft();
+    root.setLeft(scLeft.getRoot());
     setAsScene(new Scene(root, ObjectsViewable.STAGE_WIDTH, ObjectsViewable.STAGE_HEIGHT));
     stage.setScene(scene);
-
-  }
-
-  private void addButtons(){
-    ButtonObjectsViewable blah = new ButtonObjectsViewable();
-    blah.createRootObject(root);
-  }
-
-  private void addColorPicker() {
-    ColorPickerViewable cp = new ColorPickerViewable();
-    root = cp.createRootObject(root);
-
+    stage.setTitle(STAGE_TITLE);
   }
 
   private void setAsScene(Scene scene) {
     this.scene = scene;
   }
-
-  private void addBoundsRectangle() {
-    BoundsRectanglesObjectsViewable rect = new BoundsRectanglesObjectsViewable();
-    root = rect.createRootObject(root);
-  }
-
-  private void addTextField() {
-    InputTextFieldObjectsViewable textField = new InputTextFieldObjectsViewable();
-    root = textField.createRootObject(root);
-    root = textField.editRoot(root);
-  }
-
-
-//  private Scene getScene() {
-//    return scene;
-//  }
 
   @Override
   public Queue<Map<String, Integer>> getFinalInformation() {
@@ -82,6 +63,12 @@ public class ViewScreen implements ExternalAPIViewable {
   @Override
   public Stage setScene() {
     return null;
+  }
+
+
+  public static void update() {
+    scLeft.setRectangleColor(sc.getClickedColor());
+
   }
 
 

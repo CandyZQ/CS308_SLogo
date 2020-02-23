@@ -18,6 +18,6 @@ public class Controller {
 
 
   public void update() {
-    ExternalAPIViewable.update();
+    ViewScreen.update();
   }
 }
