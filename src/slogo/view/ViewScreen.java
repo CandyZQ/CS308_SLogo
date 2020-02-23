@@ -71,9 +71,8 @@ public class ViewScreen implements ExternalAPIViewable {
 
   }
 
-
   @Override
   public String setLanguage() {
-    return null;
+    return sc.getLanguage().toString();
   }
 }

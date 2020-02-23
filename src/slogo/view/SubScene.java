@@ -2,7 +2,6 @@ package slogo.view;
 
 
 import javafx.collections.FXCollections;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -11,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -69,7 +67,7 @@ public class SubScene {
   private void createComboBox(Pane box) {
     String[] week_days =
         { "Chinese", "English", "French", "German", "Italian", "Portuguese", "Russian", "Spanish", "Syntax", "Urdu" };
-    ComboBox combo_box = new ComboBox(FXCollections.observableArrayList(week_days));
+    ComboBox<String> combo_box = new ComboBox<>(FXCollections.observableArrayList(week_days));
     box.getChildren().add(combo_box);
     combo_box.setOnAction(event ->  {
       language = combo_box.getValue();
@@ -111,23 +109,19 @@ public class SubScene {
 
 
     //Setting an action for the Submit button
-    root.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-      @Override
-      public void handle(KeyEvent ke) {
-        if(ke.getCode() == KeyCode.ENTER){
-          if ((name.getText() != null && !name.getText().isEmpty())) {
-            String the_text = name.getText();
-            textArea.setText(textArea.getText() + "\n" + the_text);
-            name.clear();
-            label.setText(null);
-            label.setText("Command successfully processed!");
-          } else {
-            label.setText("No command entered.");
-          }
+    root.setOnKeyPressed(ke -> {
+      if(ke.getCode() == KeyCode.ENTER){
+        if ((name.getText() != null && !name.getText().isEmpty())) {
+          String the_text = name.getText();
+          textArea.setText(textArea.getText() + "\n" + the_text);
+          name.clear();
+          label.setText(null);
+          label.setText("Command successfully processed!");
+        } else {
+          label.setText("No command entered.");
         }
-
       }
+
     });
   }
 
