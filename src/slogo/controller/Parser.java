@@ -1,11 +1,12 @@
 package slogo.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
@@ -15,19 +16,14 @@ import slogo.model.Turtle;
 
 public class Parser implements BackEndExternalAPI {
 
-  private Turtle turtle;
+  private List<Turtle> turtles;
   private List<Languages> supportedLanguages;
   private Languages currnetLan;
+  private int turtleOperating = 0;
 
-  // TODO: delete this
-  public Parser() {
-    supportedLanguages = Arrays.asList(Languages.values());
-    currnetLan = null;
-  }
-
-  public Parser(Turtle turtle) {
+  public Parser(Turtle... t) {
     // TODO: potentially change to a list of turtles
-    this.turtle = turtle;
+    turtles = new ArrayList<Turtle>(Arrays.asList(t));
     supportedLanguages = Arrays.asList(Languages.values());
     currnetLan = null;
   }
@@ -52,7 +48,7 @@ public class Parser implements BackEndExternalAPI {
   }
 
   @Override
-  public Queue<Map<MovingObjectProperties, Double>> execute(String command)
+  public Queue<EnumMap<MovingObjectProperties, Object>> execute(String command)
       throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException {
     String engCommand = command;
     // TODO: lan conversion
@@ -63,45 +59,73 @@ public class Parser implements BackEndExternalAPI {
     Class<?> commandsClass = TurtleCommands.class;
     Method[] commands = commandsClass.getMethods();
 
+    boolean hasMethod = false;
     for (Method method : commands) {
       if (method.getName().toLowerCase().equals(commandName)) {
-         checkCommandFormat(parameters, method);
-         callMethod(parameters, method);
-         break;
+        checkCommandFormat(parameters, method);
+        callMethod(parameters, method);
+        hasMethod = true;
+        break;
       }
     }
 
-    throw new CommandDoesNotExistException(
-        "User input command \"" + commandList.get(0) + "\" is not defined!");
+    if (!hasMethod) {
+      throw new CommandDoesNotExistException(
+          "User input command \"" + commandList.get(0) + "\" is not defined!");
+    }
+    return getTurtleStates();
   }
 
   private void checkCommandFormat(String[] parameters, Method method)
       throws WrongCommandFormatException {
-    int actualParaNum = parameters.length- 1;
+    int actualParaNum = parameters.length;
     int desireParaNum = method.getParameterCount();
     if (actualParaNum != desireParaNum) {
       throw new WrongCommandFormatException(
           "Expecting " + desireParaNum + " parameters, but found " + actualParaNum
-              + " .");
+              + ".");
     }
   }
 
-  private void callMethod(String[] parameters, Method method) {
+  private void callMethod(String[] parameters, Method method)
+      throws InvalidArgumentException {
     Object[] objects = new Object[parameters.length];
+    Class<?>[] types = method.getParameterTypes();
     for (int i = 0; i < parameters.length; i++) {
-      objects[i] = (Object) parameters[i];
+      try {
+        objects[i] = types[i].getConstructor(String.class).newInstance(parameters[i]);
+      } catch (InstantiationException e) {
+        e.printStackTrace();
+      } catch (IllegalAccessException e) {
+        e.printStackTrace();
+      } catch (InvocationTargetException e) {
+        e.printStackTrace();
+      } catch (NoSuchMethodException e) {
+        e.printStackTrace();
+      }
     }
-    method.invoke()
+
+    try {
+      method.invoke(new TurtleCommands(turtles.get(turtleOperating)), objects);
+    } catch (IllegalArgumentException e) {
+      throw new InvalidArgumentException(e);
+    } catch (IllegalAccessException e) {
+      System.out.println("The method called is not accessible");
+    } catch (InvocationTargetException e) {
+      // TODO: do something?
+    }
   }
-
-
 
   private List<String> separateCommand(String command) {
     return new ArrayList<>(Arrays.asList(command.split(" ")));
   }
 
-  public static void main(String[] args) throws LanguageIsNotSupportedException {
-    Parser parser = new Parser();
-    parser.setLanguage("FF");
+  // TODO: add this to API
+  private Queue<EnumMap<MovingObjectProperties, Object>> getTurtleStates() {
+    Queue<EnumMap<MovingObjectProperties, Object>> turtleStates = new LinkedList<>();
+    for (Turtle t : turtles) {
+      turtleStates.add(t.getState());
+    }
+    return turtleStates;
   }
 }

@@ -9,6 +9,8 @@ class TurtleCommands {
     this.turtle = turtle;
   }
 
-
+  public void forward(Integer pixels) {
+    turtle.moveDistance(pixels);
+  }
 
 }

@@ -1,5 +1,6 @@
 package slogo.controller;
 
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Queue;
 import slogo.exceptions.CommandDoesNotExistException;
@@ -39,6 +40,6 @@ public interface BackEndExternalAPI {
    * @param command the command that the user inputs
    * @return a {@code Queue} of {@code Map} that represents states of the backend
    */
-  Queue<Map<MovingObjectProperties, Double>> execute(String command)
+  Queue<EnumMap<MovingObjectProperties, Object>> execute(String command)
       throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException;
 }
