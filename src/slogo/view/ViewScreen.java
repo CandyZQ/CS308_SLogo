@@ -12,6 +12,7 @@ public class ViewScreen implements ExternalAPIViewable {
   public static final int STAGE_HEIGHT = 800;
   public static final int STAGE_WIDTH = 1000;
   public static final String STAGE_TITLE = "SLOGO";
+  public static final String STYLE_SHEET = "style.css";
 
   private static SubSceneLeft scLeft;
   private static SubScene sc;
@@ -39,6 +40,7 @@ public class ViewScreen implements ExternalAPIViewable {
     setAsScene(new Scene(root, ObjectsViewable.STAGE_WIDTH, ObjectsViewable.STAGE_HEIGHT));
     stage.setScene(scene);
     stage.setTitle(STAGE_TITLE);
+    scene.getStylesheets().add(STYLE_SHEET);
   }
 
   private void setAsScene(Scene scene) {

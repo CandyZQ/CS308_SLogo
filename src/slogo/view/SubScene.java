@@ -20,6 +20,19 @@ public class SubScene {
 
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
   public static final Color INITIAL_MARKER_COLOR = null;
+  private static final String SUCCESSFUL_COMMAND = "Command successfully processed!";
+  private static final String EMPTY_COMMAND = "No command entered.";
+  private static final String NEW_MARKER_COLOR = "New Marker Color Chosen: ";
+  private static final String NEW_LANGUAGE = "New Chosen Language: ";
+  private static final String NEW_BACKGROUND_COLOR = "New Background Color Chosen: ";
+  private static final String TEXT_AREA_TEXT = "Command Display";
+  private static final String[] language_names = {"Chinese", "English", "French", "German",
+      "Italian", "Portuguese", "Russian", "Spanish",
+      "Syntax", "Urdu"};
+  private static final String BACKGROUND_COLOR_LABEL = "Change Background Color";
+  private static final String MARKER_COLOR_LABEL = "Change Marker Color";
+  private static final String CHANGE_LANGUAGE_LABEL = "Change Language";
+
   private Group root;
   private VBox vBox;
   private ColorPicker cp;
@@ -31,25 +44,25 @@ public class SubScene {
 
   public SubScene() {
     root = new Group();
-    vBox = new VBox(20);
+    vBox = new VBox();
+    vBox.getStyleClass().add("vbox");
     root.getChildren().add(vBox);
-    createLabel(vBox, "Change Background Color");
+    createLabel(vBox, BACKGROUND_COLOR_LABEL);
     createBackgroundColorPicker();
     createButtons("Open File", "Load Turtle");
     createHBox();
-    //createRectangle();
     createTextArea();
     createTextField();
-    vBox.setAlignment(Pos.CENTER);
   }
 
   private void createHBox() {
-    HBox hBox = new HBox(10);
+    HBox hBox = new HBox();
+    hBox.getStyleClass().add("hbox");
     VBox vBoxLeft = new VBox();
     VBox vBoxRight = new VBox();
-    createLabel(vBoxRight,"Change Marker Color");
+    createLabel(vBoxRight, MARKER_COLOR_LABEL);
     createMarkerColorPicker(vBoxRight);
-    createLabel(vBoxLeft, "Change Language");
+    createLabel(vBoxLeft, CHANGE_LANGUAGE_LABEL);
     createComboBox(vBoxLeft);
     hBox.getChildren().addAll(vBoxLeft, vBoxRight);
     vBox.getChildren().add(hBox);
@@ -58,27 +71,24 @@ public class SubScene {
   private void createMarkerColorPicker(Pane pane) {
     ColorPicker markerCP = new ColorPicker(INITIAL_MARKER_COLOR);
     pane.getChildren().add(markerCP);
-    markerCP.setOnAction(event ->  {
-    markerClickedColor = markerCP.getValue();
-    textArea.setText(textArea.getText() + "\n" + "New Marker Color Chosen: " + markerClickedColor.toString());
-  });
+    markerCP.setOnAction(event -> {
+      markerClickedColor = markerCP.getValue();
+      textArea
+          .setText(textArea.getText() + "\n" + NEW_MARKER_COLOR + markerClickedColor.toString());
+    });
   }
 
   private void createComboBox(Pane box) {
-    String[] week_days =
-        { "Chinese", "English", "French", "German", "Italian", "Portuguese", "Russian", "Spanish", "Syntax", "Urdu" };
-    ComboBox<String> combo_box = new ComboBox<>(FXCollections.observableArrayList(week_days));
+    ComboBox<String> combo_box = new ComboBox<>(FXCollections.observableArrayList(language_names));
     box.getChildren().add(combo_box);
-    combo_box.setOnAction(event ->  {
+    combo_box.setOnAction(event -> {
       language = combo_box.getValue();
-      textArea.setText(textArea.getText() + "\n" + "New Chosen Language: " + language);
+      textArea.setText(textArea.getText() + "\n" + NEW_LANGUAGE + language);
     });
   }
 
   private void createTextArea() {
-    textArea = new TextArea("Type Commands Here");
-    textArea.setPrefColumnCount(1);
-    textArea.setPrefRowCount(10);
+    textArea = new TextArea(TEXT_AREA_TEXT);
     textArea.setEditable(false);
     vBox.getChildren().add(textArea);
   }
@@ -90,6 +100,7 @@ public class SubScene {
 
   private void createButtons(String leftButtonText, String rightButtonText) {
     HBox hbox = new HBox();
+    hbox.getStyleClass().add("hbox");
     Button leftButton = new Button(leftButtonText);
     Button rightButton = new Button(rightButtonText);
     hbox.getChildren().addAll(leftButton, rightButton);
@@ -100,24 +111,27 @@ public class SubScene {
   private void createTextField() {
     name = new TextField();
     name.setPromptText("Enter an SLogo Command.");
-    name.setPrefColumnCount(10);
+    //name.setPrefColumnCount(10);
     name.getText();
     vBox.getChildren().add(name);
 
     //Setting an action for the Submit button
     root.setOnKeyPressed(ke -> {
-      if(ke.getCode() == KeyCode.ENTER){
-        if ((name.getText() != null && !name.getText().isEmpty())) {
-          String the_text = name.getText();
-          textArea.setText(textArea.getText() + "\n" + the_text);
-          name.clear();
-          textArea.setText(textArea.getText() + "\n" + "Command successfully processed!");
-        } else {
-          textArea.setText(textArea.getText() + "\n" + "No command entered.");
-        }
-      }
-
+      textFieldListener(ke.getCode());
     });
+  }
+
+  private void textFieldListener(KeyCode code) {
+    if (code == KeyCode.ENTER) {
+      if ((name.getText() != null && !name.getText().isEmpty())) {
+        String the_text = name.getText();
+        textArea.setText(textArea.getText() + "\n" + the_text);
+        textArea.setText(textArea.getText() + "\n" + SUCCESSFUL_COMMAND);
+      } else {
+        textArea.setText(textArea.getText() + "\n" + EMPTY_COMMAND);
+      }
+      name.clear();
+    }
   }
 
 //  private void createRectangle() {
@@ -129,17 +143,21 @@ public class SubScene {
     cp = new ColorPicker(INITIAL_BACKGROUND_COLOR);
     vBox.getChildren().add(cp);
 
-    cp.setOnAction(event ->  {
+    cp.setOnAction(event -> {
       clickedColor = cp.getValue();
-      textArea.setText(textArea.getText() + "\n" + "New Background Color Chosen: " + clickedColor.toString());
+      textArea.setText(textArea.getText() + "\n" + NEW_BACKGROUND_COLOR + clickedColor.toString());
     });
   }
 
+  public Group getRoot() {
+    return root;
+  }
 
-  public Group getRoot(){return root;}
+  public Color getClickedColor() {
+    return clickedColor;
+  }
 
-  public Color getClickedColor() {return clickedColor;}
-
-  public Object getLanguage() {return language;}
-
+  public Object getLanguage() {
+    return language;
+  }
 }
