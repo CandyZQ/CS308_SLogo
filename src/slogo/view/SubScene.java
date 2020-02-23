@@ -104,10 +104,6 @@ public class SubScene {
     name.getText();
     vBox.getChildren().add(name);
 
-    Label label = new Label();
-    vBox.getChildren().add(label);
-
-
     //Setting an action for the Submit button
     root.setOnKeyPressed(ke -> {
       if(ke.getCode() == KeyCode.ENTER){
@@ -115,10 +111,9 @@ public class SubScene {
           String the_text = name.getText();
           textArea.setText(textArea.getText() + "\n" + the_text);
           name.clear();
-          label.setText(null);
-          label.setText("Command successfully processed!");
+          textArea.setText(textArea.getText() + "\n" + "Command successfully processed!");
         } else {
-          label.setText("No command entered.");
+          textArea.setText(textArea.getText() + "\n" + "No command entered.");
         }
       }
 
