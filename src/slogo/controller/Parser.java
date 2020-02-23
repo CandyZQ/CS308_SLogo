@@ -57,7 +57,7 @@ public class Parser implements BackEndExternalAPI {
     String[] parameters = commandList.subList(1, commandList.size()).toArray(new String[0]);
 
     Class<?> commandsClass = TurtleCommands.class;
-    Method[] commands = commandsClass.getMethods();
+    Method[] commands = commandsClass.getDeclaredMethods();
 
     boolean hasMethod = false;
     for (Method method : commands) {
