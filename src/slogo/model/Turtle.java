@@ -228,7 +228,6 @@ public class Turtle implements MovingObject {
             delta[0] = Math.abs(adjacent);
             delta[1] = - Math.abs(opposite);
         }
-        // Before setting, flip according to distance
         if (distance < POS_ANGLE) {
             delta[0] = -delta[0];
             delta[1] = -delta[1];
