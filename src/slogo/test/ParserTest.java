@@ -76,8 +76,9 @@ public class ParserTest {
 
       // TODO: resolve this
       q = parser.execute("forward 50");
-       Assert.assertEquals(54.0, q.peek().get(MovingObjectProperties.Y));
-      Assert.assertEquals(55.0, q.peek().get(MovingObjectProperties.RETURN_VALUE));
+      Assert.assertEquals(50.0, q.peek().get(MovingObjectProperties.RETURN_VALUE));
+      Assert.assertEquals(44D, q.peek().get(MovingObjectProperties.Y));
+
 
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
       e.printStackTrace();
