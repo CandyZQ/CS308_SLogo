@@ -6,21 +6,23 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class SubSceneLeft {
-  private Group root;
+public class SubSceneLeft extends SubScene {
+
   private Rectangle rect;
-  private VBox vBox;
 
   public SubSceneLeft() {
     root = new Group();
-    vBox = new VBox(20);
+    vBox = new VBox();
+    vBox.getStyleClass().add("leftvbox");
     root.getChildren().add(vBox);
     createRectangle();
     vBox.setAlignment(Pos.BOTTOM_CENTER);
   }
 
   private void createRectangle() {
-    rect = new Rectangle(ViewScreen.STAGE_WIDTH/2, ViewScreen.STAGE_HEIGHT/2, SubScene.INITIAL_BACKGROUND_COLOR);
+    rect = new Rectangle(ViewScreen.STAGE_WIDTH / 2, ViewScreen.STAGE_HEIGHT / 2,
+        SubSceneRight.INITIAL_BACKGROUND_COLOR);
+    rect.getStyleClass().add("rectangle");
     vBox.getChildren().add(rect);
   }
 

@@ -13,7 +13,7 @@ public class CommandPrompt implements ExternalAPIViewable {
   }
 
   @Override
-  public String giveInputString() {
+  public String getInputString() {
     return null;
   }
 

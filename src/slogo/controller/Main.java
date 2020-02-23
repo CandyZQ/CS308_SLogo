@@ -17,6 +17,7 @@ public class Main extends Application {
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private Controller controller;
+    private ViewScreen viewScreen;
 
     /**
      * Start the program.
@@ -27,7 +28,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        ViewScreen viewScreen = new ViewScreen(primaryStage);
+        viewScreen = new ViewScreen(primaryStage);
         controller = new Controller(viewScreen);
         setTiming();
     }
@@ -41,6 +42,9 @@ public class Main extends Application {
     }
 
     private void step(double secondDelay) {
+        if (viewScreen.getInputString() != null) {
+            System.out.println(viewScreen.getInputString());
+        }
         controller.update();
     }
 }

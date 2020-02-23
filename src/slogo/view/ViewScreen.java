@@ -15,7 +15,7 @@ public class ViewScreen implements ExternalAPIViewable {
   public static final String STYLE_SHEET = "style.css";
 
   private static SubSceneLeft scLeft;
-  private static SubScene sc;
+  private static SubSceneRight sc;
   private Stage stage;
   private Scene scene;
   private BorderPane root;
@@ -33,7 +33,7 @@ public class ViewScreen implements ExternalAPIViewable {
   private void startView() {
     this.root = new BorderPane();
 
-    sc = new SubScene();
+    sc = new SubSceneRight();
     root.setRight(sc.getRoot());
     scLeft = new SubSceneLeft();
     root.setLeft(scLeft.getRoot());
@@ -53,8 +53,8 @@ public class ViewScreen implements ExternalAPIViewable {
   }
 
   @Override
-  public String giveInputString() {
-    return null;
+  public String getInputString() {
+    return sc.getTheText();
   }
 
   @Override

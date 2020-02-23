@@ -36,7 +36,7 @@ public interface ExternalAPIViewable {
    *
    * @return A string that houses the text that the user input to the command line on the screen.
    */
-  String giveInputString();
+  String getInputString();
 
   /**
    * This method will handle the exception that is caught by the controller if the input information

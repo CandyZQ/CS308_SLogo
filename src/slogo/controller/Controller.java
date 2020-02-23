@@ -1,7 +1,6 @@
 package slogo.controller;
 
 
-import slogo.view.ExternalAPIViewable;
 import slogo.view.ViewScreen;
 
 public class Controller {

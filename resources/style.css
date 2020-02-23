@@ -49,3 +49,12 @@
 .text-field {
   -fx-pref-columns: 10;
 }
+
+.rectangle {
+  -fx-alignment: center;
+}
+
+.leftvbox {
+  -fx-alignment: center;
+  -fx-padding: 80;
+}
