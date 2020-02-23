@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -66,13 +65,20 @@ public class Parser implements BackEndExternalAPI {
     }
   }
 
+  /**
+   * Executes the command from user input
+   * @param command the command that the user inputs
+   * @return  a {@link Queue} of status of existed turtles
+   * @throws CommandDoesNotExistException
+   * @throws LanguageIsNotSupportedException
+   * @throws WrongCommandFormatException
+   * @throws InvalidArgumentException
+   */
   @Override
   public Queue<EnumMap<MovingObjectProperties, Object>> execute(String command)
       throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException {
-    String executable = convertUserInput(command);
-
-    List<String> commandList = separateCommand(executable);
-    String commandName = commandList.get(0).toLowerCase();
+    List<String> commandList = separateCommand(command);
+    String commandName = convertUserInput(commandList.get(0).toLowerCase());
     String[] parameters = commandList.subList(1, commandList.size()).toArray(new String[0]);
 
     Class<?> commandsClass = TurtleCommands.class;
@@ -93,7 +99,7 @@ public class Parser implements BackEndExternalAPI {
     }
     for (String key : commandMap.keySet()) {
       if (isMatch(command, commandMap.get(key))) {
-        return key;
+        return key.toLowerCase();
       }
     }
     throw new CommandDoesNotExistException(
@@ -157,7 +163,6 @@ public class Parser implements BackEndExternalAPI {
     return new ArrayList<>(Arrays.asList(command.split(" ")));
   }
 
-  // TODO: add this to API
   private Queue<EnumMap<MovingObjectProperties, Object>> getTurtleStates() {
     Queue<EnumMap<MovingObjectProperties, Object>> turtleStates = new LinkedList<>();
     for (Turtle t : turtles) {
