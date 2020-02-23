@@ -25,7 +25,7 @@ public class SubSceneRight extends SubScene {
   private static final String NEW_MARKER_COLOR = "New Marker Color Chosen: ";
   private static final String NEW_LANGUAGE = "New Chosen Language: ";
   private static final String NEW_BACKGROUND_COLOR = "New Background Color Chosen: ";
-  private static final String TEXT_AREA_TEXT = "Command Display";
+  private static final String COMMAND_AREA_TEXT = "Command Display";
   private static final String[] language_names = {"Chinese", "English", "French", "German",
       "Italian", "Portuguese", "Russian", "Spanish",
       "Syntax", "Urdu"};
@@ -33,6 +33,7 @@ public class SubSceneRight extends SubScene {
   private static final String MARKER_COLOR_LABEL = "Change Marker Color";
   private static final String CHANGE_LANGUAGE_LABEL = "Change Language";
   private static final String TEXTFIELD_PROMPT_TEXT = "Enter an SLogo Command.";
+  private static final String VARIABLE_AREA_TEXT = "Variable Display";
 
   private ColorPicker cp;
   private Object language;
@@ -41,6 +42,7 @@ public class SubSceneRight extends SubScene {
   private TextField name;
   private TextArea textArea;
   private String theText;
+  private Boolean commandEntered = false;
 
   public SubSceneRight() {
     root = new Group();
@@ -51,9 +53,10 @@ public class SubSceneRight extends SubScene {
     createBackgroundColorPicker();
     createButtons("Open File", "Load Turtle");
     createHBox();
-    createTextArea();
+    createTextArea(COMMAND_AREA_TEXT);
     createTextField();
     createButtons("Help", "Undo");
+    createTextArea(VARIABLE_AREA_TEXT);
   }
 
   private void createHBox() {
@@ -88,8 +91,8 @@ public class SubSceneRight extends SubScene {
     });
   }
 
-  private void createTextArea() {
-    textArea = new TextArea(TEXT_AREA_TEXT);
+  private void createTextArea(String text) {
+    textArea = new TextArea(text);
     textArea.setEditable(false);
     vBox.getChildren().add(textArea);
   }
@@ -112,7 +115,6 @@ public class SubSceneRight extends SubScene {
   private void createTextField() {
     name = new TextField();
     name.setPromptText(TEXTFIELD_PROMPT_TEXT);
-    //name.setPrefColumnCount(10);
     name.getText();
     vBox.getChildren().add(name);
 
@@ -120,10 +122,12 @@ public class SubSceneRight extends SubScene {
     root.setOnKeyPressed(ke -> textFieldListener(ke.getCode()));
   }
 
+
   private void textFieldListener(KeyCode code) {
     if (code == KeyCode.ENTER) {
       if ((name.getText() != null && !name.getText().isEmpty())) {
         theText = name.getText().toLowerCase();
+        commandEntered = true;
         textArea.setText(textArea.getText() + "\n" + theText);
         textArea.setText(textArea.getText() + "\n" + SUCCESSFUL_COMMAND);
       } else {
@@ -161,9 +165,11 @@ public class SubSceneRight extends SubScene {
   }
 
   public String getTheText() {
-    String command = theText;
-    theText = null;
-    return command;
+    if (commandEntered) {
+      commandEntered = false;
+      return theText;
+    }
+    return null;
   }
 
 }

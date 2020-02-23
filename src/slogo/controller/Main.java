@@ -42,10 +42,11 @@ public class Main extends Application {
     }
 
     private void step(double secondDelay) {
-        if (viewScreen.getInputString() != null) {
-            System.out.println(viewScreen.getInputString());
-        }
-        controller.update();
+      String Ryan = viewScreen.getInputString();
+      if (Ryan != null) {
+        System.out.println(Ryan);
+      }
+      controller.update();
     }
 }
 
