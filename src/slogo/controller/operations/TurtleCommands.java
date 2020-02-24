@@ -61,11 +61,12 @@ public class TurtleCommands {
   }
 
   public void home() {
-    turtle.setCoordinates(0, 0);
+    turtle.reset();
   }
 
   public void clearScreen() {
     // TODO: remove screen trails
-    turtle.setCoordinates(0, 0);
+   turtle.reset();
+   turtle.clear();
   }
 }
