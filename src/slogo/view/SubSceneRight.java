@@ -85,7 +85,7 @@ public class SubSceneRight extends SubScene {
   private void createComboBox(Pane box) {
     ComboBox<String> combo_box = new ComboBox<>(FXCollections.observableArrayList(language_names));
     box.getChildren().add(combo_box);
-    combo_box.setValue("English");
+    combo_box.setValue(language_names[1]);
     language = combo_box.getValue();
     combo_box.setOnAction(event -> {
       language = combo_box.getValue();

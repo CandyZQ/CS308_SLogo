@@ -52,7 +52,6 @@ public class SubSceneLeft extends SubScene {
   private void createSlider() {
     slider = new Slider(1, 10, 5.5);
     vBox.getChildren().add(slider);
-    System.out.println(slider.getValue());
   }
 
   public Group getRoot() {
