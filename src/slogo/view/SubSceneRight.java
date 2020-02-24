@@ -40,7 +40,8 @@ public class SubSceneRight extends SubScene {
   private Color clickedColor = INITIAL_BACKGROUND_COLOR;
   private Color markerClickedColor = INITIAL_MARKER_COLOR;
   private TextField name;
-  private TextArea textArea;
+  private TextArea commandTextArea;
+  private TextArea variableTextArea;
   private String theText;
   private Boolean commandEntered = false;
 
@@ -53,10 +54,10 @@ public class SubSceneRight extends SubScene {
     createBackgroundColorPicker();
     createButtons("Open File", "Load Turtle");
     createHBox();
-    createTextArea(COMMAND_AREA_TEXT);
+    createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
     createTextField();
     createButtons("Help", "Undo");
-    createTextArea(VARIABLE_AREA_TEXT);
+    createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
   }
 
   private void createHBox() {
@@ -77,8 +78,9 @@ public class SubSceneRight extends SubScene {
     pane.getChildren().add(markerCP);
     markerCP.setOnAction(event -> {
       markerClickedColor = markerCP.getValue();
-      textArea
-          .setText(textArea.getText() + "\n" + NEW_MARKER_COLOR + markerClickedColor.toString());
+      commandTextArea
+          .setText(
+              commandTextArea.getText() + "\n" + NEW_MARKER_COLOR + markerClickedColor.toString());
     });
   }
 
@@ -89,14 +91,14 @@ public class SubSceneRight extends SubScene {
     language = combo_box.getValue();
     combo_box.setOnAction(event -> {
       language = combo_box.getValue();
-      textArea.setText(textArea.getText() + "\n" + NEW_LANGUAGE + language);
+      commandTextArea.setText(commandTextArea.getText() + "\n" + NEW_LANGUAGE + language);
     });
   }
 
-  private void createTextArea(String text) {
-    textArea = new TextArea(text);
-    textArea.setEditable(false);
-    vBox.getChildren().add(textArea);
+  private void createTextArea(TextArea area, String text) {
+    area.setText(text);
+    area.setEditable(false);
+    vBox.getChildren().add(area);
   }
 
   private void createLabel(Pane pane, String text) {
@@ -130,10 +132,10 @@ public class SubSceneRight extends SubScene {
       if ((name.getText() != null && !name.getText().isEmpty())) {
         theText = name.getText().toLowerCase();
         commandEntered = true;
-        textArea.setText(textArea.getText() + "\n" + theText);
-        textArea.setText(textArea.getText() + "\n" + SUCCESSFUL_COMMAND);
+        commandTextArea.setText(commandTextArea.getText() + "\n" + theText);
+        commandTextArea.setText(commandTextArea.getText() + "\n" + SUCCESSFUL_COMMAND);
       } else {
-        textArea.setText(textArea.getText() + "\n" + EMPTY_COMMAND);
+        commandTextArea.setText(commandTextArea.getText() + "\n" + EMPTY_COMMAND);
       }
       name.clear();
     }
@@ -150,7 +152,8 @@ public class SubSceneRight extends SubScene {
 
     cp.setOnAction(event -> {
       clickedColor = cp.getValue();
-      textArea.setText(textArea.getText() + "\n" + NEW_BACKGROUND_COLOR + clickedColor.toString());
+      commandTextArea.setText(
+          commandTextArea.getText() + "\n" + NEW_BACKGROUND_COLOR + clickedColor.toString());
     });
   }
 
