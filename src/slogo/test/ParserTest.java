@@ -13,12 +13,13 @@ import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 import slogo.exceptions.WrongCommandFormatException;
+import slogo.model.MovingObject;
 import slogo.model.Turtle;
 
 public class ParserTest {
   @Test
   public void shouldSetLanguage() {
-    Parser parser = new Parser(new Turtle(0));
+    Parser parser = new Parser(1);
 
     try {
       parser.setLanguage("English");
@@ -61,7 +62,7 @@ public class ParserTest {
 
   @Test
   public void shouldExecute() {
-    Parser parser = new Parser(new Turtle(0));
+    Parser parser = new Parser(1);
     try {
       parser.setLanguage("English");
     } catch (LanguageIsNotSupportedException e) {
@@ -87,7 +88,7 @@ public class ParserTest {
 
   @Test
   public void shouldExecuteNested() {
-    Parser parser = new Parser(new Turtle(0));
+    Parser parser = new Parser(1);
     try {
       parser.setLanguage("English");
     } catch (LanguageIsNotSupportedException e) {
@@ -95,12 +96,20 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("forward sum 25 50");
-      Assert.assertEquals(75D, q.peek().get(MovingObjectProperties.Y));
-      Assert.assertEquals(75D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
+      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("forward sum 10 sum 25 50");
+      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
+      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
+      printQueue(q);
 
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
       e.printStackTrace();
+    }
+  }
+
+  private void printQueue(Queue<EnumMap<MovingObjectProperties, Object>> q) {
+    while (!q.isEmpty()) {
+      Map<MovingObjectProperties, Object> map = q.poll();
+      System.out.println(map.get(MovingObjectProperties.RETURN_VALUE));
     }
   }
 }
