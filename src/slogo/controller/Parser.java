@@ -1,6 +1,5 @@
 package slogo.controller;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 import javafx.util.Pair;
-import slogo.controller.operations.TurtleCommands;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
