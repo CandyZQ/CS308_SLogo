@@ -28,7 +28,7 @@ public class CommandPrompt implements ExternalAPIViewable {
   }
 
   @Override
-  public String setLanguage() {
+  public String getLanguage() {
     return null;
   }
 }
