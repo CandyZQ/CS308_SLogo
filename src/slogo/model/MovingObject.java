@@ -50,6 +50,8 @@ public interface MovingObject {
    */
   double setHeading(double angle);
 
+  void clear();
+
   /**
    * Updates Turtle heading to face (x,y)
    * Does this by calculating angle then called public double setheading(double angle)
