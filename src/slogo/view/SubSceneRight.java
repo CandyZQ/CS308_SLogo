@@ -28,7 +28,7 @@ public class SubSceneRight extends SubScene {
   private static final String COMMAND_AREA_TEXT = "Command Display";
   private static final String[] language_names = {"Chinese", "English", "French", "German",
       "Italian", "Portuguese", "Russian", "Spanish",
-      "Syntax", "Urdu"};
+      "Urdu"};
   private static final String BACKGROUND_COLOR_LABEL = "Change Background Color";
   private static final String MARKER_COLOR_LABEL = "Change Marker Color";
   private static final String CHANGE_LANGUAGE_LABEL = "Change Language";
@@ -85,6 +85,8 @@ public class SubSceneRight extends SubScene {
   private void createComboBox(Pane box) {
     ComboBox<String> combo_box = new ComboBox<>(FXCollections.observableArrayList(language_names));
     box.getChildren().add(combo_box);
+    combo_box.setValue("English");
+    language = combo_box.getValue();
     combo_box.setOnAction(event -> {
       language = combo_box.getValue();
       textArea.setText(textArea.getText() + "\n" + NEW_LANGUAGE + language);

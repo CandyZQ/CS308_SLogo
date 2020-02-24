@@ -75,6 +75,7 @@ public class Parser implements BackEndExternalAPI {
       throws CommandDoesNotExistException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException {
     String commandName = commandsLeft.pop();
     commandName = commandsMapHelper.convertUserInput(commandName);
+    System.out.println(commandName);
     Pair<Class<?>, Method> pair = findClass(commandName);
     Class<?> c = pair.getKey();
     Method m = pair.getValue();
