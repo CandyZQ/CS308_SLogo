@@ -2,13 +2,22 @@ package slogo.view;
 
 import java.util.EnumMap;
 import java.util.Queue;
+
+import javafx.animation.Animation;
+import javafx.animation.PathTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import slogo.controller.MovingObjectProperties;
@@ -21,6 +30,13 @@ public class SubSceneLeft extends SubScene {
   private Rectangle rect;
   private Slider slider;
   private TranslateTransition trans;
+  private int initialX;
+  private int initialY;
+  private int TURTLE_X = 280;
+  private int TURTLE_Y = 230;
+  private final int TURTLE_SIZE = 60; // turtle is 60 px x 60 px
+  private Path path;
+
 
 
   public SubSceneLeft() {
@@ -30,21 +46,81 @@ public class SubSceneLeft extends SubScene {
     root.getChildren().add(vBox);
     createRectangle();
     createSlider();
+    path = new Path();
+    root.getChildren().addAll(path);
     root.getChildren().add(createTurtle());
-    moveTurtle();
+    initialX = 0;
+    initialY = 0;
+
+    TranslateTransition t1 = moveTurtle(50, 50, 135, 5);
+    TranslateTransition t2 = moveTurtle(0, -50, 0, 5);
+    Animation path_animation = clipAnimation(path, 2);
+    path_animation.play();
+    SequentialTransition s = new SequentialTransition(t1, t2);
+    s.play();
   }
 
-  private void moveTurtle() {
-    trans.setToY(-100);
-    turtle.setRotate(-45);
-    trans.setToX(-100);
-    trans.play();
+  private Animation clipAnimation(Path path, int numSteps)
+  {
+    final Pane clip = new Pane();
+    path.clipProperty().set(clip);
+
+    final Circle pen = new Circle(0, 0, 2);
+
+    ChangeListener pen_Listener = new ChangeListener()
+    {
+      @Override
+      public void changed(ObservableValue observableValue, Object o1, Object o2)
+      {
+        Circle clip_eraser = new Circle(pen.getTranslateX(), pen.getTranslateY(), pen.getRadius());
+        clip.getChildren().add(clip_eraser);
+      }
+    };
+
+    pen.translateXProperty().addListener(pen_Listener);
+    pen.translateYProperty().addListener(pen_Listener);
+    //pen.rotateProperty().addListener(pen_Listener);
+    PathTransition pathTransition = new PathTransition(Duration.seconds(5*(numSteps+1)), path, pen);
+    pathTransition.setOnFinished(new EventHandler<ActionEvent>()
+    {
+      @Override
+      public void handle(ActionEvent t)
+      {
+        path.setClip(null);
+        clip.getChildren().clear();
+      }
+    });
+
+    return pathTransition;
+  }
+
+  private TranslateTransition moveTurtle(int xdist, int ydist, int heading, int duration) {
+    path.getElements().addAll(
+            new MoveTo(TURTLE_X + 30, TURTLE_Y + 30),
+            new LineTo(TURTLE_X + 50 + 30, TURTLE_Y + 50 + 30),
+            new MoveTo(280 + 50 + 30, 230 + 50 + 30),
+            new LineTo(280 + 50 + 30, 230 + 50 + 30 - 50)
+
+    );
+    path.setFill(null);
+    path.setStroke(Color.BLACK);
+    path.setStrokeWidth(2);
+    turtle.setRotate(heading);
+    trans = new TranslateTransition(Duration.seconds(duration), turtle); // slider.getValue() for Duration
+    trans.setFromX(initialX);
+    trans.setFromY(initialY);
+    trans.setToX(initialX + xdist);
+    trans.setToY(initialY + ydist);
+    initialX += xdist;
+    initialY += ydist;
+    return trans;
+
+
   }
 
   private ImageView createTurtle() {
-    trans = new TranslateTransition(Duration.seconds(slider.getValue()), turtle);
-    turtle.setX(280);
-    turtle.setY(230);
+    turtle.setX(TURTLE_X);
+    turtle.setY(TURTLE_Y);
     return turtle;
   }
 
