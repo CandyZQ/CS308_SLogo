@@ -56,4 +56,5 @@
 .leftvbox {
   -fx-alignment: center;
   -fx-padding: 80;
+  -fx-spacing: 20;
 }

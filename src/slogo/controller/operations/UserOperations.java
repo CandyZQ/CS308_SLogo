@@ -9,7 +9,7 @@ public class UserOperations {
 
     public Map<String, Double> UserVars = new HashMap<>();
 
-    public double makeSet(String variable, double expr) {
+    public Double makeSet(String variable, Double expr) {
         UserVars.put(variable,expr);
         return expr;
     }

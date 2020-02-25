@@ -17,18 +17,21 @@ import slogo.model.Turtle;
 
 public class Parser implements BackEndExternalAPI {
 
-  private List<Turtle> turtles;
+  private List<Turtle> animals;
   private int turtleOperating = 0;
   private CommandsMapHelper commandsMapHelper;
 
   private Stack<String> commandsLeft;
-  private List<String> currentCommand;
+  private Queue<EnumMap<MovingObjectProperties, Object>> turtleStates;
 
-  public Parser(Turtle... t) {
-    turtles = new ArrayList<>(Arrays.asList(t));
+  public Parser(int animalNum) {
+    animals = new ArrayList<>();
+    for (int i = 0; i < animalNum; i ++) {
+      animals.add(new Turtle(i));
+    }
     commandsMapHelper = new CommandsMapHelper();
     commandsLeft = new Stack<>();
-    currentCommand = new ArrayList<>();
+    turtleStates = new LinkedList<>();
   }
 
   /**
@@ -55,13 +58,15 @@ public class Parser implements BackEndExternalAPI {
    */
   @Override
   public Queue<EnumMap<MovingObjectProperties, Object>> execute(String command)
-      throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException {
+      throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException {    turtleStates = new LinkedList<>();
+    turtleStates = new LinkedList<>();
     fillStack(command);
 
     while (!commandsLeft.empty()) {
       getNextCommand();
     }
-    return getTurtleStates();
+
+    return turtleStates;
   }
 
   private void fillStack(String command) {
@@ -73,6 +78,7 @@ public class Parser implements BackEndExternalAPI {
 
   private String getNextCommand()
       throws CommandDoesNotExistException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException {
+
     String commandName = commandsLeft.pop();
     commandName = commandsMapHelper.convertUserInput(commandName);
     System.out.println(commandName);
@@ -86,7 +92,9 @@ public class Parser implements BackEndExternalAPI {
       current.addPara(nextPara);
     }
 
-    return current.execute(turtles.get(turtleOperating)).toString();
+    String returnVal = current.execute(animals.get(turtleOperating)).toString();
+    turtleStates.add(animals.get(turtleOperating).getState());
+    return returnVal;
   }
 
   private String getNextPara(CommandStructure structure)
@@ -149,11 +157,7 @@ public class Parser implements BackEndExternalAPI {
     return method.getParameterCount();
   }
 
-  private Queue<EnumMap<MovingObjectProperties, Object>> getTurtleStates() {
-    Queue<EnumMap<MovingObjectProperties, Object>> turtleStates = new LinkedList<>();
-    for (Turtle t : turtles) {
-      turtleStates.add(t.getState());
-    }
-    return turtleStates;
+  public void setTurtleOperating(int id) {
+    turtleOperating = id;
   }
 }

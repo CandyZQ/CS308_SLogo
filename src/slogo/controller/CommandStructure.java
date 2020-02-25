@@ -1,6 +1,5 @@
 package slogo.controller;
 
-import com.sun.security.jgss.GSSUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
