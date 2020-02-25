@@ -27,7 +27,7 @@ import java.io.File;
 
 public class SubSceneRight extends SubScene {
 
-  private final ImageView turtle = new ImageView(new Image("file:resources/defaultTurtle.png"));
+
   private final ImageView helpImage0 = new ImageView(new Image("file:resources/help_title.png"));
   private final ImageView helpImage1 = new ImageView(new Image("file:resources/basic_syntax.png"));
   private final ImageView helpImage2 = new ImageView(new Image("file:resources/turtle_commands.png"));
@@ -35,14 +35,9 @@ public class SubSceneRight extends SubScene {
   private final ImageView helpImage4 = new ImageView(new Image("file:resources/math_operations.png"));
   private final ImageView helpImage5 = new ImageView(new Image("file:resources/boolean_operations.png"));
   private final ImageView helpImage6 = new ImageView(new Image("file:resources/user_defined.png"));
-  private final int HELP_IMAGE_WIDTH = 580;
-  private final int HELP_IMAGE_HEIGHT1 = 250;
-  private final int HELP_IMAGE_HEIGHT2 = 450;
-  private final int HELP_IMAGE_HEIGHT3 = 100;
-  private static final int TURTLE_WIDTH = 60;
-  private static final int TURTLE_HEIGHT = 60;
 
 
+  private Image turtle = new Image("file:resources/defaultTurtle.png");
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
   public static final Color INITIAL_MARKER_COLOR = null;
   private static final String SUCCESSFUL_COMMAND = "Command successfully processed!";
@@ -70,6 +65,7 @@ public class SubSceneRight extends SubScene {
   private TextArea variableTextArea;
   private String theText;
   private Boolean commandEntered = false;
+  private Stage stage;
 
   public SubSceneRight() {
     root = new Group();
@@ -78,7 +74,7 @@ public class SubSceneRight extends SubScene {
     root.getChildren().add(vBox);
     createLabel(vBox, BACKGROUND_COLOR_LABEL);
     createBackgroundColorPicker();
-    createButtons("Open File", "Load Turtle", "Get Help", "Undo");
+    createButtons("Load Turtle", "Get Help", "Reset", "Undo");
     createHBox();
     createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
     createTextField();
@@ -151,10 +147,10 @@ public class SubSceneRight extends SubScene {
   }
 
   private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton, Button fourthButton){
-    /*
+
     firstButton.setOnAction(event -> {
       setTurtleImage();
-    });*/
+    });
 
     secondButton.setOnAction(event ->{
       displayPopUp();
@@ -167,17 +163,20 @@ public class SubSceneRight extends SubScene {
 
   }
 
-/*
-  private void setTurtleImage(){
+
+  public void setTurtleImage(){
     File file = fileChooser.showOpenDialog(stage);
     if(file != null){
-      turtle.setImage(new Image(file.toURI().toString()));
-      turtle.setFitHeight(TURTLE_HEIGHT);
-      turtle.setFitWidth(TURTLE_WIDTH);
-      turtle.setX(150);
-      turtle.setY(150);
+      turtle = new Image(file.toURI().toString(), 60, 60, false, true);
+      //turtle.setX(150);
+      //turtle.setY(150);
     }
-  }*/
+  }
+
+
+  public void assignStage(Stage incoming){
+    stage = incoming;
+  }
 
   private void displayPopUp(){
     BorderPane helpRoot = new BorderPane();
@@ -257,6 +256,8 @@ public class SubSceneRight extends SubScene {
   public Group getRoot() {
     return root;
   }
+
+  public Image getTurtle(){return turtle;}
 
   public Color getClickedColor() {
     return clickedColor;

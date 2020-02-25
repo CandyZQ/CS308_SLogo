@@ -10,9 +10,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import java.io.File;
+
 public class SubSceneLeft extends SubScene {
 
-  private final ImageView turtle = new ImageView(new Image("file:resources/defaultTurtle.png"));
+  private ImageView turtle = new ImageView(new Image("file:resources/defaultTurtle.png"));
   private Rectangle rect;
   private Slider slider;
 
@@ -40,6 +42,10 @@ public class SubSceneLeft extends SubScene {
     turtle.setX(280);
     turtle.setY(230);
     return turtle;
+  }
+
+  public void setTurtle(Image newTurtle){
+    turtle.setImage(newTurtle);
   }
 
   private void createRectangle() {
