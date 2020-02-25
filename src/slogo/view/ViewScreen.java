@@ -15,6 +15,8 @@ public class ViewScreen implements ExternalAPIViewable {
   public static final int STAGE_WIDTH = 1000;
   public static final String STAGE_TITLE = "SLOGO";
   public static final String STYLE_SHEET = "style.css";
+  private static final Integer zero = 0;
+  private static final Integer one = 1;
 
   private static SubSceneLeft scLeft;
   private static SubSceneRight scRight;
@@ -72,9 +74,15 @@ public class ViewScreen implements ExternalAPIViewable {
 
   public static void update(
       Queue<EnumMap<MovingObjectProperties, Object>> commands) {
-    if (commands == null) {
+    if (commands == null || commands.isEmpty()) {
       //DO NOTHING
     } else {
+      while (!commands.isEmpty()) {
+        EnumMap<MovingObjectProperties, Object> items = commands.remove();
+        if (items.get(MovingObjectProperties.CLEAR) == one) {
+          //TODO: implement
+        }
+      }
       scLeft.update(commands);
     }
     scLeft.setRectangleColor(scRight.getClickedColor());
