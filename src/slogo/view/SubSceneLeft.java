@@ -22,6 +22,7 @@ public class SubSceneLeft extends SubScene {
   private Slider slider;
   private TranslateTransition trans;
 
+
   public SubSceneLeft() {
     root = new Group();
     vBox = new VBox();
