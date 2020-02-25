@@ -1,5 +1,7 @@
 package slogo.view;
 
+import java.util.EnumMap;
+import java.util.Queue;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
 import javafx.scene.control.Slider;
@@ -9,12 +11,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import slogo.controller.MovingObjectProperties;
 
 public class SubSceneLeft extends SubScene {
 
   private final ImageView turtle = new ImageView(new Image("file:resources/defaultTurtle.png"));
   private Rectangle rect;
   private Slider slider;
+  private TranslateTransition trans;
 
   public SubSceneLeft() {
     root = new Group();
@@ -22,14 +26,12 @@ public class SubSceneLeft extends SubScene {
     vBox.getStyleClass().add("leftvbox");
     root.getChildren().add(vBox);
     createRectangle();
-    root.getChildren().add(createTurtle());
     createSlider();
+    root.getChildren().add(createTurtle());
     moveTurtle();
   }
 
   private void moveTurtle() {
-    TranslateTransition trans = new TranslateTransition(Duration.seconds(slider.getValue()),
-        turtle);
     trans.setToY(-100);
     turtle.setRotate(-45);
     trans.setToX(-100);
@@ -37,6 +39,7 @@ public class SubSceneLeft extends SubScene {
   }
 
   private ImageView createTurtle() {
+    trans = new TranslateTransition(Duration.seconds(slider.getValue()), turtle);
     turtle.setX(280);
     turtle.setY(230);
     return turtle;
@@ -54,8 +57,9 @@ public class SubSceneLeft extends SubScene {
     vBox.getChildren().add(slider);
   }
 
-  public Group getRoot() {
-    return root;
+  @Override
+  public void update(Queue<EnumMap<MovingObjectProperties, Object>> commands) {
+
   }
 
   public void setRectangleColor(Color color) {

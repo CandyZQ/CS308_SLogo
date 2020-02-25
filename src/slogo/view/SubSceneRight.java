@@ -1,6 +1,8 @@
 package slogo.view;
 
 
+import java.util.EnumMap;
+import java.util.Queue;
 import javafx.collections.FXCollections;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -15,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.geometry.Pos;
+import slogo.controller.MovingObjectProperties;
 
 public class SubSceneRight extends SubScene {
 
@@ -157,8 +160,9 @@ public class SubSceneRight extends SubScene {
     });
   }
 
-  public Group getRoot() {
-    return root;
+  @Override
+  public void update(Queue<EnumMap<MovingObjectProperties, Object>> commands) {
+
   }
 
   public Color getClickedColor() {

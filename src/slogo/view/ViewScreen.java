@@ -1,11 +1,13 @@
 package slogo.view;
 
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Queue;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
 import javafx.stage.Stage;
+import slogo.controller.MovingObjectProperties;
 
 public class ViewScreen implements ExternalAPIViewable {
 
@@ -68,8 +70,14 @@ public class ViewScreen implements ExternalAPIViewable {
   }
 
 
-  public static void update() {
+  public static void update(
+      Queue<EnumMap<MovingObjectProperties, Object>> commands) {
     scLeft.setRectangleColor(sc.getClickedColor());
+    if (commands == null) {
+      //DO NOTHING
+    } else {
+      scLeft.update(commands);
+    }
 
   }
 
