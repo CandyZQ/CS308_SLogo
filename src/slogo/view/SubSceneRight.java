@@ -3,24 +3,44 @@ package slogo.view;
 
 import java.util.EnumMap;
 import java.util.Queue;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.geometry.Orientation;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.geometry.Pos;
 import slogo.controller.MovingObjectProperties;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 
 public class SubSceneRight extends SubScene {
 
+
+  private final ImageView helpImage0 = new ImageView(new Image("file:resources/help_title.png"));
+  private final ImageView helpImage1 = new ImageView(new Image("file:resources/basic_syntax.png"));
+  private final ImageView helpImage2 = new ImageView(new Image("file:resources/turtle_commands.png"));
+  private final ImageView helpImage3 = new ImageView(new Image("file:resources/turtle_queries.png"));
+  private final ImageView helpImage4 = new ImageView(new Image("file:resources/math_operations.png"));
+  private final ImageView helpImage5 = new ImageView(new Image("file:resources/boolean_operations.png"));
+  private final ImageView helpImage6 = new ImageView(new Image("file:resources/user_defined.png"));
+
+
+  private Image turtle = new Image("file:resources/defaultTurtle.png");
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
   public static final Color INITIAL_MARKER_COLOR = null;
   private static final String SUCCESSFUL_COMMAND = "Command successfully processed!";
@@ -29,14 +49,15 @@ public class SubSceneRight extends SubScene {
   private static final String NEW_LANGUAGE = "New Chosen Language: ";
   private static final String NEW_BACKGROUND_COLOR = "New Background Color Chosen: ";
   private static final String COMMAND_AREA_TEXT = "Command Display";
-  private static final String[] language_names = {"Chinese", "English", "French", "German",
-      "Italian", "Portuguese", "Russian", "Spanish",
-      "Urdu"};
+  private final String[] language_names = {"Chinese", "English", "French", "German",
+      "Italian", "Portuguese", "Russian", "Spanish", "Urdu"};
   private static final String BACKGROUND_COLOR_LABEL = "Change Background Color";
   private static final String MARKER_COLOR_LABEL = "Change Marker Color";
   private static final String CHANGE_LANGUAGE_LABEL = "Change Language";
   private static final String TEXTFIELD_PROMPT_TEXT = "Enter an SLogo Command.";
   private static final String VARIABLE_AREA_TEXT = "Variable Display";
+  private final FileChooser fileChooser = new FileChooser();
+
 
   private ColorPicker cp;
   private Object language;
@@ -47,6 +68,7 @@ public class SubSceneRight extends SubScene {
   private TextArea variableTextArea;
   private String theText;
   private Boolean commandEntered = false;
+  private Stage stage;
 
   public SubSceneRight() {
     root = new Group();
@@ -55,11 +77,10 @@ public class SubSceneRight extends SubScene {
     root.getChildren().add(vBox);
     createLabel(vBox, BACKGROUND_COLOR_LABEL);
     createBackgroundColorPicker();
-    createButtons("Open File", "Load Turtle");
+    createButtons("Load Turtle", "Get Help", "Reset", "Undo");
     createHBox();
     createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
     createTextField();
-    createButtons("Help", "Undo");
     createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
   }
 
@@ -109,14 +130,89 @@ public class SubSceneRight extends SubScene {
     pane.getChildren().addAll(label);
   }
 
-  private void createButtons(String leftButtonText, String rightButtonText) {
-    HBox hbox = new HBox();
-    hbox.getStyleClass().add("hbox");
-    Button leftButton = new Button(leftButtonText);
-    Button rightButton = new Button(rightButtonText);
-    hbox.getChildren().addAll(leftButton, rightButton);
-    hbox.setAlignment(Pos.CENTER);
-    vBox.getChildren().add(hbox);
+
+  private void createButtons(String firstName, String secondName, String thirdName, String fourthName) {
+    HBox hbox1 = new HBox(30);
+    HBox hbox2 = new HBox(30);
+    hbox1.getStyleClass().add("hbox");
+    hbox2.getStyleClass().add("hbox");
+    Button firstButton = new Button(firstName);
+    Button secondButton = new Button(secondName);
+    Button thirdButton = new Button(thirdName);
+    Button fourthButton = new Button(fourthName);
+    hbox1.getChildren().addAll(firstButton, secondButton);
+    hbox2.getChildren().addAll(thirdButton, fourthButton);
+    hbox1.setAlignment(Pos.CENTER);
+    hbox2.setAlignment(Pos.CENTER);
+
+    this.buttonListeners(firstButton, secondButton, thirdButton, fourthButton);
+    vBox.getChildren().addAll(hbox1, hbox2);
+  }
+
+  private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton, Button fourthButton){
+
+    firstButton.setOnAction(event -> {
+      setTurtleImage();
+    });
+
+    secondButton.setOnAction(event ->{
+      displayPopUp();
+    });
+
+    /*
+    thirdButton.setOnAction(event ->{
+      moveTurtle(fourthButton);
+    });*/
+
+  }
+
+
+  public void setTurtleImage(){
+    File file = fileChooser.showOpenDialog(stage);
+    if(file != null){
+      turtle = new Image(file.toURI().toString(), 60, 60, false, true);
+      //turtle.setX(150);
+      //turtle.setY(150);
+    }
+  }
+
+
+  public void assignStage(Stage incoming){
+    stage = incoming;
+  }
+
+  private void displayPopUp(){
+    BorderPane helpRoot = new BorderPane();
+    Stage helpStage = new Stage();
+    helpStage.setTitle("Help Screen");
+    VBox vb = new VBox();
+
+    vb.getChildren().addAll(helpImage0, helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6);
+    ScrollBar s1 = new ScrollBar();
+    s1.setMin(0);
+    s1.setMax(1400);
+    s1.setOrientation(Orientation.VERTICAL);
+    helpRoot.getChildren().add(vb);
+    helpRoot.setRight(s1);
+    this.listenVBoxScroll(s1, vb);
+    Scene errorScene = setUpPopUp(helpRoot);
+    helpStage.setScene(errorScene);
+    helpStage.show();
+  }
+
+
+  private Scene setUpPopUp(BorderPane helpRoot){
+
+    return new Scene(helpRoot, 600, 800,  Color.LIGHTBLUE);
+  }
+
+  private void listenVBoxScroll(ScrollBar sb, VBox vb){
+    sb.valueProperty().addListener(new ChangeListener<Number>() {
+      public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+        vb.setLayoutY(-new_val.doubleValue());
+      }
+    });
+
   }
 
   private void createTextField() {
@@ -164,6 +260,8 @@ public class SubSceneRight extends SubScene {
   public void update(Queue<EnumMap<MovingObjectProperties, Object>> commands) {
 
   }
+
+  public Image getTurtle(){return turtle;}
 
   public Color getClickedColor() {
     return clickedColor;
