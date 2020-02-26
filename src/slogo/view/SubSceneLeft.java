@@ -87,7 +87,7 @@ public class SubSceneLeft extends SubScene {
     return pathTransition;
   }
 
-  private TranslateTransition moveTurtle(int xFinal, int yFinal, double heading, int duration) {
+  private TranslateTransition moveTurtle(int xFinal, int yFinal, int heading, int duration) {
 //    path.getElements().addAll(
 //        new MoveTo(INITIAL_TURTLE_X + 30, INITIAL_TURTLE_Y + 30),
 //        new LineTo(INITIAL_TURTLE_X + 50 + 30, INITIAL_TURTLE_Y + 50 + 30),
@@ -141,12 +141,13 @@ public class SubSceneLeft extends SubScene {
   }
 
   private void createMovement(String xFinal, String yFinal, String heading, int duration) {
-//    TranslateTransition t1 = moveTurtle(Integer.parseInt(xFinal) + INITIAL_TURTLE_X,
-//        Integer.parseInt(yFinal) + INITIAL_TURTLE_Y,
-//        Integer.parseInt(heading), duration);
-    TranslateTransition t1 = moveTurtle(INITIAL_TURTLE_X,
-        50 + INITIAL_TURTLE_Y,
-        Double.parseDouble(heading) - 90, duration);
+    System.out.println((int) Double.parseDouble(xFinal) + INITIAL_TURTLE_X);
+    TranslateTransition t1 = moveTurtle((int) Double.parseDouble(xFinal) + INITIAL_TURTLE_X,
+        (int) Double.parseDouble(yFinal) + INITIAL_TURTLE_Y,
+        (int) Double.parseDouble(heading) - 90, duration);
+//    TranslateTransition t1 = moveTurtle(INITIAL_TURTLE_X,
+//        50 + INITIAL_TURTLE_Y,
+//        Double.parseDouble(heading) - 90, duration);
     t1.play();
   }
 
