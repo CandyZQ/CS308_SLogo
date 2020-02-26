@@ -15,5 +15,5 @@ public abstract class SubScene {
     return root;
   }
 
-  public abstract void update(Queue<EnumMap<MovingObjectProperties, Object>> commands);
+  public abstract void update(EnumMap<MovingObjectProperties, Object> movements);
 }

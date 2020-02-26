@@ -62,6 +62,8 @@ public class Main extends Application {
         Queue<EnumMap<MovingObjectProperties, Object>> commands = null;
         if (inputString != null) {
             commands = parser.execute(inputString);
+            //System.out.println(commands.remove().get(MovingObjectProperties.X));
+            //System.out.println(commands.remove().get(MovingObjectProperties.Y));
         }
         parser.setLanguage(viewScreen.getLanguage());
         ViewScreen.update(commands);

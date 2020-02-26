@@ -257,7 +257,7 @@ public class SubSceneRight extends SubScene {
   }
 
   @Override
-  public void update(Queue<EnumMap<MovingObjectProperties, Object>> commands) {
+  public void update(EnumMap<MovingObjectProperties, Object> movements) {
 
   }
 

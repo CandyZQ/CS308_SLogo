@@ -75,15 +75,17 @@ public class ViewScreen implements ExternalAPIViewable {
   public static void update(
       Queue<EnumMap<MovingObjectProperties, Object>> commands) {
     if (commands == null || commands.isEmpty()) {
-      //DO NOTHING
+      return;
     } else {
       while (!commands.isEmpty()) {
         EnumMap<MovingObjectProperties, Object> items = commands.remove();
         if (items.get(MovingObjectProperties.CLEAR) == one) {
           //TODO: implement
+        } else {
+          scLeft.update(items);
         }
       }
-      scLeft.update(commands);
+
     }
     scLeft.setRectangleColor(scRight.getClickedColor());
     scLeft.setTurtle(scRight.getTurtle());
