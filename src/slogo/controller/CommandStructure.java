@@ -12,19 +12,18 @@ import slogo.exceptions.WrongCommandFormatException;
 import slogo.model.Turtle;
 
 class CommandStructure {
-
   Class<?> c;
   Method m;
   List<Object> paras;
   List<Class<?>> paraTypes;
   int numOfPara;
 
-  public CommandStructure(Class<?> c, Method m, int numOfPara) {
+  public CommandStructure(Class<?> c, Method m) {
     this.c = c;
     this.m = m;
     paras = new ArrayList<>();
     initializeParaTypes();
-    this.numOfPara = numOfPara;
+    numOfPara = m.getParameterCount();
   }
 
   private void initializeParaTypes() {
@@ -64,16 +63,15 @@ class CommandStructure {
 
     Object res = null;
     try {
-      res = m.invoke(new TurtleCommands(turtle), paras.toArray(new Object[0]));
+      res = m.invoke(c.getConstructor(Turtle.class).newInstance(turtle), paras.toArray(new Object[0]));
     } catch (IllegalArgumentException e) {
       throw new InvalidArgumentException(e);
     } catch (IllegalAccessException e) {
       System.out.println("The method " + m.getName() + " called is not accessible");
-    } catch (InvocationTargetException e) {
+    } catch (InvocationTargetException | NoSuchMethodException | InstantiationException e) {
       // TODO: do something?
     }
 
-
-    return res != null? res: turtle.getState().get(MovingObjectProperties.RETURN_VALUE);
+    return res != null ? res : turtle.getState().get(MovingObjectProperties.RETURN_VALUE);
   }
 }

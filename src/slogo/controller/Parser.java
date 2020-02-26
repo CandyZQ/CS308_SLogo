@@ -53,7 +53,6 @@ public class Parser implements BackEndExternalAPI {
   public Queue<EnumMap<MovingObjectProperties, Object>> execute(String command)
       throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException {
     turtleStates = new LinkedList<>();
-    turtleStates = new LinkedList<>();
     fillStack(command);
 
     while (!commandsLeft.empty()) {
@@ -70,6 +69,9 @@ public class Parser implements BackEndExternalAPI {
     }
   }
 
+  public CommandExecuter getCommandExecuter() {
+    return commandExecuter;
+  }
 
   public void setTurtleOperating(int id) {
     commandExecuter.setTurtleOperating(id);

@@ -107,7 +107,30 @@ public class ParserTest {
   private void printQueue(Queue<EnumMap<MovingObjectProperties, Object>> q) {
     while (!q.isEmpty()) {
       Map<MovingObjectProperties, Object> map = q.poll();
+//      System.out.println(map.get(MovingObjectProperties.Y));
+//      System.out.println(map.get(MovingObjectProperties.HEADING));
       System.out.println(map.get(MovingObjectProperties.RETURN_VALUE));
+    }
+  }
+
+  @Test
+  public void shouldLoop() {
+    Parser parser = new Parser(1);
+
+    try {
+      parser.setLanguage("English");
+    } catch (LanguageIsNotSupportedException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("repeat 2 [ fd 5 rt 2 ]");
+//      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
+//      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
+      printQueue(q);
+
+    } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
+      e.printStackTrace();
     }
   }
 }

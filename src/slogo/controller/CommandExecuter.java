@@ -55,7 +55,7 @@ public class CommandExecuter {
     Pair<Class<?>, Method> pair = findClass(commandName);
     Class<?> c = pair.getKey();
     Method m = pair.getValue();
-    CommandStructure current = new CommandStructure(c, m, getNumOfPara(m));
+    CommandStructure current = new CommandStructure(c, m);
 
     while (current.needMoreParas()) {
       String nextPara = getNextPara(current);
@@ -63,7 +63,17 @@ public class CommandExecuter {
     }
 
     String returnVal = current.execute(animals.get(turtleOperating)).toString();
-    animals.get(turtleOperating).getState().put(MovingObjectProperties.RETURN_VALUE, Double.parseDouble(returnVal));
+    try {
+      if (commandsMapHelper.getInputType(returnVal).equals(CONSTANT)) {
+        animals.get(turtleOperating).getState()
+            .put(MovingObjectProperties.RETURN_VALUE, Double.parseDouble(returnVal));
+      }
+    } catch (InvalidArgumentException e){
+      String[] ss = returnVal.split(" ");
+      for (int i = ss.length - 1; i >= 0; i--) {
+        commandsLeft.push(ss[i]);
+      }
+    }
     turtleStates.add(animals.get(turtleOperating).getState().clone());
     return returnVal;
   }
@@ -97,9 +107,10 @@ public class CommandExecuter {
     }
 
     if (commandsMapHelper.getInputType(next.toString()).equals(LISTSTART)) {
-      String s = "";
+      String s = next.toString();
       while (!commandsMapHelper.getInputType(s).equals(LISTEND)) {
         s = commandsLeft.pop();
+        next.append(" ");
         next.append(s);
       }
     }
@@ -132,10 +143,6 @@ public class CommandExecuter {
       }
     }
     return null;
-  }
-
-  private int getNumOfPara(Method method) {
-    return method.getParameterCount();
   }
 
   public void setTurtleOperating(int turtleOperating) {

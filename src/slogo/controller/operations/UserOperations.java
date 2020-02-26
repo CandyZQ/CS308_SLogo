@@ -1,17 +1,25 @@
 package slogo.controller.operations;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import slogo.controller.CommandExecuter;
 import slogo.controller.CommandsMapHelper;
 import slogo.controller.listings.BasicSyntax;
 import slogo.exceptions.InvalidArgumentException;
+import slogo.model.Turtle;
 
 public class UserOperations {
 
   public Map<String, Double> UserVars = new HashMap<>();
   private CommandsMapHelper commandsMapHelper = new CommandsMapHelper();
+
+  public UserOperations(Turtle turtle) {
+
+  }
 
   public Double makeVariable(String variable, Double expr) throws InvalidArgumentException {
     if (!commandsMapHelper.getInputType(variable).equals(BasicSyntax.VARIABLE)) {
@@ -21,12 +29,13 @@ public class UserOperations {
     return expr;
   }
 
-  public List<String> repeat(int expr, String commands) {
-    List<String> listCommands = new ArrayList<>();
+  public String repeat(Integer expr, String commands) {
+    StringBuilder sb = new StringBuilder();
+    String as = commands.substring(2, commands.length() - 1);
     for (int i = 0; i < expr; i++) {
-      listCommands.add(commands);
+      sb.append(as);
     }
-    return listCommands;
+    return sb.toString();
   }
 
   // public double doTimes() { }
