@@ -183,7 +183,21 @@ public class Turtle implements MovingObject {
    */
   @Override
   public EnumMap<MovingObjectProperties, Object> getState() {
+    Double modifiedReturn = isZero((Double) this.stateMap.get(MovingObjectProperties.RETURN_VALUE));
+    this.stateMap.put(MovingObjectProperties.RETURN_VALUE, modifiedReturn);
     return this.stateMap;
+  }
+
+  private Double isZero(Double val) {
+    double input = val;
+    double expd = 0.0D;
+    if (val < expd) {
+      val = -val;
+    }
+    if (val > (expd*.99D) && val < (expd*1.01D)) {
+      return expd;
+    }
+    return input;
   }
 
 
