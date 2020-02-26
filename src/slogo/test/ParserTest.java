@@ -93,6 +93,8 @@ public class ParserTest {
 
     try {
       Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("forward sum 10 sum 25 50");
+      q.poll();
+      q.poll();
       Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
       Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
       printQueue(q);
