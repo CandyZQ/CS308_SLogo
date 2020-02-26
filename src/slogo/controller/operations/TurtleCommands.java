@@ -1,5 +1,6 @@
 package slogo.controller.operations;
 
+import java.util.Map;
 import slogo.controller.listings.MovingObjectProperties;
 import slogo.model.Turtle;
 
@@ -7,7 +8,7 @@ public class TurtleCommands {
 
   Turtle turtle;
 
-  public TurtleCommands(Turtle turtle) {
+  public TurtleCommands(Turtle turtle, Map map) {
     this.turtle = turtle;
   }
 

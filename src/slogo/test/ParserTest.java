@@ -107,9 +107,9 @@ public class ParserTest {
   private void printQueue(Queue<EnumMap<MovingObjectProperties, Object>> q) {
     while (!q.isEmpty()) {
       Map<MovingObjectProperties, Object> map = q.poll();
-//      System.out.println(map.get(MovingObjectProperties.Y));
+      System.out.println(map.get(MovingObjectProperties.Y));
 //      System.out.println(map.get(MovingObjectProperties.HEADING));
-      System.out.println(map.get(MovingObjectProperties.RETURN_VALUE));
+//      System.out.println(map.get(MovingObjectProperties.RETURN_VALUE));
     }
   }
 

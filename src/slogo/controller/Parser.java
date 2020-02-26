@@ -1,7 +1,9 @@
 package slogo.controller;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 import slogo.controller.listings.MovingObjectProperties;
@@ -69,11 +71,11 @@ public class Parser implements BackEndExternalAPI {
     }
   }
 
-  public CommandExecuter getCommandExecuter() {
-    return commandExecuter;
-  }
-
   public void setTurtleOperating(int id) {
     commandExecuter.setTurtleOperating(id);
+  }
+
+  public Map<String, Double> gerUserVars() {
+    return commandExecuter.getUserVars();
   }
 }

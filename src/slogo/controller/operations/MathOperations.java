@@ -1,7 +1,9 @@
 package slogo.controller.operations;
 
+import java.util.Map;
 import java.util.Random;
 import slogo.exceptions.InvalidArgumentException;
+import slogo.model.Turtle;
 
 /**
  * This class contains exclusively of static method that perform basic math and boolean operations.
@@ -10,6 +12,10 @@ import slogo.exceptions.InvalidArgumentException;
 public class MathOperations {
 
   public static final String NONNEGATIVE_ARG = "The argument should be non-negative!";
+
+  public MathOperations(Turtle turtle, Map map) {
+
+  }
 
   /**
    * Adds two numbers together

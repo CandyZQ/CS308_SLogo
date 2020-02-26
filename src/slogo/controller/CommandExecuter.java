@@ -5,11 +5,14 @@ import static slogo.controller.listings.BasicSyntax.COMMENT;
 import static slogo.controller.listings.BasicSyntax.CONSTANT;
 import static slogo.controller.listings.BasicSyntax.LISTEND;
 import static slogo.controller.listings.BasicSyntax.LISTSTART;
+import static slogo.controller.listings.BasicSyntax.VARIABLE;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 import javafx.util.Pair;
@@ -29,12 +32,14 @@ public class CommandExecuter {
   private CommandsMapHelper commandsMapHelper;
   private Stack<String> commandsLeft;
   private Queue<EnumMap<MovingObjectProperties, Object>> turtleStates;
+  private Map<String, Double> userVars;
 
   public CommandExecuter(int animalNum) {
     animals = new ArrayList<>();
     for (int i = 0; i < animalNum; i++) {
       animals.add(new Turtle(i));
     }
+    userVars = new HashMap<>();
   }
 
 
@@ -62,7 +67,7 @@ public class CommandExecuter {
       current.addPara(nextPara);
     }
 
-    String returnVal = current.execute(animals.get(turtleOperating)).toString();
+    String returnVal = current.execute(animals.get(turtleOperating), userVars).toString();
     try {
       if (commandsMapHelper.getInputType(returnVal).equals(CONSTANT)) {
         animals.get(turtleOperating).getState()
@@ -88,6 +93,8 @@ public class CommandExecuter {
         .equals(double.class) || nextType.equals(int.class)) {
       if (commandsMapHelper.getInputType(next).equals(CONSTANT)) {
         return next;
+      } else if (commandsMapHelper.getInputType(next).equals(VARIABLE)) {
+        return userVars.get(next).toString();
       }
       commandsLeft.push(next);
       return getNextCommand(commandsMapHelper, commandsLeft, turtleStates);
@@ -147,5 +154,9 @@ public class CommandExecuter {
 
   public void setTurtleOperating(int turtleOperating) {
     this.turtleOperating = turtleOperating;
+  }
+
+  public Map<String, Double> getUserVars() {
+    return userVars;
   }
 }
