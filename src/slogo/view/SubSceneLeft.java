@@ -35,8 +35,10 @@ public class SubSceneLeft extends SubScene {
   private int TURTLE_X = 280;
   private int TURTLE_Y = 230;
   private final int TURTLE_SIZE = 60; // turtle is 60 px x 60 px
+  private static final int TURTLE_INITAL_X = 280;
+  private static final int TURTLE_INITAL_Y = 230;
   private Path path;
-
+  private Color markerColor;
 
 
   public SubSceneLeft() {
@@ -52,15 +54,14 @@ public class SubSceneLeft extends SubScene {
     initialX = 0;
     initialY = 0;
 
-    TranslateTransition t1 = moveTurtle(50, 50, 135, 5);
-    TranslateTransition t2 = moveTurtle(0, -50, 0, 5);
-    Animation path_animation = clipAnimation(path, 2);
+    TranslateTransition t1 = moveTurtle(TURTLE_INITAL_X + 50, TURTLE_INITAL_Y + 50, 135, 5);
+    Animation path_animation = clipAnimation(path);
     path_animation.play();
-    SequentialTransition s = new SequentialTransition(t1, t2);
+    SequentialTransition s = new SequentialTransition(t1);
     s.play();
   }
 
-  private Animation clipAnimation(Path path, int numSteps)
+  private Animation clipAnimation(Path path)
   {
     final Pane clip = new Pane();
     path.clipProperty().set(clip);
@@ -80,7 +81,7 @@ public class SubSceneLeft extends SubScene {
     pen.translateXProperty().addListener(pen_Listener);
     pen.translateYProperty().addListener(pen_Listener);
     //pen.rotateProperty().addListener(pen_Listener);
-    PathTransition pathTransition = new PathTransition(Duration.seconds(5*(numSteps+1)), path, pen);
+    PathTransition pathTransition = new PathTransition(Duration.seconds(5), path, pen);
     pathTransition.setOnFinished(new EventHandler<ActionEvent>()
     {
       @Override
@@ -94,25 +95,26 @@ public class SubSceneLeft extends SubScene {
     return pathTransition;
   }
 
-  private TranslateTransition moveTurtle(int xdist, int ydist, int heading, int duration) {
+  private TranslateTransition moveTurtle(int xfinal, int yfinal, int heading, int duration) {
+    turtle.setRotate(heading);
     path.getElements().addAll(
             new MoveTo(TURTLE_X + 30, TURTLE_Y + 30),
-            new LineTo(TURTLE_X + 50 + 30, TURTLE_Y + 50 + 30),
-            new MoveTo(280 + 50 + 30, 230 + 50 + 30),
-            new LineTo(280 + 50 + 30, 230 + 50 + 30 - 50)
+            new LineTo(xfinal + 30, yfinal + 30)
 
     );
     path.setFill(null);
-    path.setStroke(Color.BLACK);
+    path.setStroke(markerColor);
     path.setStrokeWidth(2);
-    turtle.setRotate(heading);
+
     trans = new TranslateTransition(Duration.seconds(duration), turtle); // slider.getValue() for Duration
     trans.setFromX(initialX);
     trans.setFromY(initialY);
-    trans.setToX(initialX + xdist);
-    trans.setToY(initialY + ydist);
-    initialX += xdist;
-    initialY += ydist;
+    trans.setToX(initialX + (xfinal - TURTLE_X));
+    trans.setToY(initialY + (yfinal - TURTLE_Y));
+    initialX += xfinal - TURTLE_X;
+    initialY += yfinal - TURTLE_Y;
+    TURTLE_X = xfinal;
+    TURTLE_Y = yfinal;
     return trans;
 
 
@@ -148,4 +150,9 @@ public class SubSceneLeft extends SubScene {
   public void setRectangleColor(Color color) {
     rect.setFill(color);
   }
+
+  public void getMarkerColor(Color color) {
+    markerColor = color;
+  }
+
 }
