@@ -1,4 +1,4 @@
-package slogo.controller;
+package slogo.controller.listings;
 
 public enum Languages {
   CHINESE,

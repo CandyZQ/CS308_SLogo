@@ -1,14 +1,19 @@
 package slogo.controller;
 
+import static slogo.controller.listings.BasicSyntax.COMMAND;
+import static slogo.controller.listings.BasicSyntax.COMMENT;
+import static slogo.controller.listings.BasicSyntax.CONSTANT;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 import javafx.util.Pair;
+import slogo.controller.listings.CommandType;
+import slogo.controller.listings.MovingObjectProperties;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
@@ -78,8 +83,11 @@ public class Parser implements BackEndExternalAPI {
 
   private String getNextCommand()
       throws CommandDoesNotExistException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException {
+    String commandName = popNext();
+    if (!commandsMapHelper.getInputType(commandName).equals(COMMAND)) {
+      throw new InvalidArgumentException("The command " + commandName + " is not a valid SLogo command!");
+    }
 
-    String commandName = commandsLeft.pop();
     commandName = commandsMapHelper.convertUserInput(commandName);
     System.out.println(commandName);
     Pair<Class<?>, Method> pair = findClass(commandName);
@@ -99,12 +107,12 @@ public class Parser implements BackEndExternalAPI {
 
   private String getNextPara(CommandStructure structure)
       throws WrongCommandFormatException, CommandDoesNotExistException, InvalidArgumentException, LanguageIsNotSupportedException {
-    String next = commandsLeft.pop();
+    String next = popNext();
     Class<?> nextType = structure.getNextParaType();
 
     // TODO: potentially add more types if necessary
     if (nextType.equals(Double.class) || nextType.equals(Integer.class) || nextType.equals(double.class) || nextType.equals(int.class)) {
-      if (isNumeric(next)) {
+      if (commandsMapHelper.getInputType(next).equals(CONSTANT)) {
         return next;
       }
       commandsLeft.push(next);
@@ -116,13 +124,12 @@ public class Parser implements BackEndExternalAPI {
     }
   }
 
-  private boolean isNumeric(String str) {
-    try {
-      Double.parseDouble(str);
-      return true;
-    } catch (NumberFormatException e) {
-      return false;
+  private String popNext() throws InvalidArgumentException {
+    String next = commandsLeft.pop();
+    while (!commandsLeft.isEmpty() && commandsMapHelper.getInputType(next).equals(COMMENT)) {
+      next = commandsLeft.pop();
     }
+    return next;
   }
 
   private Pair<Class<?>, Method> findClass(String commandName) throws CommandDoesNotExistException {

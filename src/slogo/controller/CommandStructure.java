@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import slogo.controller.listings.MovingObjectProperties;
 import slogo.controller.operations.TurtleCommands;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.WrongCommandFormatException;

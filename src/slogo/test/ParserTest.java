@@ -2,19 +2,15 @@ package slogo.test;
 
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Queue;
 import org.junit.Assert;
 import org.junit.Test;
-import slogo.controller.Languages;
-import slogo.controller.MovingObjectProperties;
+import slogo.controller.listings.MovingObjectProperties;
 import slogo.controller.Parser;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 import slogo.exceptions.WrongCommandFormatException;
-import slogo.model.MovingObject;
-import slogo.model.Turtle;
 
 public class ParserTest {
   @Test

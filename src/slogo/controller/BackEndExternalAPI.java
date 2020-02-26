@@ -3,6 +3,7 @@ package slogo.controller;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Queue;
+import slogo.controller.listings.MovingObjectProperties;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
