@@ -60,7 +60,6 @@ public class UserOperations {
     checkType(increment, BasicSyntax.CONSTANT, 4);
 
     return loop(Integer.parseInt(start), Integer.parseInt(end), Integer.parseInt(increment), commands, variable);
-
    }
 
    private void checkType(String s, BasicSyntax type, int num) throws InvalidArgumentException {
@@ -71,17 +70,17 @@ public class UserOperations {
 
   public String IF(Integer expr, String commands) {
     if (expr != 0) {
-      return commands.substring(1, commands.length() - 1);
+      return commands.substring(2, commands.length() - 1);
     } else {
-      return "";
+      return " ";
     }
   }
 
-  public String ifElse(int expr, String trueCommands, String falsecommands) {
+  public String ifElse(Integer expr, String trueCommands, String falsecommands) {
     if (expr != 0) {
-      return trueCommands.substring(1, trueCommands.length() - 1);
+      return trueCommands.substring(2, trueCommands.length() - 1);
     } else {
-      return falsecommands.substring(1, falsecommands.length() - 1);
+      return falsecommands.substring(2, falsecommands.length() - 1);
     }
   }
 
