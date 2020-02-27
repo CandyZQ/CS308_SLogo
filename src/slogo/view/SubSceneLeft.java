@@ -22,6 +22,7 @@ import slogo.controller.listings.MovingObjectProperties;
 
 public class SubSceneLeft extends SubScene {
 
+
   private static final int INITIAL_TURTLE_X = 280;
   private static final int INITIAL_TURTLE_Y = 230;
   private final int TURTLE_SIZE = 60; // turtle is 60 px x 60 px
