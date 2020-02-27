@@ -88,27 +88,6 @@ public class SubSceneLeft extends SubScene {
     });
   }
 
-  private void recurse(){
-    if (!queue.isEmpty){
-      //pop
-      TranslateTransition one = singleTurtleMovement(50, 50, 135, 5);
-      one.play();
-
-      if(!queue.isEmpty){
-        one.setOnFinished(new EventHandler<ActionEvent>() {
-
-          @Override
-          public void handle(ActionEvent event) {
-            TranslateTransition two = singleTurtleMovement(50, 0, 0, 5);
-            //path_animation = clipAnimation(path);
-            //path_animation.play();
-            two.play();
-            recurse();
-          }
-        });
-      }
-    }
-  }
 
   public TranslateTransition singleTurtleMovement(int xfinal, int yfinal, int heading, int duration){
     TranslateTransition t1 = moveTurtle(TURTLE_INITAL_X + xfinal, TURTLE_INITAL_Y + yfinal, heading, duration);
