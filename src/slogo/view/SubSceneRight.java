@@ -44,7 +44,7 @@ public class SubSceneRight extends SubScene {
 
   private Image turtle = new Image("file:resources/defaultTurtle.png");
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
-  public static final Color INITIAL_MARKER_COLOR = null;
+  public static final Color INITIAL_MARKER_COLOR = null; // the code for having the pen up
   private static final String SUCCESSFUL_COMMAND = "Command successfully processed!";
   private static final String EMPTY_COMMAND = "No command entered.";
   private static final String NEW_MARKER_COLOR = "New Marker Color Chosen: ";
@@ -298,6 +298,10 @@ public class SubSceneRight extends SubScene {
 
   public Object getLanguage() {
     return language;
+  }
+
+  public Color getMarkerClickedColor(){
+    return markerClickedColor;
   }
 
   public String getTheText() {

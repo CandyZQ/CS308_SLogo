@@ -73,9 +73,11 @@ public class ViewScreen implements ExternalAPIViewable {
       Queue<EnumMap<MovingObjectProperties, Object>> commands,
       Map<String, Double> variables) {
     scLeft.setRectangleColor(scRight.getClickedColor());
+    scLeft.setMarkerColor(scRight.getMarkerClickedColor());
     scLeft.setTurtle(scRight.getTurtle());
     scLeft.listenToDisableTextField(scRight.getTextField());
     scRight.setVariableTextArea(variables);
+
     //scRight.setUserTextArea();
     if (commands != null) {
       scLeft.update(commands);
