@@ -4,7 +4,6 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Queue;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 import javafx.stage.Stage;
@@ -21,7 +20,6 @@ public class ViewScreen implements ExternalAPIViewable {
   private static SubSceneRight scRight;
   private Stage stage;
   private Scene scene;
-  private BorderPane root;
 
   public ViewScreen(Stage stage) {
     this.stage = stage;
@@ -34,7 +32,7 @@ public class ViewScreen implements ExternalAPIViewable {
   }
 
   private void startView() {
-    this.root = new BorderPane();
+    BorderPane root = new BorderPane(); // might need to make this an instance variable for refactoring, got rid of warning for now with local variable
     scRight = new SubSceneRight();
     scRight.assignStage(stage);
     root.setRight(scRight.getRoot());
@@ -79,9 +77,7 @@ public class ViewScreen implements ExternalAPIViewable {
     scLeft.listenToDisableTextField(scRight.getTextField());
     scRight.setVariableTextArea(variables);
     //scRight.setUserTextArea();
-    if (commands == null || commands.isEmpty()) {
-      return;
-    } else {
+    if (commands != null) {
       scLeft.update(commands);
     }
   }
