@@ -13,6 +13,7 @@ import slogo.exceptions.WrongCommandFormatException;
 import slogo.model.Turtle;
 
 class CommandStructure {
+
   Class<?> c;
   Method m;
   List<Object> paras;
@@ -55,7 +56,7 @@ class CommandStructure {
     return m.getName();
   }
 
-  Object execute(Turtle turtle, Map<String, Double> userVars)
+  Object execute(Turtle turtle, Map<String, Double> userVars, Map<String, List<String>> functions)
       throws InvalidArgumentException, WrongCommandFormatException {
     if (needMoreParas()) {
       throw new WrongCommandFormatException(
@@ -64,7 +65,8 @@ class CommandStructure {
 
     Object res = null;
     try {
-      res = m.invoke(c.getConstructor(Turtle.class, Map.class).newInstance(turtle, userVars), paras.toArray(new Object[0]));
+      res = m.invoke(c.getConstructor(Turtle.class, Map.class, Map.class)
+          .newInstance(turtle, userVars, functions), paras.toArray(new Object[0]));
     } catch (IllegalArgumentException e) {
       throw new InvalidArgumentException(e);
     } catch (IllegalAccessException e) {

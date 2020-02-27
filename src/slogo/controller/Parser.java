@@ -1,8 +1,8 @@
 package slogo.controller;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
@@ -17,16 +17,13 @@ public class Parser implements BackEndExternalAPI {
   private CommandsMapHelper commandsMapHelper;
   private CommandExecuter commandExecuter;
   private Queue<EnumMap<MovingObjectProperties, Object>> turtleStates;
-
   private Stack<String> commandsLeft;
 
   public Parser(int animalNum) {
     turtleStates = new LinkedList<>();
-
     commandsMapHelper = new CommandsMapHelper();
     commandsLeft = new Stack<>();
     commandExecuter = new CommandExecuter(animalNum);
-
   }
 
   /**
@@ -77,5 +74,9 @@ public class Parser implements BackEndExternalAPI {
 
   public Map<String, Double> gerUserVars() {
     return commandExecuter.getUserVars();
+  }
+
+  public Map<String, List<String>> getFunctions() {
+    return commandExecuter.getFunctions();
   }
 }

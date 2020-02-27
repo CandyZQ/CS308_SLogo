@@ -33,6 +33,8 @@ public class CommandExecuter {
   private Stack<String> commandsLeft;
   private Queue<EnumMap<MovingObjectProperties, Object>> turtleStates;
   private Map<String, Double> userVars;
+  // List entries: variable and then command
+  private Map<String, List<String>> functions;
 
   public CommandExecuter(int animalNum) {
     animals = new ArrayList<>();
@@ -40,6 +42,7 @@ public class CommandExecuter {
       animals.add(new Turtle(i));
     }
     userVars = new HashMap<>();
+    functions = new HashMap<>();
   }
 
 
@@ -67,13 +70,14 @@ public class CommandExecuter {
       current.addPara(nextPara);
     }
 
-    String returnVal = current.execute(animals.get(turtleOperating), userVars).toString();
+    String returnVal = current.execute(animals.get(turtleOperating), userVars, functions)
+        .toString();
     try {
       if (commandsMapHelper.getInputType(returnVal).equals(CONSTANT)) {
         animals.get(turtleOperating).getState()
             .put(MovingObjectProperties.RETURN_VALUE, Double.parseDouble(returnVal));
       }
-    } catch (InvalidArgumentException e){
+    } catch (InvalidArgumentException e) {
       String[] ss = returnVal.split(" ");
       for (int i = ss.length - 1; i >= 0; i--) {
         commandsLeft.push(ss[i]);
@@ -121,6 +125,16 @@ public class CommandExecuter {
         next.append(s);
       }
     }
+
+    if (functions.containsKey(next.toString())) {
+      List<String> com = functions.get(next.toString());
+      String[] ss = com.get(1).split(" ");
+      for (int i = ss.length - 1; i >= 0; i--) {
+        commandsLeft.push(ss[i]);
+      }
+      next = new StringBuilder(popNext());
+    }
+
     return next.toString();
   }
 
@@ -158,5 +172,9 @@ public class CommandExecuter {
 
   public Map<String, Double> getUserVars() {
     return userVars;
+  }
+
+  public Map<String, List<String>> getFunctions() {
+    return functions;
   }
 }
