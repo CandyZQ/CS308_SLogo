@@ -15,9 +15,6 @@ import slogo.view.ViewScreen;
 import slogo.controller.listings.MovingObjectProperties;
 
 
-/**
- *
- */
 public class Main extends Application {
 
     public static final int FRAMES_PER_SECOND = 60;
