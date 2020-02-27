@@ -18,7 +18,7 @@ public class CommandPrompt implements ExternalAPIViewable {
   }
 
   @Override
-  public void exceptionHandling() throws Exception {
+  public void exceptionHandling() {
 
   }
 
