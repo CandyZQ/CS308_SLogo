@@ -14,7 +14,7 @@ public class BooleanOperations {
    * @param b = expr2
    * @return returns 1 if the value of expr1 is strictly less than the value of expr2, otherwise 0
    */
-  public Integer less(Double a, Double b) {
+  public Integer lessThan(Double a, Double b) {
     if (a < b) {
       return 1;
     } else {
@@ -28,7 +28,7 @@ public class BooleanOperations {
    * @param b = expr2
    * @return returns 1 if the value of expr1 is strictly greater than the value of expr2, otherwise 0
    */
-  public Integer greater(Double a, Double b) {
+  public Integer greaterThan(Double a, Double b) {
     if (a > b) {
       return 1;
     } else {
@@ -56,7 +56,7 @@ public class BooleanOperations {
    * @param b = expr2
    * @return returns 1 if the value of expr1 and the value of expr2 are not equal, otherwise 0
    */
-  public Integer notequal(Double a, Double b) {
+  public Integer notEqual(Double a, Double b) {
     if (a != b) {
       return 1;
     } else {
