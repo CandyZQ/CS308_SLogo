@@ -4,7 +4,7 @@
 
 package slogo.model;
 
-import slogo.controller.MovingObjectProperties;
+import slogo.controller.listings.MovingObjectProperties;
 
 import java.util.EnumMap;
 import java.util.Map;

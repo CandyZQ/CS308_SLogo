@@ -2,16 +2,18 @@ package slogo.controller;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
+import slogo.controller.listings.BasicSyntax;
+import slogo.controller.listings.Languages;
 import slogo.exceptions.CommandDoesNotExistException;
+import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 
-class CommandsMapHelper {
+public class CommandsMapHelper {
   public static final String RESOURCE_DIR = "resources/languages/";
   public static final String SYNTAX_FILE = "Syntax";
 
@@ -67,5 +69,14 @@ class CommandsMapHelper {
 
   private boolean isMatch(String command, Pattern pattern) {
     return pattern.matcher(command).matches();
+  }
+
+  public BasicSyntax getInputType(String input) throws InvalidArgumentException {
+    for (String key: syntaxMap.keySet()) {
+      if (isMatch(input, syntaxMap.get(key))) {
+        return BasicSyntax.valueOf(key.toUpperCase());
+      }
+    }
+    throw new InvalidArgumentException("The input " + input + " is not valid in SLogo.");
   }
 }

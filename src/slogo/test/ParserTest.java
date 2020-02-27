@@ -2,19 +2,15 @@ package slogo.test;
 
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Queue;
 import org.junit.Assert;
 import org.junit.Test;
-import slogo.controller.Languages;
-import slogo.controller.MovingObjectProperties;
+import slogo.controller.listings.MovingObjectProperties;
 import slogo.controller.Parser;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 import slogo.exceptions.WrongCommandFormatException;
-import slogo.model.MovingObject;
-import slogo.model.Turtle;
 
 public class ParserTest {
   @Test
@@ -97,6 +93,8 @@ public class ParserTest {
 
     try {
       Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("forward sum 10 sum 25 50");
+      q.poll();
+      q.poll();
       Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
       Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
       printQueue(q);
@@ -109,7 +107,57 @@ public class ParserTest {
   private void printQueue(Queue<EnumMap<MovingObjectProperties, Object>> q) {
     while (!q.isEmpty()) {
       Map<MovingObjectProperties, Object> map = q.poll();
-      System.out.println(map.get(MovingObjectProperties.RETURN_VALUE));
+      System.out.println(map.get(MovingObjectProperties.Y));
+//      System.out.println(map.get(MovingObjectProperties.HEADING));
+//      System.out.println(map.get(MovingObjectProperties.RETURN_VALUE));
+    }
+  }
+
+  @Test
+  public void shouldLoop() {
+    Parser parser = new Parser(1);
+
+    try {
+      parser.setLanguage("English");
+    } catch (LanguageIsNotSupportedException e) {
+      e.printStackTrace();
+    }
+
+    try {
+//      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("repeat 2 [ fd 50 ]");
+//      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("dotimes [ :a 3 ] [ fd 50 ]");
+      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("for [ :b 2 6 3 ] [ fd 50 ]");
+      printQueue(q);
+
+    } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void shouldIf() {
+    Parser parser = new Parser(1);
+
+    try {
+      parser.setLanguage("English");
+    } catch (LanguageIsNotSupportedException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("if 2 [ fd 50 ]");
+//      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
+//      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
+      printQueue(q);
+      q = parser.execute("if 0 [ fd 50 ]");
+      printQueue(q);
+      q = parser.execute("ifelse 0 [ fd 50 ] [ fd 100 ]");
+      printQueue(q);
+
+    } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
+      e.printStackTrace();
     }
   }
 }
+
+

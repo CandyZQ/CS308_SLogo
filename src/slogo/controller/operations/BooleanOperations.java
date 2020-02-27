@@ -1,7 +1,13 @@
 package slogo.controller.operations;
 
+import java.util.Map;
+import slogo.model.Turtle;
+
 public class BooleanOperations {
 
+  public BooleanOperations(Turtle turtle, Map map) {
+
+  }
   /**
    * @param a = expr1
    * @param b = expr2
