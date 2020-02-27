@@ -1,13 +1,14 @@
 package slogo.controller.operations;
 
-import slogo.controller.MovingObjectProperties;
+import java.util.Map;
+import slogo.controller.listings.MovingObjectProperties;
 import slogo.model.Turtle;
 
 public class TurtleCommands {
 
   Turtle turtle;
 
-  public TurtleCommands(Turtle turtle) {
+  public TurtleCommands(Turtle turtle, Map map) {
     this.turtle = turtle;
   }
 
@@ -20,7 +21,7 @@ public class TurtleCommands {
   }
 
   public void left(Double degrees) {
-    turtle.setHeading((Double) turtle.getState().get(MovingObjectProperties.HEADING) + degrees);
+    turtle.setHeading(-degrees);
   }
 
   public void right(Double degrees) {

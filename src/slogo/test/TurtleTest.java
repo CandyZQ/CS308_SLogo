@@ -6,7 +6,7 @@ package slogo.test;
 
 import org.junit.Assert;
 import org.junit.Test;
-import slogo.controller.MovingObjectProperties;
+import slogo.controller.listings.MovingObjectProperties;
 import slogo.model.Turtle;
 
 public class TurtleTest {

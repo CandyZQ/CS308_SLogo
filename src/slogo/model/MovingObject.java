@@ -1,7 +1,7 @@
 package slogo.model;
 
 import java.util.Map;
-import slogo.controller.MovingObjectProperties;
+import slogo.controller.listings.MovingObjectProperties;
 
 /**
  * This is the backend internal API for the slogo project.
