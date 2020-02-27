@@ -22,8 +22,8 @@ public class Main extends Application {
 
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-    private long time;
+    //    public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+//    private long time;
     private ViewScreen viewScreen;
     private Parser parser;
 
@@ -37,7 +37,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws LanguageIsNotSupportedException {
         viewScreen = new ViewScreen(primaryStage);
-        time = System.currentTimeMillis();
+        //time = System.currentTimeMillis();
         parser = new Parser(1);
         parser.setLanguage(viewScreen.getLanguage());
         setTiming();
@@ -63,11 +63,9 @@ public class Main extends Application {
         Queue<EnumMap<MovingObjectProperties, Object>> commands = null;
         if (inputString != null) {
             commands = parser.execute(inputString);
-            //System.out.println(commands.remove().get(MovingObjectProperties.X));
-            //System.out.println(commands.remove().get(MovingObjectProperties.Y));
         }
         parser.setLanguage(viewScreen.getLanguage());
-        ViewScreen.update(commands);
+        ViewScreen.update(commands, parser.gerUserVars(), parser.getFunctions());
     }
 }
 

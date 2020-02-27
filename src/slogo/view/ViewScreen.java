@@ -1,6 +1,7 @@
 package slogo.view;
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import javafx.scene.Scene;
@@ -15,14 +16,11 @@ public class ViewScreen implements ExternalAPIViewable {
   public static final int STAGE_WIDTH = 1000;
   public static final String STAGE_TITLE = "SLOGO";
   public static final String STYLE_SHEET = "style.css";
-  private static final Integer zero = 0;
-  private static final Integer one = 1;
 
   private static SubSceneLeft scLeft;
   private static SubSceneRight scRight;
   private Stage stage;
   private Scene scene;
-  private BorderPane root;
 
   public ViewScreen(Stage stage) {
     this.stage = stage;
@@ -35,7 +33,7 @@ public class ViewScreen implements ExternalAPIViewable {
   }
 
   private void startView() {
-    this.root = new BorderPane();
+    BorderPane root = new BorderPane(); // might need to make this an instance variable for refactoring, got rid of warning for now with local variable
     scRight = new SubSceneRight();
     scRight.assignStage(stage);
     root.setRight(scRight.getRoot());
@@ -73,23 +71,19 @@ public class ViewScreen implements ExternalAPIViewable {
 
 
   public static void update(
-      Queue<EnumMap<MovingObjectProperties, Object>> commands) {
-    if (commands == null || commands.isEmpty()) {
-      return;
-    } else {
-      while (!commands.isEmpty()) {
-        EnumMap<MovingObjectProperties, Object> items = commands.remove();
-        if (items.get(MovingObjectProperties.CLEAR) == one) {
-          //TODO: implement
-        } else {
-          scLeft.update(items);
-        }
-      }
-
-    }
+      Queue<EnumMap<MovingObjectProperties, Object>> commands,
+      Map<String, Double> variables,
+      Map<String, List<String>> functions) {
     scLeft.setRectangleColor(scRight.getClickedColor());
+    scLeft.setMarkerColor(scRight.getMarkerClickedColor());
     scLeft.setTurtle(scRight.getTurtle());
+    scLeft.listenToDisableTextField(scRight.getTextField());
+    scRight.setVariableTextArea(variables);
 
+    scRight.setUserTextArea(functions);
+    if (commands != null) {
+      scLeft.update(commands);
+    }
   }
 
   @Override

@@ -1,12 +1,14 @@
+DESIGN_PLAN.md
+
 # PARSER DESIGN PLAN
 #### Team Number: 15
 #### Team Members:
-Ryan Mecca (rm358)
-Cady Zhou (zz160)
-Sarah Gregorich (seg47)
-Ameer Syedibrahim (as877)
+Ryan Mecca (rm358)  
+Cady Zhou (zz160)  
+Sarah Gregorich (seg47)  
+Ameer Syedibrahim (as877)  
 
-## Introduction (cady (thx cady!))
+## Introduction 
 The goal of this project is to create a Java program that allows users to draw and learn programming with simple commands. This project should allow users to input known commands, and returns the desired result. User inputs can either be a command that makes a turtle move and draw on the white background, or a simple programming language (conditional statement, loop, math operation, variable assignment, etc). 
 
 We will use MVC structure as the architecure of this project. This design should be able to be expanded later so that more drawing/operation commands can be accepted.
@@ -15,10 +17,15 @@ We will use MVC structure as the architecure of this project. This design should
 - The controller gets commands from the view. Depending on the command's type, it can call different methods from the model to update the turtle's state, or execute the command as a programming language. 
 - The model saves the state of the turtle, updates it for each command, and passed it back to the controller. 
 
-## Overview (everyone)
-- Internal Backend API will be responsible communicate between the model and the view. It consists of public methods in Model, Turtle.java, which allows the controller to get and set the current status of the Turtle. The status information includes the turtle's x position, y position, angle in which it is heading, visibility, and whether the pen is down or not. 
+## Overview
+- Internal Backend API will be responsible communicate between the model and the view. It consists of public methods in Model, Turtle.java, which allows the controller to get and set the current status of the Turtle. The status information includes the turtle's x position, y position, angle in which it is heading, and visibility.
+![Structure of backend](https://i.imgur.com/fL67uOT.png)
 
-- External Backend API will consist of public methods that reads individual commands from the view. Before reading in commands, a method that sets the user's language should also be called. After each command is interpreted and the backend updates the turtle's status, this API should pass the current status as a map of the turtle back to the frontend. All the implementation will be wrote in Controller.Parser.java.
+
+- External Backend API will consist of public methods that reads individual commands from the view. Before reading in commands, a method that sets the user's language should also be called. After each command is interpreted and the backend updates the turtle's status, this API should pass the current status as a map of the turtle back to the frontend. All the implementation will be wrote in Controller.Parser.java. There are also multiple exceptiions that need to be handled.
+![Strcture of controller](https://i.imgur.com/LCGsbrx.png)
+
+![Exceptions](https://i.imgur.com/ZMhoybL.png)
 
 - The internal Front-end API will deal with the communication between the classes in the front end of the code. This will include a class that will control the color of the pen chosen, the image for the turtle, the for loop for the turtle moving one pixel as the time. The classes will communicate between each other about the color that the marker should draw the line in, the width of the line, and the image used for the turtle. This can also communicate between themselves the differnt commands of the buttons where they would create a pull down window or pop out a new scene for the user. Lastly, the Frontend Internal API will deal with passing the turtle information back and forth that has to do with its movement, color, image, and properties. Also included in the internal API is the set on command pressed buttons of enter and if a button is pressed for a new color, this will need to be communicated to the view manager which can communicate to the External API/controller.
 
@@ -26,11 +33,12 @@ We will use MVC structure as the architecure of this project. This design should
 
 With regards to data structures, a Map was chose to hold the Turtle's state as opposed to passing a TurtleState object so that the front end is not required to handle classes implemented in the back end.
 
-## User Interface (ryan and ameer)
+## User Interface 
 
 ![Image of the proposed front end view](https://i.imgur.com/JmHdvK0.jpg)
 
 ![Image of the proposed plan of View package](https://i.imgur.com/UE8U68b.png)
+
 
 
 
@@ -76,8 +84,7 @@ Error checking
 * This window can then be closed, without the turtle performing the action, and the user can input another action.
 
 
-## Design Details (everyone)
-
+## Design Details 
 - Front End Internal:
     - As mentioned previously, the front-end internal API will contain all classes that communicate with one another in the front-end. 
     - The first class will control the color of the pen chosen. This class will allow the user to click a button and will corresponding set the marker to that color. It is intended to be used as only in the front-end and can be stored in a log for future use (potentially in complete)
@@ -101,7 +108,7 @@ Error checking
     - Controller.Parser.java accepts individual commands as strings from the frontend (View) via Controller.Parser.execute(String command). 
     - The frontend can also call Controller.Parser.setLanguage(String language) which will tell the controller which property files to look at in order to decode the input strings.
 
-## API as Code (everyone)
+## API as Code 
 
 #### Front End
 * External API
@@ -112,6 +119,7 @@ import java.util.Map;
 import java.util.Queue;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import slogo.controller.MovingObjectProperties;
 
 /**
  * The purpose of this interface is to communicate between the controller package and the view
@@ -136,7 +144,7 @@ public interface ExternalAPIViewable {
    * @return A Queue of Maps that store the x position, y position, heading, and other information
    * about the turtle
    */
-  Queue<Map<String, Integer>> getFinalInformation();
+  Queue<Map<MovingObjectProperties, Double>> getFinalInformation();
 
   /**
    * This method will give the string from the command line to the controller for error handing and
@@ -150,12 +158,11 @@ public interface ExternalAPIViewable {
    * This method will handle the exception that is caught by the controller if the input information
    * is bad.
    *
-   * @throws Exception This is a general exception that is bound to change as the code takes shape,
-   *                   but will catch the exception or be clarified in the overrides of this message
+   * @param e This is a general exception that is bound to change as the code takes shape,
+   *                   but will handle the exception or be clarified in the overrides of this message
    *                   as we write our own exception to use.
    */
-  void exceptionHandling() throws Exception;
-
+  void exceptionHandling(Exception e);
   /**
    * This method will be called by the controller to initialize and set the scene for the first time
    * in the initial configuration.
@@ -177,7 +184,7 @@ public interface ExternalAPIViewable {
    *
    * @return The string of the language that was selected to identify the commands in.
    */
-  String setLanguage();
+  String getLanguage();
 }
 
 ```
@@ -240,40 +247,50 @@ public interface ViewInternalAPI {
 ```java
 package slogo.controller;
 
+import java.util.Map;
+import java.util.Queue;
+import slogo.exceptions.CommandDoesNotExistException;
+import slogo.exceptions.InvalidArgumentException;
+import slogo.exceptions.LanguageIsNotSupportedException;
+import slogo.exceptions.WrongCommandFormatException;
+import slogo.controller.MovingObjectProperties;
+
 /**
- * The purpose of this interface is to communicate between the controller package and the view
- * package. These packages will have to do a lot of communication for the code to work, as they will
- * be sending and returning the information from the back end about where the object, turtle, should
- * move and end at. The methods included in this Interface are to take in the map of the final
- * position from the controller and give this to the view, as well as a method to give the input
- * string from the command line to the controller for error checking and parsing. This API might
- * also include error checking as it will have to pass the string of the command to the controller
- * whether or not the string is a valid command. In the controller it will check if the command is a
- * valid string and a valid final position for the turtle to end in. This will then throw an
- * exception of our own creation in the controller package. This exception will be caught by the
- * view package and handled there where it will create an error window with the tag from the
- * exception displayed.
+ * This is the backend external API for the slogo project.
+ * <p></p>
+ * This class takes user inputs in a specific language as a String and interpret it as one of the
+ * pre-set commands, which give specific instructions of on how the backend states need to be
+ * updated. This class then correspondingly updates backend states, and returns the current state
+ * and other necessary values. Each state is stored in a {@link Map}, and a {@link Queue} of maps
+ * will be returned. In most cases the {@link Queue} contains only one {@link Map}, but multiple
+ * {@code Maps} will be returned when a {@code FOR} command is executed.
+ * <p></p>
+ * Note, the language the user uses should be set before any user inputs are read, and then all user
+ * inputs will be interpreted in that language until the language is reset.
+ * <p></p>
+ * User inputs will be checked to see whether commands are recognizable, and if yes, whether the
+ * format fulfills the format of that command. Multiple exceptions can be thrown in this process.
  */
-public interface ControllerExternalAPI {
-  
-  /**
-   * This method will be available to the front end (View) to execute command strings inputted by 
-   * the user. The back end will return from this function the updated state(s) of the Turtle in order
-   * of updates made (in case of a for loop).
-   * 
-   * @return Queue of Maps which contain the parameters defining the state of the Turtle at each
-   * update position
-   */
-  Queue<Map> execute(String command);
+public interface BackEndExternalAPI {
 
   /**
-   * This method will be available to the front end (View) to set the language desired by the user. 
-   * The back end will internally set the property file to be used from that point on. Running commands
-   * using the execute function is dependent on setting the language.
-   * 
+   * Sets the desired language commands the user passed will be interpreted in. This method can be
+   * called multiple times for the user to change language.
+   *
+   * @param language the language user inputs will be in
    */
-  void setLanguage(String language);
+  void setLanguage(String language) throws LanguageIsNotSupportedException;
+
+  /**
+   * Accepts one command from user input and updates the backend states accordingly
+   *
+   * @param command the command that the user inputs
+   * @return a {@code Queue} of {@code Map} that represents states of the backend
+   */
+  Queue<Map<MovingObjectProperties, Double>> execute(String command)
+      throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException;
 }
+
 
 ```
 * Internal API
@@ -281,51 +298,240 @@ public interface ControllerExternalAPI {
 ```java
 package slogo.model;
 
+import java.util.Map;
+
 /**
- * The purpose of this interface is to provide the Controller with the ability to
- * update the Turtle's state appropriately, as well as obtain a copy of that state to pass to View for
- * display purposes.
- * 
+ * This is the backend internal API for the slogo project.
+ * <p></p>
+ * This class stores necessary state information, multiple operations that changes some or all of
+ * the state information, and a getter methods that returns all state information. The state
+ * information includes:
+ * <ul>
+ *   <li>the x position</li>
+ *   <li>the y position</li>
+ *   <li>the direction in which this object is heading</li>
+ *   <li>the visibility</li>
+ * </ul>
  */
-public interface ModelInternalAPI {
-    /**
-     * Model.Turtle.java will provide the below methods to Controller to allow updates to Turtle state
-     * consistent with the commands being executed.
-     * 
-     */
-    double getDistanceTravelled()
-    double setCoordinates(double x, double y)
-    double setHeading(double angle)
-    void moveDistance(double distance)
-    void reset()
-    Map<> getState()
-    
-    /**
-     * 
-     * Model.Operations.java will provide the below methods to Controller to perform mathematical 
-     * operations and logic operations demanded by the execution of commands.
-     * 
-     */
-    static double sum(double a, double b)
-    static double difference(double a, double b)
-    static double product(double a, double b)
-    double quotient(double a, double b)
-    double remainder(double a, double b)
-    double minus(double a)
-    double random(double max)
-    double sin(double degrees)
-    double cos(double degrees)
-    double tan(degrees)
-    double atan(degrees)
-    double log(degrees)
-    pow(degrees)
-    double pi()
+public interface MovingObject {
+
+  /**
+   * Gets the distance this {@link MovingObject} travelled when the state changes
+   *
+   * @return the distance travelled
+   */
+  double getDistanceTravelled();
+
+
+  /**
+   * Moves this object forward/backward certain distance
+   *
+   * @param distance the distance to be moved, positive value moves this object forward while
+   *                 negative value moves it backward
+   * @return the distance moved
+   */
+  double moveDistance(double distance);
+
+  /**
+   * Sets the new heading of this object
+   *
+   * @param angle the new heading, which assumes north of (0,0) is 0 degree and turning clockwise
+   *              from NORTH increases angle
+   * @return the number of degree moved
+   */
+  double setHeading(double angle);
+
+  /**
+   * Sets the position of this object
+   *
+   * @param x the x position
+   * @param y the y position
+   * @return the distance moved
+   */
+  double setCoordinates(double x, double y);
+
+
+  /**
+   * Returns this object to the center of the screen and sets heading ot 0
+   */
+  void reset();
+
+  /**
+   * Gets all state information of this object as a {@link Map}
+   *
+   * @return a {@link Map} containing all state information
+   */
+  Map<MovingObjectProperties, Double> getState();
+}
+```
+
+```java 
+package slogo.model;
+
+import java.util.Random;
+import slogo.exceptions.InvalidArgumentException;
+
+/**
+ * This class contains exclusively of static method that perform basic math and boolean operations.
+ * The methods of this class throws any exceptions that can happen during a math operation.
+ */
+public interface Operations {
+
+  /**
+   * Adds two numbers together
+   *
+   * @param a the first value
+   * @param b the second value
+   * @return the result
+   */
+  static double sum(double a, double b) {
+    return a + b;
+  }
+
+  /**
+   * Subtracts the second value from the first
+   *
+   * @param a the first value
+   * @param b the second value
+   * @return the result
+   */
+  static double difference(double a, double b) {
+    return a - b;
+  }
+
+  /**
+   * Multiplies two values
+   *
+   * @param a the first value
+   * @param b the second value
+   * @return the result
+   */
+  static double product(double a, double b) {
+    return a * b;
+  }
+
+  /**
+   * Divides two doubles
+   *
+   * @param a the first double
+   * @param b the second double
+   * @return the result
+   */
+  static double quotient(double a, double b) {
+    return a / b;
+  }
+
+  /**
+   * Returns remainder on dividing the values of the second value from the first value
+   *
+   * @param a the first int
+   * @param b the second int
+   * @return the result
+   */
+  static double remainder(int a, int b) {
+    return a % b;
+  }
+
+
+  /**
+   * Returns negative of the value
+   *
+   * @param a the value
+   * @return the negative of the value
+   */
+  static double minus(double a) {
+    return 0 - a;
+  }
+
+  /**
+   * Returns random non-negative number strictly less than max
+   *
+   * @param max the upper bound of return value
+   * @return a non-negative random value smaller than max
+   */
+  static double random(double max) throws InvalidArgumentException{
+    if (max < 0) {
+      throw new InvalidArgumentException("The argument should be non-negative!");
+    }
+    Random rand = new Random();
+    return rand.nextDouble() * max;
+  }
+
+  /**
+   * Returns sine of an angle
+   *
+   * @param degrees the angle in degree
+   * @return the result
+   */
+  static double sin(double degrees) {
+    return Math.sin(degrees);
+  }
+
+  /**
+   * Returns cosine of an angle
+   *
+   * @param degrees the angle in degree
+   * @return the result
+   */
+  static double cos(double degrees) {
+    return Math.cos(degrees);
+  }
+
+  /**
+   * Returns tangent of an angle
+   *
+   * @param degrees the angle in degree
+   * @return the result
+   */
+  static double tan(double degrees) {
+    return Math.tan(degrees);
+  }
+
+  /**
+   * Returns arctangent of an angle
+   *
+   * @param degrees the angle in degree
+   * @return the result
+   */
+  static double atan(double degrees) {
+    return Math.atan(degrees);
+  }
+
+  /**
+   * Returns natural log of an angle
+   *
+   * @param degrees the angle in degree
+   * @return the result
+   */
+  static double log(double degrees) {
+    return Math.log(degrees);
+  }
+
+  /**
+   * Returns base raised to the power of the exponent
+   *
+   * @param base     the base to be raised
+   * @param exponent the exponent that will be raised to
+   * @return the result
+   */
+  static double pow(double base, double exponent) {
+    return Math.pow(base, exponent);
+  }
+
+  /**
+   * Reports the number PI
+   *
+   * @return the PI value
+   */
+  static double pi() {
+    return Math.PI;
+  }
 }
 
 ```
 
 
-## Design Considerations (cady and sarah)
+## Design Considerations
 - Extensibility: We are expecting to add more new commands for user to use in the future. As a result, the extensibility of the parser is very important. Our first desing was to use a large switch case to select the correct backend methods to execute for each command passed in. This design was very intuitive and easy to implement. However, this design would result in a very large method, especially when we added more commands in the future, and is thus not ideal. We then decide to use the Reflect API or Regular Expressions to solve this problem. 
 - Commands Passing: We also spent time discussing the format that commands should be in when passed from the frontend to the controller. Since the user can choose to write a script or execute commands interactively, it is possible that the view reads in more than one command at a time. In our design, the view will be responsible for separating multiple commands and passing them to the controller one by one in a loop. This design decision allows the UI to show an animation of the turtle's movement step by step. It also simplifies the controller's implementattion, and allows it to focus on parsing commands and update the model.
 - Currently our desgin uses a map to store and pass turtle's state information as a whole. An alternative we came up with was to create another class TurtleState.java to hold all necessary information. The pro of the original design was that it saved data in a class and made getting and setting states easier. However, this desing made the MVC structure vague at the same time. The view needed to access TurtleState, which was placed at the backend, to update UI. The pro of our current design solves this problem. Both the model and the view can access a map data structure. As a tradeoff, the operation of getting and setting states on both ends become less intuitive, and additional operations are needed to construct and decode the map. 
@@ -348,12 +554,11 @@ To change the language, the user selects an option from the DropDownViewable obj
     - Use Case #3: Set the background color
 To change the background color, wait for the user to pick a color with some type of an object that enables this functionality. Then, that corresponding portion of the stage will be filled the color that can be handled in t BoundsRectanglesView class. This class will merely set the color of the rectangle with a setColor method
     
-
     - Use Case #4: Pen down and pen up
 The user has the ability to chose whether the pen is placed down or up in the turtle field. A ButtonView object, when triggered with an onClick method will allow change the state of a boolean variable. This information will then be passed to the LineViewable class which will either enable the lines to be displayed or not.
     
  
-## Team Responsibilities (everyone)
+## Team Responsibilities 
 - Sarah: Backend 
     - Updating state of Turtle in Model
     - Creating methods for boolean and mathematical operators

@@ -146,14 +146,14 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("if 2 [ fd 50 ]");
+      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("if equal? 50 50 [ fd 50 ]");
 //      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
 //      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
       printQueue(q);
-      q = parser.execute("if 0 [ fd 50 ]");
-      printQueue(q);
-      q = parser.execute("ifelse 0 [ fd 50 ] [ fd 100 ]");
-      printQueue(q);
+//      q = parser.execute("if 0 [ fd 50 ]");
+//      printQueue(q);
+//      q = parser.execute("ifelse 0 [ fd 50 ] [ fd 100 ]");
+//      printQueue(q);
 
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
       e.printStackTrace();

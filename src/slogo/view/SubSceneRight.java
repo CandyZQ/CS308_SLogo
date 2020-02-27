@@ -2,6 +2,8 @@ package slogo.view;
 
 
 import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,9 +25,6 @@ import slogo.controller.listings.MovingObjectProperties;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
 import java.io.File;
 
 public class SubSceneRight extends SubScene {
@@ -33,16 +32,20 @@ public class SubSceneRight extends SubScene {
 
   private final ImageView helpImage0 = new ImageView(new Image("file:resources/help_title.png"));
   private final ImageView helpImage1 = new ImageView(new Image("file:resources/basic_syntax.png"));
-  private final ImageView helpImage2 = new ImageView(new Image("file:resources/turtle_commands.png"));
-  private final ImageView helpImage3 = new ImageView(new Image("file:resources/turtle_queries.png"));
-  private final ImageView helpImage4 = new ImageView(new Image("file:resources/math_operations.png"));
-  private final ImageView helpImage5 = new ImageView(new Image("file:resources/boolean_operations.png"));
+  private final ImageView helpImage2 = new ImageView(
+      new Image("file:resources/turtle_commands.png"));
+  private final ImageView helpImage3 = new ImageView(
+      new Image("file:resources/turtle_queries.png"));
+  private final ImageView helpImage4 = new ImageView(
+      new Image("file:resources/math_operations.png"));
+  private final ImageView helpImage5 = new ImageView(
+      new Image("file:resources/boolean_operations.png"));
   private final ImageView helpImage6 = new ImageView(new Image("file:resources/user_defined.png"));
 
 
   private Image turtle = new Image("file:resources/defaultTurtle.png");
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
-  public static final Color INITIAL_MARKER_COLOR = null;
+  public static final Color INITIAL_MARKER_COLOR = null; // the code for having the pen up
   private static final String SUCCESSFUL_COMMAND = "Command successfully processed!";
   private static final String EMPTY_COMMAND = "No command entered.";
   private static final String NEW_MARKER_COLOR = "New Marker Color Chosen: ";
@@ -56,6 +59,7 @@ public class SubSceneRight extends SubScene {
   private static final String CHANGE_LANGUAGE_LABEL = "Change Language";
   private static final String TEXTFIELD_PROMPT_TEXT = "Enter an SLogo Command.";
   private static final String VARIABLE_AREA_TEXT = "Variable Display";
+  private static final String USER_TEXT_AREA = "User Defined Commands Display";
   private final FileChooser fileChooser = new FileChooser();
 
 
@@ -66,6 +70,7 @@ public class SubSceneRight extends SubScene {
   private TextField name;
   private TextArea commandTextArea;
   private TextArea variableTextArea;
+  private TextArea userDefinedCommandsTextArea;
   private String theText;
   private Boolean commandEntered = false;
   private Stage stage;
@@ -82,6 +87,7 @@ public class SubSceneRight extends SubScene {
     createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
     createTextField();
     createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
+    createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA);
   }
 
   private void createHBox() {
@@ -131,7 +137,8 @@ public class SubSceneRight extends SubScene {
   }
 
 
-  private void createButtons(String firstName, String secondName, String thirdName, String fourthName) {
+  private void createButtons(String firstName, String secondName, String thirdName,
+      String fourthName) {
     HBox hbox1 = new HBox(30);
     HBox hbox2 = new HBox(30);
     hbox1.getStyleClass().add("hbox");
@@ -149,13 +156,14 @@ public class SubSceneRight extends SubScene {
     vBox.getChildren().addAll(hbox1, hbox2);
   }
 
-  private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton, Button fourthButton){
+  private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton,
+      Button fourthButton) {
 
     firstButton.setOnAction(event -> {
       setTurtleImage();
     });
 
-    secondButton.setOnAction(event ->{
+    secondButton.setOnAction(event -> {
       displayPopUp();
     });
 
@@ -167,9 +175,9 @@ public class SubSceneRight extends SubScene {
   }
 
 
-  public void setTurtleImage(){
+  public void setTurtleImage() {
     File file = fileChooser.showOpenDialog(stage);
-    if(file != null){
+    if (file != null) {
       turtle = new Image(file.toURI().toString(), 60, 60, false, true);
       //turtle.setX(150);
       //turtle.setY(150);
@@ -177,17 +185,18 @@ public class SubSceneRight extends SubScene {
   }
 
 
-  public void assignStage(Stage incoming){
+  public void assignStage(Stage incoming) {
     stage = incoming;
   }
 
-  private void displayPopUp(){
+  private void displayPopUp() {
     BorderPane helpRoot = new BorderPane();
     Stage helpStage = new Stage();
     helpStage.setTitle("Help Screen");
     VBox vb = new VBox();
 
-    vb.getChildren().addAll(helpImage0, helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6);
+    vb.getChildren()
+        .addAll(helpImage0, helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6);
     ScrollBar s1 = new ScrollBar();
     s1.setMin(0);
     s1.setMax(1400);
@@ -201,12 +210,12 @@ public class SubSceneRight extends SubScene {
   }
 
 
-  private Scene setUpPopUp(BorderPane helpRoot){
+  private Scene setUpPopUp(BorderPane helpRoot) {
 
-    return new Scene(helpRoot, 600, 800,  Color.LIGHTBLUE);
+    return new Scene(helpRoot, 600, 800, Color.LIGHTBLUE);
   }
 
-  private void listenVBoxScroll(ScrollBar sb, VBox vb){
+  private void listenVBoxScroll(ScrollBar sb, VBox vb) {
     sb.valueProperty().addListener(new ChangeListener<Number>() {
       public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
         vb.setLayoutY(-new_val.doubleValue());
@@ -256,12 +265,33 @@ public class SubSceneRight extends SubScene {
     });
   }
 
-  @Override
-  public void update(EnumMap<MovingObjectProperties, Object> movements) {
-
+  public void setVariableTextArea(Map<String, Double> vars) {
+    variableTextArea.setText(VARIABLE_AREA_TEXT);
+    for (Map.Entry<String, Double> entry : vars.entrySet()) {
+      variableTextArea.setText(
+          variableTextArea.getText() + "\n" + entry.getKey().substring(1) + " = " + entry
+              .getValue());
+    }
   }
 
-  public Image getTurtle(){return turtle;}
+  public void setUserTextArea(Map<String, List<String>> functions) {
+    userDefinedCommandsTextArea.setText(USER_TEXT_AREA);
+    for (Map.Entry<String, List<String>> entry : functions.entrySet()) {
+      userDefinedCommandsTextArea.setText(
+          userDefinedCommandsTextArea.getText() + "\n" + entry.getKey() + " : " + entry
+              .getValue());
+    }
+  }
+
+  @Override
+  public void update(Queue<EnumMap<MovingObjectProperties, Object>> movements) {
+  }
+
+  public Image getTurtle() {
+    return turtle;
+  }
+
+  public TextField getTextField(){return name;}
 
   public Color getClickedColor() {
     return clickedColor;
@@ -269,6 +299,10 @@ public class SubSceneRight extends SubScene {
 
   public Object getLanguage() {
     return language;
+  }
+
+  public Color getMarkerClickedColor(){
+    return markerClickedColor;
   }
 
   public String getTheText() {

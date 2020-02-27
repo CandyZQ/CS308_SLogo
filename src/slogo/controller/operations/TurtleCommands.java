@@ -22,11 +22,11 @@ public class TurtleCommands {
   }
 
   public void left(Double degrees) {
-    turtle.rotate(-degrees);
+    turtle.rotate(degrees);
   }
 
   public void right(Double degrees) {
-    turtle.rotate(degrees);
+    turtle.rotate(-degrees);
   }
 
   public void setHeading(Double degrees) {
