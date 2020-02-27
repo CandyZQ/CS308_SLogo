@@ -12,8 +12,8 @@ import slogo.controller.listings.MovingObjectProperties;
 
 public class ViewScreen implements ExternalAPIViewable {
 
-  public static final int STAGE_HEIGHT = 800;
-  public static final int STAGE_WIDTH = 1000;
+  public static final double STAGE_HEIGHT = 800;
+  public static final double STAGE_WIDTH = 1000;
   public static final String STAGE_TITLE = "SLOGO";
   public static final String STYLE_SHEET = "style.css";
 
@@ -60,8 +60,8 @@ public class ViewScreen implements ExternalAPIViewable {
   }
 
   @Override
-  public void exceptionHandling() throws Exception {
-
+  public void exceptionHandling() {
+    scRight.setCommandText(SubSceneRight.FAILED_COMMAND);
   }
 
   @Override
@@ -79,9 +79,9 @@ public class ViewScreen implements ExternalAPIViewable {
     scLeft.setTurtle(scRight.getTurtle());
     scLeft.listenToDisableTextField(scRight.getTextField());
     scRight.setVariableTextArea(variables);
-
     scRight.setUserTextArea(functions);
     if (commands != null) {
+      scRight.setCommandText(SubSceneRight.SUCCESSFUL_COMMAND);
       scLeft.update(commands);
     }
   }
