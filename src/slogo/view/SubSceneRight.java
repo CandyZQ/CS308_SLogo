@@ -2,6 +2,7 @@ package slogo.view;
 
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import javafx.beans.value.ChangeListener;
@@ -273,11 +274,11 @@ public class SubSceneRight extends SubScene {
     }
   }
 
-  public void setUserTextArea(Map<String, String> functions) {
+  public void setUserTextArea(Map<String, List<String>> functions) {
     userDefinedCommandsTextArea.setText(USER_TEXT_AREA);
-    for (Map.Entry<String, String> entry : functions.entrySet()) {
+    for (Map.Entry<String, List<String>> entry : functions.entrySet()) {
       userDefinedCommandsTextArea.setText(
-          userDefinedCommandsTextArea.getText() + "\n" + entry.getKey().substring(1) + " : " + entry
+          userDefinedCommandsTextArea.getText() + "\n" + entry.getKey() + " : " + entry
               .getValue());
     }
   }

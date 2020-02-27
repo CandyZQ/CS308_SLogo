@@ -151,7 +151,7 @@ public class SubSceneLeft extends SubScene {
       EnumMap<MovingObjectProperties, Object> movements = queue.remove();
       TranslateTransition t1 = moveTurtle(-1 * (Double) movements.get(MovingObjectProperties.X),
           -1 * (Double) movements.get(MovingObjectProperties.Y),
-          (Double) movements.get(MovingObjectProperties.HEADING) - 90, 2);
+          (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90, 2);
       t1.play();
 
       t1.setOnFinished(event -> {
@@ -162,7 +162,7 @@ public class SubSceneLeft extends SubScene {
           TranslateTransition t2 = moveTurtle(
               -1 * (Double) movements1.get(MovingObjectProperties.X),
               -1 * (Double) movements1.get(MovingObjectProperties.Y),
-              (Double) movements1.get(MovingObjectProperties.HEADING) - 90, 2);
+              (Double) movements1.get(MovingObjectProperties.HEADING) * -1 + 90, 2);
           t2.play();
           t2.setOnFinished(event1 -> recurse());
         } else {

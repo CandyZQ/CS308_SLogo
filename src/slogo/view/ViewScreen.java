@@ -1,6 +1,7 @@
 package slogo.view;
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import javafx.scene.Scene;
@@ -71,14 +72,15 @@ public class ViewScreen implements ExternalAPIViewable {
 
   public static void update(
       Queue<EnumMap<MovingObjectProperties, Object>> commands,
-      Map<String, Double> variables) {
+      Map<String, Double> variables,
+      Map<String, List<String>> functions) {
     scLeft.setRectangleColor(scRight.getClickedColor());
     scLeft.setMarkerColor(scRight.getMarkerClickedColor());
     scLeft.setTurtle(scRight.getTurtle());
     scLeft.listenToDisableTextField(scRight.getTextField());
     scRight.setVariableTextArea(variables);
 
-    //scRight.setUserTextArea();
+    scRight.setUserTextArea(functions);
     if (commands != null) {
       scLeft.update(commands);
     }

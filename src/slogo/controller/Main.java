@@ -65,7 +65,7 @@ public class Main extends Application {
             commands = parser.execute(inputString);
         }
         parser.setLanguage(viewScreen.getLanguage());
-        ViewScreen.update(commands, parser.gerUserVars());
+        ViewScreen.update(commands, parser.gerUserVars(), parser.getFunctions());
     }
 }
 
