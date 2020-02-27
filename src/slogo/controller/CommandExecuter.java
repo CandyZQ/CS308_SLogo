@@ -24,7 +24,7 @@ import slogo.exceptions.LanguageIsNotSupportedException;
 import slogo.exceptions.WrongCommandFormatException;
 import slogo.model.Turtle;
 
-public class CommandExecuter {
+class CommandExecuter {
 
   private List<Turtle> animals;
   private int turtleOperating;
