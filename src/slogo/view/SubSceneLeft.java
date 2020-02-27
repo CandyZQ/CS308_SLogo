@@ -87,7 +87,8 @@ public class SubSceneLeft extends SubScene {
     return pathTransition;
   }
 
-  private TranslateTransition moveTurtle(int xFinal, int yFinal, int heading, int duration) {
+  private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading,
+      int duration) {
 //    path.getElements().addAll(
 //        new MoveTo(INITIAL_TURTLE_X + 30, INITIAL_TURTLE_Y + 30),
 //        new LineTo(INITIAL_TURTLE_X + 50 + 30, INITIAL_TURTLE_Y + 50 + 30),
@@ -104,10 +105,12 @@ public class SubSceneLeft extends SubScene {
     trans.setFromX(initialX);
     trans.setFromY(initialY);
 
-    trans.setToX(initialX - (xFinal - INITIAL_TURTLE_X));
-    trans.setToY(initialY - (yFinal - INITIAL_TURTLE_Y));
-    initialX += -(xFinal - INITIAL_TURTLE_X);
-    initialY += -(yFinal - INITIAL_TURTLE_Y);
+    trans.setToX(xFinal);
+    trans.setToY(yFinal);
+
+    initialX = xFinal;
+    initialY = yFinal;
+
     return trans;
   }
 
@@ -135,19 +138,14 @@ public class SubSceneLeft extends SubScene {
 
   @Override
   public void update(EnumMap<MovingObjectProperties, Object> movements) {
-    createMovement(movements.get(MovingObjectProperties.X).toString(),
-        movements.get(MovingObjectProperties.Y).toString(),
-        movements.get(MovingObjectProperties.HEADING).toString(), 2);
+    createMovement((Double) movements.get(MovingObjectProperties.X),
+        (Double) movements.get(MovingObjectProperties.Y),
+        (Double) movements.get(MovingObjectProperties.HEADING), 2);
   }
 
-  private void createMovement(String xFinal, String yFinal, String heading, int duration) {
-    System.out.println((int) Double.parseDouble(xFinal) + INITIAL_TURTLE_X);
-    TranslateTransition t1 = moveTurtle((int) Double.parseDouble(xFinal) + INITIAL_TURTLE_X,
-        (int) Double.parseDouble(yFinal) + INITIAL_TURTLE_Y,
-        (int) Double.parseDouble(heading) - 90, duration);
-//    TranslateTransition t1 = moveTurtle(INITIAL_TURTLE_X,
-//        50 + INITIAL_TURTLE_Y,
-//        Double.parseDouble(heading) - 90, duration);
+  private void createMovement(double xFinal, double yFinal, double heading, int duration) {
+    TranslateTransition t1 = moveTurtle(-1 * xFinal, -1 * yFinal,
+        heading - 90, duration);
     t1.play();
   }
 
