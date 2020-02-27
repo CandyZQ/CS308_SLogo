@@ -1,5 +1,7 @@
 package slogo.controller;
 
+import java.util.EnumMap;
+import java.util.Queue;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -9,8 +11,8 @@ import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 import slogo.exceptions.WrongCommandFormatException;
-import slogo.model.Turtle;
 import slogo.view.ViewScreen;
+import slogo.controller.listings.MovingObjectProperties;
 
 
 /**
@@ -44,7 +46,7 @@ public class Main extends Application {
     private void setTiming() {
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> {
             try {
-                step(SECOND_DELAY);
+                step();
             } catch (WrongCommandFormatException | InvalidArgumentException | LanguageIsNotSupportedException | CommandDoesNotExistException ex) {
                 ex.printStackTrace();
             }
@@ -55,14 +57,17 @@ public class Main extends Application {
         animation.play();
     }
 
-    private void step(double secondDelay)
+    private void step()
         throws WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException {
         String inputString = viewScreen.getInputString();
+        Queue<EnumMap<MovingObjectProperties, Object>> commands = null;
         if (inputString != null) {
-            parser.execute(inputString);
+            commands = parser.execute(inputString);
+            //System.out.println(commands.remove().get(MovingObjectProperties.X));
+            //System.out.println(commands.remove().get(MovingObjectProperties.Y));
         }
         parser.setLanguage(viewScreen.getLanguage());
-        ViewScreen.update();
+        ViewScreen.update(commands);
     }
 }
 

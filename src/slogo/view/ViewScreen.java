@@ -1,11 +1,13 @@
 package slogo.view;
 
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Queue;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
 import javafx.stage.Stage;
+import slogo.controller.listings.MovingObjectProperties;
 
 public class ViewScreen implements ExternalAPIViewable {
 
@@ -13,9 +15,11 @@ public class ViewScreen implements ExternalAPIViewable {
   public static final int STAGE_WIDTH = 1000;
   public static final String STAGE_TITLE = "SLOGO";
   public static final String STYLE_SHEET = "style.css";
+  private static final Integer zero = 0;
+  private static final Integer one = 1;
 
   private static SubSceneLeft scLeft;
-  private static SubSceneRight sc;
+  private static SubSceneRight scRight;
   private Stage stage;
   private Scene scene;
   private BorderPane root;
@@ -32,9 +36,9 @@ public class ViewScreen implements ExternalAPIViewable {
 
   private void startView() {
     this.root = new BorderPane();
-
-    sc = new SubSceneRight();
-    root.setRight(sc.getRoot());
+    scRight = new SubSceneRight();
+    scRight.assignStage(stage);
+    root.setRight(scRight.getRoot());
     scLeft = new SubSceneLeft();
     root.setLeft(scLeft.getRoot());
     setAsScene(new Scene(root, ObjectsViewable.STAGE_WIDTH, ObjectsViewable.STAGE_HEIGHT));
@@ -54,7 +58,7 @@ public class ViewScreen implements ExternalAPIViewable {
 
   @Override
   public String getInputString() {
-    return sc.getTheText();
+    return scRight.getTheText();
   }
 
   @Override
@@ -68,13 +72,28 @@ public class ViewScreen implements ExternalAPIViewable {
   }
 
 
-  public static void update() {
-    scLeft.setRectangleColor(sc.getClickedColor());
+  public static void update(
+      Queue<EnumMap<MovingObjectProperties, Object>> commands) {
+    if (commands == null || commands.isEmpty()) {
+      return;
+    } else {
+      while (!commands.isEmpty()) {
+        EnumMap<MovingObjectProperties, Object> items = commands.remove();
+        if (items.get(MovingObjectProperties.CLEAR) == one) {
+          //TODO: implement
+        } else {
+          scLeft.update(items);
+        }
+      }
+
+    }
+    scLeft.setRectangleColor(scRight.getClickedColor());
+    scLeft.setTurtle(scRight.getTurtle());
 
   }
 
   @Override
   public String getLanguage() {
-    return sc.getLanguage().toString();
+    return scRight.getLanguage().toString();
   }
 }

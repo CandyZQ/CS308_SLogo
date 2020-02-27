@@ -1,7 +1,10 @@
 package slogo.view;
 
+import java.util.EnumMap;
+import java.util.Queue;
 import javafx.scene.Group;
 import javafx.scene.layout.VBox;
+import slogo.controller.listings.MovingObjectProperties;
 
 public abstract class SubScene {
 
@@ -12,4 +15,5 @@ public abstract class SubScene {
     return root;
   }
 
+  public abstract void update(EnumMap<MovingObjectProperties, Object> movements);
 }
