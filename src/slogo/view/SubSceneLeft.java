@@ -163,6 +163,8 @@ public class SubSceneLeft extends SubScene {
               (Double) movements1.get(MovingObjectProperties.HEADING) - 90, 2);
           t2.play();
           t2.setOnFinished(event1 -> recurse());
+        }else{
+          tf.setEditable(true);
         }
        // tf.setVisible(true);
       });
