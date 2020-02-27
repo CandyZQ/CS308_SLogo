@@ -8,8 +8,6 @@ import javafx.animation.PathTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
