@@ -2,6 +2,7 @@ package slogo.controller;
 
 import java.util.EnumMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
@@ -73,5 +74,9 @@ public class Parser implements BackEndExternalAPI {
 
   public Map<String, Double> gerUserVars() {
     return commandExecuter.getUserVars();
+  }
+
+  public Map<String, List<String>> getFunctions() {
+    return commandExecuter.getFunctions();
   }
 }

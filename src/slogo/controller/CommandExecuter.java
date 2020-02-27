@@ -173,4 +173,8 @@ public class CommandExecuter {
   public Map<String, Double> getUserVars() {
     return userVars;
   }
+
+  public Map<String, List<String>> getFunctions() {
+    return functions;
+  }
 }
