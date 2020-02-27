@@ -1,5 +1,7 @@
 package slogo.controller;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,15 +70,23 @@ public class Parser implements BackEndExternalAPI {
     }
   }
 
+  /**
+   * Set the id of the turtle which is currently operating
+   * @param id
+   */
   public void setTurtleOperating(int id) {
     commandExecuter.setTurtleOperating(id);
   }
 
+  /**
+   * Gets the user defined variables
+   * @return
+   */
   public Map<String, Double> gerUserVars() {
-    return commandExecuter.getUserVars();
+    return Collections.unmodifiableMap(commandExecuter.getUserVars());
   }
 
   public Map<String, List<String>> getFunctions() {
-    return commandExecuter.getFunctions();
+    return Collections.unmodifiableMap(commandExecuter.getFunctions());
   }
 }

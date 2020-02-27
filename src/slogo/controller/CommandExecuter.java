@@ -46,7 +46,7 @@ public class CommandExecuter {
   }
 
 
-  public String getNextCommand(CommandsMapHelper commandsMapHelper, Stack<String> commandsLeft,
+  String getNextCommand(CommandsMapHelper commandsMapHelper, Stack<String> commandsLeft,
       Queue<EnumMap<MovingObjectProperties, Object>> turtleStates)
       throws CommandDoesNotExistException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException {
     this.commandsMapHelper = commandsMapHelper;
@@ -166,15 +166,15 @@ public class CommandExecuter {
     return null;
   }
 
-  public void setTurtleOperating(int turtleOperating) {
+  void setTurtleOperating(int turtleOperating) {
     this.turtleOperating = turtleOperating;
   }
 
-  public Map<String, Double> getUserVars() {
+  Map<String, Double> getUserVars() {
     return userVars;
   }
 
-  public Map<String, List<String>> getFunctions() {
+  Map<String, List<String>> getFunctions() {
     return functions;
   }
 }
