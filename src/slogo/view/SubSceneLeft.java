@@ -39,6 +39,10 @@ public class SubSceneLeft extends SubScene {
   private static final int TURTLE_INITAL_Y = 230;
   private Path path;
   private Color markerColor;
+  private Animation path_animation;
+
+  private Animation.Status status;
+
 
 
   public SubSceneLeft() {
@@ -54,57 +58,77 @@ public class SubSceneLeft extends SubScene {
     initialX = 0;
     initialY = 0;
 
-    TranslateTransition t1 = moveTurtle(TURTLE_INITAL_X + 50, TURTLE_INITAL_Y + 50, 135, 5);
-    Animation path_animation = clipAnimation(path);
-    path_animation.play();
-    SequentialTransition s = new SequentialTransition(t1);
-    s.play();
-  }
+    TranslateTransition t1 = singleTurtleMovement(50, 50, 135, 5);
 
-  private Animation clipAnimation(Path path)
-  {
-    final Pane clip = new Pane();
-    path.clipProperty().set(clip);
+//    t1.play();
+//    status = t1.getStatus();
+//    while(status == Animation.Status.RUNNING){
+//      getAnimationStatus(t1.getStatus());
+//    }
 
-    final Circle pen = new Circle(0, 0, 2);
+//    System.out.println(t1.getStatus());
+    //t2.play();
 
-    ChangeListener pen_Listener = new ChangeListener()
-    {
+    /*
+    SequentialTransition s1 = new SequentialTransition(t1);
+    s1.play();
+    s1.getChildren().add(t2);
+    s1.setOnFinished();*/
+
+    t1.play();
+    t1.setOnFinished(new EventHandler<ActionEvent>() {
+
       @Override
-      public void changed(ObservableValue observableValue, Object o1, Object o2)
-      {
-        Circle clip_eraser = new Circle(pen.getTranslateX(), pen.getTranslateY(), pen.getRadius());
-        clip.getChildren().add(clip_eraser);
-      }
-    };
-
-    pen.translateXProperty().addListener(pen_Listener);
-    pen.translateYProperty().addListener(pen_Listener);
-    //pen.rotateProperty().addListener(pen_Listener);
-    PathTransition pathTransition = new PathTransition(Duration.seconds(5), path, pen);
-    pathTransition.setOnFinished(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent t)
-      {
-        path.setClip(null);
-        clip.getChildren().clear();
+      public void handle(ActionEvent event) {
+        TranslateTransition t2 = singleTurtleMovement(50, 0, 0, 5);
+        //path_animation = clipAnimation(path);
+        //path_animation.play();
+        t2.play();
       }
     });
+  }
 
-    return pathTransition;
+  private void recurse(){
+    if (!queue.isEmpty){
+      //pop
+      TranslateTransition one = singleTurtleMovement(50, 50, 135, 5);
+      one.play();
+
+      if(!queue.isEmpty){
+        one.setOnFinished(new EventHandler<ActionEvent>() {
+
+          @Override
+          public void handle(ActionEvent event) {
+            TranslateTransition two = singleTurtleMovement(50, 0, 0, 5);
+            //path_animation = clipAnimation(path);
+            //path_animation.play();
+            two.play();
+            recurse();
+          }
+        });
+      }
+    }
+  }
+
+  public TranslateTransition singleTurtleMovement(int xfinal, int yfinal, int heading, int duration){
+    TranslateTransition t1 = moveTurtle(TURTLE_INITAL_X + xfinal, TURTLE_INITAL_Y + yfinal, heading, duration);
+    return t1;
   }
 
   private TranslateTransition moveTurtle(int xfinal, int yfinal, int heading, int duration) {
     turtle.setRotate(heading);
     path.getElements().addAll(
+
             new MoveTo(TURTLE_X + 30, TURTLE_Y + 30),
             new LineTo(xfinal + 30, yfinal + 30)
 
     );
     path.setFill(null);
-    path.setStroke(markerColor);
+    path.setStroke(Color.DEEPPINK);
     path.setStrokeWidth(2);
+
+    path_animation = clipAnimation(path);
+    path_animation.play();
 
     trans = new TranslateTransition(Duration.seconds(duration), turtle); // slider.getValue() for Duration
     trans.setFromX(initialX);
@@ -118,6 +142,39 @@ public class SubSceneLeft extends SubScene {
     return trans;
 
 
+  }
+
+  private Animation clipAnimation(Path path)
+  {
+    Pane clip = new Pane();
+    path.clipProperty().set(clip);
+
+    Circle pen = new Circle(0, 0, 2);
+
+    ChangeListener pen_Listener = new ChangeListener()
+    {
+      @Override
+      public void changed(ObservableValue observableValue, Object o1, Object o2)
+      {
+        Circle clip_eraser = new Circle(pen.getTranslateX(), pen.getTranslateY(), pen.getRadius());
+        clip.getChildren().add(clip_eraser);
+      }
+    };
+
+    pen.translateXProperty().addListener(pen_Listener);
+    pen.translateYProperty().addListener(pen_Listener);
+    PathTransition pathTransition = new PathTransition(Duration.seconds(5), path, pen);
+    pathTransition.setOnFinished(new EventHandler<ActionEvent>()
+    {
+      @Override
+      public void handle(ActionEvent t)
+      {
+        path.setClip(null);
+        clip.getChildren().clear();
+      }
+    });
+
+    return pathTransition;
   }
 
   private ImageView createTurtle() {
@@ -153,6 +210,10 @@ public class SubSceneLeft extends SubScene {
 
   public void getMarkerColor(Color color) {
     markerColor = color;
+  }
+
+  private void getAnimationStatus(Animation.Status a) {
+    status = a;
   }
 
 }

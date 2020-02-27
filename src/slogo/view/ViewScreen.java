@@ -88,7 +88,7 @@ public class ViewScreen implements ExternalAPIViewable {
     scLeft.setRectangleColor(scRight.getClickedColor());
     scLeft.setTurtle(scRight.getTurtle());
     scLeft.getMarkerColor(scRight.getMarkerClickedColor());
-
+    scLeft.update(commands);
   }
 
   @Override
