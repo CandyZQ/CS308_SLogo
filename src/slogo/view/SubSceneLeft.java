@@ -34,6 +34,7 @@ public class SubSceneLeft extends SubScene {
   private double initialX;
   private double initialY;
   private TextField tf;
+  private Color markercolor;
 
   private Path path;
   private Queue<EnumMap<MovingObjectProperties, Object>> queue;
@@ -46,29 +47,25 @@ public class SubSceneLeft extends SubScene {
     root.getChildren().add(vBox);
     createRectangle();
     createSlider();
-    path = new Path();
-    root.getChildren().addAll(path);
+
     root.getChildren().add(createTurtle());
     initialX = 0;
     initialY = 0;
 
-//    TranslateTransition t1 = moveTurtle(50, 50, 135, 5);
-//    TranslateTransition t2 = moveTurtle(0, -50, 0, 5);
-//    Animation path_animation = clipAnimation(path, 2);
-//    path_animation.play();
-//    SequentialTransition s = new SequentialTransition(t1, t2);
-//    s.play();
   }
 
-  private Animation clipAnimation(Path path, int numSteps) {
-    final Pane clip = new Pane();
+  private Animation clipAnimation(Path path)
+  {
+    Pane clip = new Pane();
     path.clipProperty().set(clip);
 
-    final Circle pen = new Circle(0, 0, 2);
+    Circle pen = new Circle(0, 0, 2);
 
-    ChangeListener pen_Listener = new ChangeListener() {
+    ChangeListener pen_Listener = new ChangeListener()
+    {
       @Override
-      public void changed(ObservableValue observableValue, Object o1, Object o2) {
+      public void changed(ObservableValue observableValue, Object o1, Object o2)
+      {
         Circle clip_eraser = new Circle(pen.getTranslateX(), pen.getTranslateY(), pen.getRadius());
         clip.getChildren().add(clip_eraser);
       }
@@ -76,29 +73,22 @@ public class SubSceneLeft extends SubScene {
 
     pen.translateXProperty().addListener(pen_Listener);
     pen.translateYProperty().addListener(pen_Listener);
-    //pen.rotateProperty().addListener(pen_Listener);
-    PathTransition pathTransition = new PathTransition(Duration.seconds(5 * (numSteps + 1)), path,
-        pen);
-    pathTransition.setOnFinished(t -> {
-      path.setClip(null);
-      clip.getChildren().clear();
+    PathTransition pathTransition = new PathTransition(Duration.seconds(2), path, pen);
+    pathTransition.setOnFinished(new EventHandler<ActionEvent>()
+    {
+      @Override
+      public void handle(ActionEvent t)
+      {
+        path.setClip(null);
+        clip.getChildren().clear();
+      }
     });
 
     return pathTransition;
   }
 
-  private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading,
-      int duration) {
-//    path.getElements().addAll(
-//        new MoveTo(INITIAL_TURTLE_X + 30, INITIAL_TURTLE_Y + 30),
-//        new LineTo(INITIAL_TURTLE_X + 50 + 30, INITIAL_TURTLE_Y + 50 + 30),
-//        new MoveTo(280 + 50 + 30, 230 + 50 + 30),
-//        new LineTo(280 + 50 + 30, 230 + 50 + 30 - 50)
-//
-//    );
-//    path.setFill(null);
-//    path.setStroke(Color.BLACK);
-//    path.setStrokeWidth(2);
+
+  private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading, int duration) {
     turtle.setRotate(heading);
     trans = new TranslateTransition(Duration.seconds(duration),
         turtle); // slider.getValue() for Duration
@@ -107,6 +97,25 @@ public class SubSceneLeft extends SubScene {
 
     trans.setToX(xFinal);
     trans.setToY(yFinal);
+
+    Path path = new Path();
+    root.getChildren().addAll(path);
+
+
+    path.getElements().addAll(
+
+            new MoveTo(INITIAL_TURTLE_X + initialX + 30, INITIAL_TURTLE_Y + initialY + 30),
+            new LineTo(INITIAL_TURTLE_X + xFinal + 30, INITIAL_TURTLE_Y + yFinal + 30)
+
+    );
+    path.setFill(null);
+    path.setStroke(markercolor);
+    path.setStrokeWidth(2);
+
+    Animation path_animation = clipAnimation(path);
+    path_animation.play();
+
+
 
     initialX = xFinal;
     initialY = yFinal;
@@ -174,6 +183,9 @@ public class SubSceneLeft extends SubScene {
 
   public void setRectangleColor(Color color) {
     rect.setFill(color);
+  }
+  public void setMarkerColor(Color color) {
+    markercolor = color;
   }
 
   public void listenToDisableTextField(TextField tf){
