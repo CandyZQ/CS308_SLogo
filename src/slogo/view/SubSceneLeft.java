@@ -144,7 +144,7 @@ public class SubSceneLeft extends SubScene {
 
   private void createMovement(double xFinal, double yFinal, double heading, int duration) {
     TranslateTransition t1 = moveTurtle(-1 * xFinal, -1 * yFinal,
-        heading - 90, duration);
+        -heading + 90, duration);
     t1.play();
   }
 
