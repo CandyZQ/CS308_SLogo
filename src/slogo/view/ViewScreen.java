@@ -15,8 +15,6 @@ public class ViewScreen implements ExternalAPIViewable {
   public static final int STAGE_WIDTH = 1000;
   public static final String STAGE_TITLE = "SLOGO";
   public static final String STYLE_SHEET = "style.css";
-  private static final Integer zero = 0;
-  private static final Integer one = 1;
 
   private static SubSceneLeft scLeft;
   private static SubSceneRight scRight;
@@ -73,15 +71,17 @@ public class ViewScreen implements ExternalAPIViewable {
 
 
   public static void update(
-      Queue<EnumMap<MovingObjectProperties, Object>> commands) {
+      Queue<EnumMap<MovingObjectProperties, Object>> commands,
+      Map<String, Double> variables) {
     scLeft.setRectangleColor(scRight.getClickedColor());
     scLeft.setTurtle(scRight.getTurtle());
+    scRight.setVariableTextArea(variables);
+    //scRight.setUserTextArea();
     if (commands == null || commands.isEmpty()) {
       return;
     } else {
       scLeft.update(commands);
     }
-
   }
 
   @Override
