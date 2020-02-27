@@ -64,8 +64,7 @@ public class SubSceneLeft extends SubScene {
     ChangeListener pen_Listener = new ChangeListener()
     {
       @Override
-      public void changed(ObservableValue observableValue, Object o1, Object o2)
-      {
+      public void changed(ObservableValue observableValue, Object o1, Object o2) {
         Circle clip_eraser = new Circle(pen.getTranslateX(), pen.getTranslateY(), pen.getRadius());
         clip.getChildren().add(clip_eraser);
       }
@@ -74,14 +73,9 @@ public class SubSceneLeft extends SubScene {
     pen.translateXProperty().addListener(pen_Listener);
     pen.translateYProperty().addListener(pen_Listener);
     PathTransition pathTransition = new PathTransition(Duration.seconds(2), path, pen);
-    pathTransition.setOnFinished(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent t)
-      {
-        path.setClip(null);
-        clip.getChildren().clear();
-      }
+    pathTransition.setOnFinished(t -> {
+      path.setClip(null);
+      clip.getChildren().clear();
     });
 
     return pathTransition;
@@ -171,13 +165,12 @@ public class SubSceneLeft extends SubScene {
               (Double) movements1.get(MovingObjectProperties.HEADING) - 90, 2);
           t2.play();
           t2.setOnFinished(event1 -> recurse());
-        }else{
+        } else {
           tf.setEditable(true);
         }
-       // tf.setVisible(true);
       });
-    }else{
-    tf.setEditable(true);
+    } else {
+      tf.setEditable(true);
     }
   }
 
