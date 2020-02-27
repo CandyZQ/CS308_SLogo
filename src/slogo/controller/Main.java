@@ -26,6 +26,7 @@ public class Main extends Application {
     private long time;
     private ViewScreen viewScreen;
     private Parser parser;
+    private Queue<EnumMap<MovingObjectProperties, Object>> queue;
 
     /**
      * Start the program.
@@ -66,6 +67,9 @@ public class Main extends Application {
             //System.out.println(commands.remove().get(MovingObjectProperties.X));
             //System.out.println(commands.remove().get(MovingObjectProperties.Y));
         }
+//        while (!commands.isEmpty()) {
+//            queue.add(commands.remove());
+//        }
         parser.setLanguage(viewScreen.getLanguage());
         ViewScreen.update(commands);
     }

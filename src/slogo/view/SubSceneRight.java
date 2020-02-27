@@ -23,9 +23,6 @@ import slogo.controller.listings.MovingObjectProperties;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
 import java.io.File;
 
 public class SubSceneRight extends SubScene {
@@ -257,7 +254,7 @@ public class SubSceneRight extends SubScene {
   }
 
   @Override
-  public void update(EnumMap<MovingObjectProperties, Object> movements) {
+  public void update(Queue<EnumMap<MovingObjectProperties, Object>> movements) {
 
   }
 

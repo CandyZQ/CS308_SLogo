@@ -2,6 +2,7 @@ package slogo.view;
 
 import java.util.EnumMap;
 
+import java.util.Queue;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.TranslateTransition;
@@ -24,6 +25,8 @@ public class SubSceneLeft extends SubScene {
 
   private static final int INITIAL_TURTLE_X = 280;
   private static final int INITIAL_TURTLE_Y = 230;
+  private final int TURTLE_SIZE = 60; // turtle is 60 px x 60 px
+
   private ImageView turtle = new ImageView(new Image("file:resources/defaultTurtle.png"));
   private Rectangle rect;
   private Slider slider;
@@ -31,8 +34,8 @@ public class SubSceneLeft extends SubScene {
   private double initialX;
   private double initialY;
 
-  private final int TURTLE_SIZE = 60; // turtle is 60 px x 60 px
   private Path path;
+  private Queue<EnumMap<MovingObjectProperties, Object>> queue;
 
 
   public SubSceneLeft() {
@@ -75,12 +78,9 @@ public class SubSceneLeft extends SubScene {
     //pen.rotateProperty().addListener(pen_Listener);
     PathTransition pathTransition = new PathTransition(Duration.seconds(5 * (numSteps + 1)), path,
         pen);
-    pathTransition.setOnFinished(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent t) {
-        path.setClip(null);
-        clip.getChildren().clear();
-      }
+    pathTransition.setOnFinished(t -> {
+      path.setClip(null);
+      clip.getChildren().clear();
     });
 
     return pathTransition;
@@ -136,16 +136,31 @@ public class SubSceneLeft extends SubScene {
   }
 
   @Override
-  public void update(EnumMap<MovingObjectProperties, Object> movements) {
-    createMovement((Double) movements.get(MovingObjectProperties.X),
-        (Double) movements.get(MovingObjectProperties.Y),
-        (Double) movements.get(MovingObjectProperties.HEADING), 2);
+  public void update(Queue<EnumMap<MovingObjectProperties, Object>> queue) {
+    this.queue = queue;
+    recurse();
   }
 
-  private void createMovement(double xFinal, double yFinal, double heading, int duration) {
-    TranslateTransition t1 = moveTurtle(-1 * xFinal, -1 * yFinal,
-        heading - 90, duration);
-    t1.play();
+  private void recurse() {
+    if (!queue.isEmpty()) {
+      EnumMap<MovingObjectProperties, Object> movements = queue.remove();
+      TranslateTransition t1 = moveTurtle(-1 * (Double) movements.get(MovingObjectProperties.X),
+          -1 * (Double) movements.get(MovingObjectProperties.Y),
+          (Double) movements.get(MovingObjectProperties.HEADING) - 90, 2);
+      t1.play();
+
+      t1.setOnFinished(event -> {
+        if (!queue.isEmpty()) {
+          EnumMap<MovingObjectProperties, Object> movements1 = queue.remove();
+          TranslateTransition t2 = moveTurtle(
+              -1 * (Double) movements1.get(MovingObjectProperties.X),
+              -1 * (Double) movements1.get(MovingObjectProperties.Y),
+              (Double) movements1.get(MovingObjectProperties.HEADING) - 90, 2);
+          t2.play();
+          t2.setOnFinished(event1 -> recurse());
+        }
+      });
+    }
   }
 
   public void setRectangleColor(Color color) {
