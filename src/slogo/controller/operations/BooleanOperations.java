@@ -1,11 +1,12 @@
 package slogo.controller.operations;
 
+import java.util.List;
 import java.util.Map;
 import slogo.model.Turtle;
 
 public class BooleanOperations {
 
-  public BooleanOperations(Turtle turtle, Map map) {
+  public BooleanOperations(Turtle turtle, Map<String, Double> map, Map<String, List<String>> functions) {
 
   }
   /**
