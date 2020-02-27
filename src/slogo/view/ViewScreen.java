@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Queue;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 import javafx.stage.Stage;
@@ -76,6 +77,7 @@ public class ViewScreen implements ExternalAPIViewable {
       Queue<EnumMap<MovingObjectProperties, Object>> commands) {
     scLeft.setRectangleColor(scRight.getClickedColor());
     scLeft.setTurtle(scRight.getTurtle());
+    scLeft.listenToDisableTextField(scRight.getTextField());
     if (commands == null || commands.isEmpty()) {
       return;
     } else {
