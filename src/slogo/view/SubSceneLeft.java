@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -33,6 +34,7 @@ public class SubSceneLeft extends SubScene {
   private TranslateTransition trans;
   private double initialX;
   private double initialY;
+  private TextField tf;
 
   private Path path;
   private Queue<EnumMap<MovingObjectProperties, Object>> queue;
@@ -143,6 +145,7 @@ public class SubSceneLeft extends SubScene {
 
   private void recurse() {
     if (!queue.isEmpty()) {
+      tf.setEditable(false); // .setVisible() will alternatively make it go away
       EnumMap<MovingObjectProperties, Object> movements = queue.remove();
       TranslateTransition t1 = moveTurtle(-1 * (Double) movements.get(MovingObjectProperties.X),
           -1 * (Double) movements.get(MovingObjectProperties.Y),
@@ -150,7 +153,9 @@ public class SubSceneLeft extends SubScene {
       t1.play();
 
       t1.setOnFinished(event -> {
+
         if (!queue.isEmpty()) {
+
           EnumMap<MovingObjectProperties, Object> movements1 = queue.remove();
           TranslateTransition t2 = moveTurtle(
               -1 * (Double) movements1.get(MovingObjectProperties.X),
@@ -158,12 +163,21 @@ public class SubSceneLeft extends SubScene {
               (Double) movements1.get(MovingObjectProperties.HEADING) - 90, 2);
           t2.play();
           t2.setOnFinished(event1 -> recurse());
+        }else{
+          tf.setEditable(true);
         }
+       // tf.setVisible(true);
       });
+    }else{
+    tf.setEditable(true);
     }
   }
 
   public void setRectangleColor(Color color) {
     rect.setFill(color);
+  }
+
+  public void listenToDisableTextField(TextField tf){
+      this.tf = tf;
   }
 }

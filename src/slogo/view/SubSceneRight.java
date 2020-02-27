@@ -284,12 +284,13 @@ public class SubSceneRight extends SubScene {
 
   @Override
   public void update(Queue<EnumMap<MovingObjectProperties, Object>> movements) {
-
   }
 
   public Image getTurtle() {
     return turtle;
   }
+
+  public TextField getTextField(){return name;}
 
   public Color getClickedColor() {
     return clickedColor;
