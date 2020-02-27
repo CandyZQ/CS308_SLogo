@@ -20,7 +20,7 @@ public class TurtleCommands {
   }
 
   public void left(Double degrees) {
-    turtle.setHeading((Double) turtle.getState().get(MovingObjectProperties.HEADING) + degrees);
+    turtle.setHeading(-degrees);
   }
 
   public void right(Double degrees) {
