@@ -76,9 +76,9 @@ public class ViewScreen implements ExternalAPIViewable {
       Map<String, Double> variables) {
     scLeft.setRectangleColor(scRight.getClickedColor());
     scLeft.setTurtle(scRight.getTurtle());
+    scLeft.listenToDisableTextField(scRight.getTextField());
     scRight.setVariableTextArea(variables);
     //scRight.setUserTextArea();
-    scLeft.listenToDisableTextField(scRight.getTextField());
     if (commands == null || commands.isEmpty()) {
       return;
     } else {
