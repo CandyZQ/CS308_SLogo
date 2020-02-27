@@ -4,7 +4,7 @@ import java.util.EnumMap;
 import java.util.Queue;
 import javafx.scene.Group;
 import javafx.scene.layout.VBox;
-import slogo.controller.MovingObjectProperties;
+import slogo.controller.listings.MovingObjectProperties;
 
 public abstract class SubScene {
 

@@ -12,6 +12,7 @@ import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 import slogo.exceptions.WrongCommandFormatException;
 import slogo.view.ViewScreen;
+import slogo.controller.listings.MovingObjectProperties;
 
 
 /**

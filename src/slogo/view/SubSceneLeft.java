@@ -4,7 +4,6 @@ import java.util.EnumMap;
 
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
-import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,7 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import slogo.controller.MovingObjectProperties;
+import slogo.controller.listings.MovingObjectProperties;
 
 public class SubSceneLeft extends SubScene {
 
@@ -145,7 +144,7 @@ public class SubSceneLeft extends SubScene {
 
   private void createMovement(double xFinal, double yFinal, double heading, int duration) {
     TranslateTransition t1 = moveTurtle(-1 * xFinal, -1 * yFinal,
-        heading - 90, duration);
+        heading, duration);
     t1.play();
   }
 
