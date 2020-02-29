@@ -1,10 +1,6 @@
 package slogo.view;
 
-import java.util.EnumMap;
-
-import java.util.Locale;
-import java.util.Queue;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
@@ -43,14 +39,14 @@ public class SubSceneLeft extends SubScene {
   private TextField tf;
   private Color markerColor;
 
-  private Path path;
+  private ArrayList<Path> pathList;
   private Queue<EnumMap<MovingObjectProperties, Object>> queue;
 
 
   public SubSceneLeft() {
     root = new Group();
     vBox = new VBox();
-    vBox.getStyleClass().add("VBoxStyle");
+    vBox.getStyleClass().add(myResources.getString("VBoxStyle"));
     root.getChildren().add(vBox);
     createRectangle();
     createSlider();
@@ -127,7 +123,7 @@ public class SubSceneLeft extends SubScene {
   private void createRectangle() {
     rect = new Rectangle(ViewScreen.STAGE_WIDTH / 2, ViewScreen.STAGE_HEIGHT / 2,
         SubSceneRight.INITIAL_BACKGROUND_COLOR);
-    rect.getStyleClass().add("StyleClass");
+    rect.getStyleClass().add(myResources.getString("StyleClass"));
     vBox.getChildren().add(rect);
   }
 

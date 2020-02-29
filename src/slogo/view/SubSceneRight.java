@@ -1,10 +1,8 @@
 package slogo.view;
 
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
+
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
@@ -28,37 +26,34 @@ import java.io.File;
 public class SubSceneRight extends SubScene {
 
 
-  private final ImageView helpImage0 = new ImageView(new Image("file:resources/help_title.png"));
-  private final ImageView helpImage1 = new ImageView(new Image("file:resources/basic_syntax.png"));
-  private final ImageView helpImage2 = new ImageView(
-      new Image("file:resources/turtle_commands.png"));
-  private final ImageView helpImage3 = new ImageView(
-      new Image("file:resources/turtle_queries.png"));
-  private final ImageView helpImage4 = new ImageView(
-      new Image("file:resources/math_operations.png"));
-  private final ImageView helpImage5 = new ImageView(
-      new Image("file:resources/boolean_operations.png"));
-  private final ImageView helpImage6 = new ImageView(new Image("file:resources/user_defined.png"));
 
 
-  private Image turtle = new Image("file:resources/defaultTurtle.png");
+  private final ImageView helpImage0 = new ImageView(new Image(myResources.getString("HelpTitle")));
+  private final ImageView helpImage1 = new ImageView(new Image(myResources.getString("BasicSyntax")));
+  private final ImageView helpImage2 = new ImageView(new Image(myResources.getString("TurtleCommands")));
+  private final ImageView helpImage3 = new ImageView(new Image(myResources.getString("TurtleQueries")));
+  private final ImageView helpImage4 = new ImageView(new Image(myResources.getString("MathOperations")));
+  private final ImageView helpImage5 = new ImageView(new Image(myResources.getString("BooleanOperations")));
+  private final ImageView helpImage6 = new ImageView(new Image(myResources.getString("UserDefined")));
+
+
+  private Image turtle = new Image(myResources.getString("Turtle"));
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
   public static final Color INITIAL_MARKER_COLOR = null; // the code for having the pen up
-  public static final String SUCCESSFUL_COMMAND = "Command successfully processed!";
-  public static final String FAILED_COMMAND = "Command not recognized";
-  private static final String EMPTY_COMMAND = "No command entered.";
-  private static final String NEW_MARKER_COLOR = "New Marker Color Chosen: ";
-  private static final String NEW_LANGUAGE = "New Chosen Language: ";
-  private static final String NEW_BACKGROUND_COLOR = "New Background Color Chosen: ";
-  private static final String COMMAND_AREA_TEXT = "Command Display";
-  private final String[] language_names = {"Chinese", "English", "French", "German",
-      "Italian", "Portuguese", "Russian", "Spanish", "Urdu"};
-  private static final String BACKGROUND_COLOR_LABEL = "Change Background Color";
-  private static final String MARKER_COLOR_LABEL = "Change Marker Color";
-  private static final String CHANGE_LANGUAGE_LABEL = "Change Language";
-  private static final String TEXTFIELD_PROMPT_TEXT = "Enter an SLogo Command.";
-  private static final String VARIABLE_AREA_TEXT = "Variable Display";
-  private static final String USER_TEXT_AREA = "User Defined Commands Display";
+  public static final String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
+  public static final String FAILED_COMMAND = myResources.getString("FailedCommand");
+  private static final String EMPTY_COMMAND = myResources.getString("EmptyCommand");
+  private static final String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor");
+  private static final String NEW_LANGUAGE = myResources.getString("NewLanguage");
+  private static final String NEW_BACKGROUND_COLOR = myResources.getString("NewBackgroundColor");
+  private static final String COMMAND_AREA_TEXT = myResources.getString("CommandArea");
+  private static List<String> language_names = new ArrayList<>();
+  private static final String BACKGROUND_COLOR_LABEL = myResources.getString("BackgroundColorLabel");
+  private static final String MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
+  private static final String CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
+  private static final String TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
+  private static final String VARIABLE_AREA_TEXT = myResources.getString("VariableAreaText");
+  private static final String USER_TEXT_AREA = myResources.getString("UserTextArea");
   private final FileChooser fileChooser = new FileChooser();
 
 
@@ -78,6 +73,9 @@ public class SubSceneRight extends SubScene {
   public SubSceneRight() {
     root = new Group();
     vBox = new VBox();
+    for(String key: Collections.list(myLanguages.getKeys())){
+      language_names.add(myLanguages.getString(key));
+    }
     vBox.getStyleClass().add("vbox");
     root.getChildren().add(vBox);
     createLabel(vBox, BACKGROUND_COLOR_LABEL);
@@ -117,7 +115,7 @@ public class SubSceneRight extends SubScene {
   private void createComboBox(Pane box) {
     ComboBox<String> combo_box = new ComboBox<>(FXCollections.observableArrayList(language_names));
     box.getChildren().add(combo_box);
-    combo_box.setValue(language_names[1]);
+    combo_box.setValue(language_names.get(3));
     language = combo_box.getValue();
     combo_box.setOnAction(event -> {
       language = combo_box.getValue();
