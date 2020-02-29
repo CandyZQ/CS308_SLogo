@@ -204,6 +204,12 @@ public class SubSceneLeft extends SubScene {
 
   private TranslateTransition move() {
     EnumMap<MovingObjectProperties, Object> movements = queue.remove();
+    System.out.println("Turtle ID: " + movements.get(MovingObjectProperties.ID));
+    System.out.println("X Pos: " + -1 * (Double) movements.get(MovingObjectProperties.X));
+    System.out.println("Y Pos: " + -1 * (Double) movements.get(MovingObjectProperties.Y));
+    System.out.println("Heading: " + (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90);
+    System.out.println("Pen Thickness: " + markerThickness);
+    System.out.println("Pen Up/Down: " + penUpDown());
     TranslateTransition t1 = moveTurtle(-1 * (Double) movements.get(MovingObjectProperties.X),
         -1 * (Double) movements.get(MovingObjectProperties.Y),
         (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90);
@@ -211,6 +217,13 @@ public class SubSceneLeft extends SubScene {
     return t1;
   }
 
+  // if Pen is Up, return true. Else return false
+  private String penUpDown(){
+    if (markerColor == null){
+      return "Pen Up";
+    }
+    return "Pen Down";
+  }
 
   public void setTurtle(Image newTurtle) {
     turtle.setImage(newTurtle);
