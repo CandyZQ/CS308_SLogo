@@ -25,8 +25,8 @@ public class SubSceneLeft extends SubScene {
   private static final int INITIAL_TURTLE_X = 280;
   private static final int INITIAL_TURTLE_Y = 230;
   private final double TURTLE_SIZE = 60; // turtle is 60 px x 60 px
-  private static final int SLIDER_LOW_VALUE = 1;
-  private static final int SLIDER_HIGH_VALUE = 10;
+  private static final double SLIDER_LOW_VALUE = 0.01;
+  private static final double SLIDER_HIGH_VALUE = 10;
   private static final int SLIDER_STARTING_VALUE = 2;
 
   private ImageView turtle = new ImageView(new Image("file:resources/defaultTurtle.png"));
