@@ -6,15 +6,20 @@ import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import slogo.controller.listings.MovingObjectProperties;
 
@@ -33,23 +38,34 @@ public class SubSceneLeft extends SubScene {
 
   private ImageView turtle = new ImageView(new Image(myResources.getString("Turtle")));
   private Rectangle rect;
-  private Slider slider;
+  private Slider turtleSpeed;
+  private Slider thick;
   private double initialX;
   private double initialY;
   private TextField tf;
   private Color markerColor;
+  private double markerThickness;
 
   private ArrayList<Path> pathList;
   private Queue<EnumMap<MovingObjectProperties, Object>> queue;
 
 
   public SubSceneLeft() {
+    markerThickness = 2;
     root = new Group();
     vBox = new VBox();
     vBox.getStyleClass().add(myResources.getString("VBoxStyle"));
     root.getChildren().add(vBox);
     createRectangle();
-    createSlider();
+    Label label1 = new Label("Turtle Speed");
+    turtleSpeed = createSlider();
+    vBox.getChildren().add(label1);
+    vBox.getChildren().add(turtleSpeed);
+    Label label2 = new Label("Marker Thickness");
+    vBox.getChildren().add(label2);
+    thick = createSlider();
+    vBox.getChildren().add(thick);
+    createButtons("FD 50", "BK 50", "LT 50", "RT 50");
     root.getChildren().add(createTurtle());
     initialX = 0;
     initialY = 0;
@@ -69,7 +85,7 @@ public class SubSceneLeft extends SubScene {
 
     pen.translateXProperty().addListener(pen_Listener);
     pen.translateYProperty().addListener(pen_Listener);
-    PathTransition pathTransition = new PathTransition(Duration.seconds(slider.getValue()), path,
+    PathTransition pathTransition = new PathTransition(Duration.seconds(turtleSpeed.getValue()), path,
         pen);
     pathTransition.setOnFinished(t -> {
       path.setClip(null);
@@ -79,10 +95,38 @@ public class SubSceneLeft extends SubScene {
     return pathTransition;
   }
 
+  private void createButtons(String firstName, String secondName, String thirdName,
+                             String fourthName) {
+    HBox hbox1 = new HBox(30);
+    HBox hbox2 = new HBox(30);
+    hbox1.getStyleClass().add(myResources.getString("HBox"));
+    hbox2.getStyleClass().add(myResources.getString("HBox"));
+    Button firstButton = new Button(firstName);
+    Button secondButton = new Button(secondName);
+    Button thirdButton = new Button(thirdName);
+    Button fourthButton = new Button(fourthName);
+    hbox1.getChildren().addAll(firstButton, secondButton);
+    hbox2.getChildren().addAll(thirdButton, fourthButton);
+    hbox1.setAlignment(Pos.CENTER);
+    hbox2.setAlignment(Pos.CENTER);
+
+    this.buttonListeners(firstButton, secondButton, thirdButton, fourthButton);
+    vBox.getChildren().addAll(hbox1, hbox2);
+  }
+
+  private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton,
+                               Button fourthButton) {
+
+    //firstButton.setOnAction(event ->); // fd 50
+
+    //secondButton.setOnAction(event -> displayPopUp());
+
+  }
+
 
   private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading) {
     turtle.setRotate(heading);
-    TranslateTransition trans = new TranslateTransition(Duration.seconds(slider.getValue()),
+    TranslateTransition trans = new TranslateTransition(Duration.seconds(turtleSpeed.getValue()),
         turtle);
     trans.setFromX(initialX);
     trans.setFromY(initialY);
@@ -103,7 +147,7 @@ public class SubSceneLeft extends SubScene {
     );
     path.setFill(null);
     path.setStroke(markerColor);
-    path.setStrokeWidth(2);
+    path.setStrokeWidth(thick.getValue());
 
     Animation path_animation = clipAnimation(path);
     path_animation.play();
@@ -127,9 +171,9 @@ public class SubSceneLeft extends SubScene {
     vBox.getChildren().add(rect);
   }
 
-  private void createSlider() {
-    slider = new Slider(SLIDER_LOW_VALUE, SLIDER_HIGH_VALUE, SLIDER_STARTING_VALUE);
-    vBox.getChildren().add(slider);
+  private Slider createSlider() {
+    return new Slider(SLIDER_LOW_VALUE, SLIDER_HIGH_VALUE, SLIDER_STARTING_VALUE);
+
   }
 
   @Override
@@ -167,6 +211,7 @@ public class SubSceneLeft extends SubScene {
     return t1;
   }
 
+
   public void setTurtle(Image newTurtle) {
     turtle.setImage(newTurtle);
   }
@@ -177,6 +222,10 @@ public class SubSceneLeft extends SubScene {
 
   public void setMarkerColor(Color color) {
     markerColor = color;
+  }
+
+  public void setMarkerThickness(Double size) {
+    markerThickness = size;
   }
 
   public void listenToDisableTextField(TextField tf) {
