@@ -2,10 +2,9 @@ package slogo.view;
 
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
@@ -45,7 +44,8 @@ public class SubSceneRight extends SubScene {
   private Image turtle = new Image("file:resources/defaultTurtle.png");
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
   public static final Color INITIAL_MARKER_COLOR = null; // the code for having the pen up
-  private static final String SUCCESSFUL_COMMAND = "Command successfully processed!";
+  public static final String SUCCESSFUL_COMMAND = "Command successfully processed!";
+  public static final String FAILED_COMMAND = "Command not recognized";
   private static final String EMPTY_COMMAND = "No command entered.";
   private static final String NEW_MARKER_COLOR = "New Marker Color Chosen: ";
   private static final String NEW_LANGUAGE = "New Chosen Language: ";
@@ -73,6 +73,7 @@ public class SubSceneRight extends SubScene {
   private String theText;
   private Boolean commandEntered = false;
   private Stage stage;
+  private String commandText;
 
   public SubSceneRight() {
     root = new Group();
@@ -158,13 +159,9 @@ public class SubSceneRight extends SubScene {
   private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton,
       Button fourthButton) {
 
-    firstButton.setOnAction(event -> {
-      setTurtleImage();
-    });
+    firstButton.setOnAction(event -> setTurtleImage());
 
-    secondButton.setOnAction(event -> {
-      displayPopUp();
-    });
+    secondButton.setOnAction(event -> displayPopUp());
 
     /*
     thirdButton.setOnAction(event ->{
@@ -215,11 +212,7 @@ public class SubSceneRight extends SubScene {
   }
 
   private void listenVBoxScroll(ScrollBar sb, VBox vb) {
-    sb.valueProperty().addListener(new ChangeListener<Number>() {
-      public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-        vb.setLayoutY(-new_val.doubleValue());
-      }
-    });
+    sb.valueProperty().addListener((ov, old_val, new_val) -> vb.setLayoutY(-new_val.doubleValue()));
 
   }
 
@@ -240,7 +233,6 @@ public class SubSceneRight extends SubScene {
         theText = name.getText().toLowerCase();
         commandEntered = true;
         commandTextArea.setText(commandTextArea.getText() + "\n" + theText);
-        commandTextArea.setText(commandTextArea.getText() + "\n" + SUCCESSFUL_COMMAND);
       } else {
         commandTextArea.setText(commandTextArea.getText() + "\n" + EMPTY_COMMAND);
       }
@@ -273,11 +265,11 @@ public class SubSceneRight extends SubScene {
     }
   }
 
-  public void setUserTextArea(Map<String, String> functions) {
+  public void setUserTextArea(Map<String, List<String>> functions) {
     userDefinedCommandsTextArea.setText(USER_TEXT_AREA);
-    for (Map.Entry<String, String> entry : functions.entrySet()) {
+    for (Map.Entry<String, List<String>> entry : functions.entrySet()) {
       userDefinedCommandsTextArea.setText(
-          userDefinedCommandsTextArea.getText() + "\n" + entry.getKey().substring(1) + " : " + entry
+          userDefinedCommandsTextArea.getText() + "\n" + entry.getKey() + " : " + entry
               .getValue());
     }
   }
@@ -286,11 +278,18 @@ public class SubSceneRight extends SubScene {
   public void update(Queue<EnumMap<MovingObjectProperties, Object>> movements) {
   }
 
+  public void setCommandText(String response) {
+    commandText = response;
+    commandTextArea.setText(commandTextArea.getText() + "\n" + commandText);
+  }
+
   public Image getTurtle() {
     return turtle;
   }
 
-  public TextField getTextField(){return name;}
+  public TextField getTextField() {
+    return name;
+  }
 
   public Color getClickedColor() {
     return clickedColor;
@@ -300,7 +299,7 @@ public class SubSceneRight extends SubScene {
     return language;
   }
 
-  public Color getMarkerClickedColor(){
+  public Color getMarkerClickedColor() {
     return markerClickedColor;
   }
 

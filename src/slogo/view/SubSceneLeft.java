@@ -10,7 +10,6 @@ import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.Group;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;

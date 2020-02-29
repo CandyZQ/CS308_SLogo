@@ -1,5 +1,8 @@
 package slogo.controller.operations;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import slogo.controller.CommandsMapHelper;
 import slogo.controller.listings.BasicSyntax;
@@ -8,13 +11,15 @@ import slogo.model.Turtle;
 
 public class UserOperations {
 
-  public Map<String, Double> userVars;
+  private Map<String, Double> userVars;
+  private Map<String, List<String>> functions;
   private CommandsMapHelper commandsMapHelper = new CommandsMapHelper();
 
   public static final String LOOP_EXPR = ":repcount";
 
-  public UserOperations(Turtle turtle, Map<String, Double> map) {
+  public UserOperations(Turtle turtle, Map<String, Double> map, Map<String, List<String>> functions) {
     this.userVars = map;
+    this.functions = functions;
   }
 
   public Double makeVariable(String variable, Double expr) throws InvalidArgumentException {
@@ -84,5 +89,8 @@ public class UserOperations {
     }
   }
 
-  //public String to(String commandName, String variables, String commands) { }
+  public void makeUserInstruction(String commandName, String variables, String commands) {
+    List<String> current = new ArrayList<>(Arrays.asList(variables, commands.substring(2, commands.length() - 2)));
+    functions.put(commandName, current);
+  }
 }

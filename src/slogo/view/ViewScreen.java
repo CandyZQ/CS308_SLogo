@@ -1,6 +1,7 @@
 package slogo.view;
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import javafx.scene.Scene;
@@ -11,8 +12,8 @@ import slogo.controller.listings.MovingObjectProperties;
 
 public class ViewScreen implements ExternalAPIViewable {
 
-  public static final int STAGE_HEIGHT = 800;
-  public static final int STAGE_WIDTH = 1000;
+  public static final double STAGE_HEIGHT = 800;
+  public static final double STAGE_WIDTH = 1000;
   public static final String STAGE_TITLE = "SLOGO";
   public static final String STYLE_SHEET = "style.css";
 
@@ -59,8 +60,8 @@ public class ViewScreen implements ExternalAPIViewable {
   }
 
   @Override
-  public void exceptionHandling() throws Exception {
-
+  public void exceptionHandling() {
+    scRight.setCommandText(SubSceneRight.FAILED_COMMAND);
   }
 
   @Override
@@ -71,15 +72,19 @@ public class ViewScreen implements ExternalAPIViewable {
 
   public static void update(
       Queue<EnumMap<MovingObjectProperties, Object>> commands,
-      Map<String, Double> variables) {
+      Map<String, Double> variables,
+      Map<String, List<String>> functions) {
     scLeft.setRectangleColor(scRight.getClickedColor());
     scLeft.setMarkerColor(scRight.getMarkerClickedColor());
     scLeft.setTurtle(scRight.getTurtle());
     scLeft.listenToDisableTextField(scRight.getTextField());
     scRight.setVariableTextArea(variables);
-
-    //scRight.setUserTextArea();
-    if (commands != null) {
+    scRight.setUserTextArea(functions);
+    if (commands != null && commands.peek() != null) {
+      if (commands.peek().get(MovingObjectProperties.CLEAR).toString().contentEquals("true")) {
+        scLeft.setMarkerColor(null);
+      }
+      scRight.setCommandText(SubSceneRight.SUCCESSFUL_COMMAND);
       scLeft.update(commands);
     }
   }

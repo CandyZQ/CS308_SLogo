@@ -1,5 +1,6 @@
 package slogo.controller.operations;
 
+import java.util.List;
 import java.util.Map;
 import slogo.controller.listings.MovingObjectProperties;
 import slogo.model.Turtle;
@@ -8,7 +9,7 @@ public class TurtleCommands {
 
   Turtle turtle;
 
-  public TurtleCommands(Turtle turtle, Map map) {
+  public TurtleCommands(Turtle turtle, Map<String, Double> map, Map<String, List<String>> functions) {
     this.turtle = turtle;
   }
 
@@ -21,11 +22,11 @@ public class TurtleCommands {
   }
 
   public void left(Double degrees) {
-    turtle.rotate(-degrees);
+    turtle.rotate(degrees);
   }
 
   public void right(Double degrees) {
-    turtle.rotate(degrees);
+    turtle.rotate(-degrees);
   }
 
   public void setHeading(Double degrees) {
