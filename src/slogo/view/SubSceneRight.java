@@ -25,9 +25,6 @@ import java.io.File;
 
 public class SubSceneRight extends SubScene {
 
-
-
-
   private final ImageView helpImage0 = new ImageView(new Image(myResources.getString("HelpTitle")));
   private final ImageView helpImage1 = new ImageView(new Image(myResources.getString("BasicSyntax")));
   private final ImageView helpImage2 = new ImageView(new Image(myResources.getString("TurtleCommands")));
@@ -76,11 +73,12 @@ public class SubSceneRight extends SubScene {
     for(String key: Collections.list(myLanguages.getKeys())){
       language_names.add(myLanguages.getString(key));
     }
-    vBox.getStyleClass().add("vbox");
+    vBox.getStyleClass().add(myResources.getString("VBox"));
     root.getChildren().add(vBox);
     createLabel(vBox, BACKGROUND_COLOR_LABEL);
     createBackgroundColorPicker();
-    createButtons("Load Turtle", "Get Help", "Reset", "Undo");
+    createButtons(myResources.getString("LoadButton"), myResources.getString("HelpButton"),
+            myResources.getString("ResetButton"), myResources.getString("UndoButton"));
     createHBox();
     createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
     createTextField();
@@ -90,7 +88,7 @@ public class SubSceneRight extends SubScene {
 
   private void createHBox() {
     HBox hBox = new HBox();
-    hBox.getStyleClass().add("hbox");
+    hBox.getStyleClass().add(myResources.getString("HBox"));
     VBox vBoxLeft = new VBox();
     VBox vBoxRight = new VBox();
     createLabel(vBoxRight, MARKER_COLOR_LABEL);
@@ -139,8 +137,8 @@ public class SubSceneRight extends SubScene {
       String fourthName) {
     HBox hbox1 = new HBox(30);
     HBox hbox2 = new HBox(30);
-    hbox1.getStyleClass().add("hbox");
-    hbox2.getStyleClass().add("hbox");
+    hbox1.getStyleClass().add(myResources.getString("HBox"));
+    hbox2.getStyleClass().add(myResources.getString("HBox"));
     Button firstButton = new Button(firstName);
     Button secondButton = new Button(secondName);
     Button thirdButton = new Button(thirdName);
@@ -184,34 +182,23 @@ public class SubSceneRight extends SubScene {
   }
 
   private void displayPopUp() {
-    BorderPane helpRoot = new BorderPane();
+    ScrollPane helpRoot = new ScrollPane();
     Stage helpStage = new Stage();
-    helpStage.setTitle("Help Screen");
+    helpStage.setTitle(myResources.getString("HelpStageTitle"));
     VBox vb = new VBox();
 
     vb.getChildren()
         .addAll(helpImage0, helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6);
-    ScrollBar s1 = new ScrollBar();
-    s1.setMin(0);
-    s1.setMax(1400);
-    s1.setOrientation(Orientation.VERTICAL);
-    helpRoot.getChildren().add(vb);
-    helpRoot.setRight(s1);
-    this.listenVBoxScroll(s1, vb);
+    helpRoot.setContent(vb);
     Scene errorScene = setUpPopUp(helpRoot);
     helpStage.setScene(errorScene);
     helpStage.show();
   }
 
 
-  private Scene setUpPopUp(BorderPane helpRoot) {
+  private Scene setUpPopUp(ScrollPane helpRoot) {
 
     return new Scene(helpRoot, 600, 800, Color.LIGHTBLUE);
-  }
-
-  private void listenVBoxScroll(ScrollBar sb, VBox vb) {
-    sb.valueProperty().addListener((ov, old_val, new_val) -> vb.setLayoutY(-new_val.doubleValue()));
-
   }
 
   private void createTextField() {
