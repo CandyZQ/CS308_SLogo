@@ -1,16 +1,13 @@
 package slogo.view;
 
-import java.util.EnumMap;
-import java.util.Locale;
-import java.util.Queue;
-import java.util.ResourceBundle;
-
+import java.util.*;
 import javafx.scene.Group;
 import javafx.scene.layout.VBox;
 import slogo.controller.listings.MovingObjectProperties;
 
 public abstract class SubScene {
 
+  //new Locale("fr", "FR")
   protected Group root;
   protected VBox vBox;
   protected static ResourceBundle myResources =

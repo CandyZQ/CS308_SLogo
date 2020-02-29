@@ -4,14 +4,12 @@ package slogo.view;
 import java.util.*;
 
 import javafx.collections.FXCollections;
-import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -30,8 +28,10 @@ public class SubSceneRight extends SubScene {
   private final ImageView helpImage2 = new ImageView(new Image(myResources.getString("TurtleCommands")));
   private final ImageView helpImage3 = new ImageView(new Image(myResources.getString("TurtleQueries")));
   private final ImageView helpImage4 = new ImageView(new Image(myResources.getString("MathOperations")));
-  private final ImageView helpImage5 = new ImageView(new Image(myResources.getString("BooleanOperations")));
-  private final ImageView helpImage6 = new ImageView(new Image(myResources.getString("UserDefined")));
+  private final ImageView helpImage5 = new ImageView(
+      new Image(myResources.getString("BooleanOperations")));
+  private final ImageView helpImage6 = new ImageView(
+      new Image(myResources.getString("UserDefined")));
 
 
   private Image turtle = new Image(myResources.getString("Turtle"));
@@ -40,12 +40,14 @@ public class SubSceneRight extends SubScene {
   public static final String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
   public static final String FAILED_COMMAND = myResources.getString("FailedCommand");
   private static final String EMPTY_COMMAND = myResources.getString("EmptyCommand");
-  private static final String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor");
-  private static final String NEW_LANGUAGE = myResources.getString("NewLanguage");
-  private static final String NEW_BACKGROUND_COLOR = myResources.getString("NewBackgroundColor");
+  private static final String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
+  private static final String NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
+  private static final String NEW_BACKGROUND_COLOR =
+      myResources.getString("NewBackgroundColor") + " ";
   private static final String COMMAND_AREA_TEXT = myResources.getString("CommandArea");
   private static List<String> language_names = new ArrayList<>();
-  private static final String BACKGROUND_COLOR_LABEL = myResources.getString("BackgroundColorLabel");
+  private static final String BACKGROUND_COLOR_LABEL = myResources
+      .getString("BackgroundColorLabel");
   private static final String MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
   private static final String CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
   private static final String TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
@@ -65,7 +67,6 @@ public class SubSceneRight extends SubScene {
   private String theText;
   private Boolean commandEntered = false;
   private Stage stage;
-  private String commandText;
 
   public SubSceneRight() {
     root = new Group();
@@ -143,6 +144,10 @@ public class SubSceneRight extends SubScene {
     Button secondButton = new Button(secondName);
     Button thirdButton = new Button(thirdName);
     Button fourthButton = new Button(fourthName);
+    firstButton.setWrapText(true);
+    secondButton.setWrapText(true);
+    thirdButton.setWrapText(true);
+    fourthButton.setWrapText(true);
     hbox1.getChildren().addAll(firstButton, secondButton);
     hbox2.getChildren().addAll(thirdButton, fourthButton);
     hbox1.setAlignment(Pos.CENTER);
@@ -232,6 +237,8 @@ public class SubSceneRight extends SubScene {
 
   private void createBackgroundColorPicker() {
     cp = new ColorPicker(INITIAL_BACKGROUND_COLOR);
+    Label l = new Label("Meh");
+    l.setLabelFor(cp);
     vBox.getChildren().add(cp);
 
     cp.setOnAction(event -> {
@@ -264,8 +271,7 @@ public class SubSceneRight extends SubScene {
   }
 
   public void setCommandText(String response) {
-    commandText = response;
-    commandTextArea.setText(commandTextArea.getText() + "\n" + commandText);
+    commandTextArea.setText(commandTextArea.getText() + "\n" + response);
   }
 
   public Image getTurtle() {

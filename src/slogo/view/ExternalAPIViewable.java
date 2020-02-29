@@ -41,7 +41,7 @@ public interface ExternalAPIViewable {
    * This method will handle the exception that is caught by the controller if the input information
    * is bad.
    */
-  void exceptionHandling();
+  void exceptionHandling(String errorMessage);
 
   /**
    * This method will be called by the controller to initialize and set the scene for the first time
