@@ -2,12 +2,17 @@ package slogo.view;
 
 import java.util.EnumMap;
 
+import java.util.Locale;
 import java.util.Queue;
+import java.util.ResourceBundle;
+
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -26,7 +31,10 @@ public class SubSceneLeft extends SubScene {
   private static final int INITIAL_TURTLE_Y = 230;
   private final int TURTLE_SIZE = 60; // turtle is 60 px x 60 px
 
-  private ImageView turtle = new ImageView(new Image("file:resources/defaultTurtle.png"));
+  private static ResourceBundle myResources =
+          ResourceBundle.getBundle("resources", Locale.getDefault());
+
+  private ImageView turtle = new ImageView(new Image(myResources.getString("Turtle")));
   private Rectangle rect;
   private Slider slider;
   private TranslateTransition trans;
@@ -42,7 +50,7 @@ public class SubSceneLeft extends SubScene {
   public SubSceneLeft() {
     root = new Group();
     vBox = new VBox();
-    vBox.getStyleClass().add("leftvbox");
+    vBox.getStyleClass().add("VBoxStyle");
     root.getChildren().add(vBox);
     createRectangle();
     createSlider();
@@ -135,7 +143,7 @@ public class SubSceneLeft extends SubScene {
   private void createRectangle() {
     rect = new Rectangle(ViewScreen.STAGE_WIDTH / 2, ViewScreen.STAGE_HEIGHT / 2,
         SubSceneRight.INITIAL_BACKGROUND_COLOR);
-    rect.getStyleClass().add("rectangle");
+    rect.getStyleClass().add("StyleClass");
     vBox.getChildren().add(rect);
   }
 
