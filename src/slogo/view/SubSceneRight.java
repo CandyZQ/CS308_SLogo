@@ -164,11 +164,6 @@ public class SubSceneRight extends SubScene {
 
     secondButton.setOnAction(event -> displayPopUp());
 
-    /*
-    thirdButton.setOnAction(event ->{
-      moveTurtle(fourthButton);
-    });*/
-
   }
 
 
@@ -293,6 +288,8 @@ public class SubSceneRight extends SubScene {
   public Color getMarkerClickedColor() {
     return markerClickedColor;
   }
+
+
 
   public String getTheText() {
     if (commandEntered) {
