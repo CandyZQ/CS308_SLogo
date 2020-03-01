@@ -23,7 +23,7 @@ public class UserOperations {
   }
 
   public Double makeVariable(String variable, Double expr) throws InvalidArgumentException {
-    if (!commandsMapHelper.getInputType(variable).equals(BasicSyntax.VARIABLE)) {
+    if (!commandsMapHelper.isType(variable, BasicSyntax.VARIABLE)) {
       throw new InvalidArgumentException("The first argument is not in the form of a variable.");
     }
     userVars.put(variable, expr);
@@ -68,7 +68,7 @@ public class UserOperations {
    }
 
    private void checkType(String s, BasicSyntax type, int num) throws InvalidArgumentException {
-     if (!commandsMapHelper.getInputType(s).equals(type)) {
+     if (!commandsMapHelper.isType(s, type)) {
        throw new InvalidArgumentException("The " + num + " parameter in " + s + " is not a " + type.name() + " .");
      }
    }

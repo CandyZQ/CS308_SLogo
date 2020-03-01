@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import slogo.controller.listings.CommandType;
 import slogo.controller.listings.MovingObjectProperties;
-import slogo.controller.operations.TurtleCommands;
+import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.WrongCommandFormatException;
 import slogo.model.Turtle;
@@ -77,4 +78,5 @@ class CommandStructure {
 
     return res != null ? res : turtle.getState().get(MovingObjectProperties.RETURN_VALUE);
   }
+
 }
