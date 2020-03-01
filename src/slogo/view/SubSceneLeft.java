@@ -8,10 +8,8 @@ import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -20,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import slogo.controller.listings.MovingObjectProperties;
 
@@ -49,6 +48,20 @@ public class SubSceneLeft extends SubScene {
   private ArrayList<Path> pathList;
   private Queue<EnumMap<MovingObjectProperties, Object>> queue;
 
+  private int statID;
+  private double statX;
+  private double statY;
+  private double statHeading;
+  private String statPen;
+  private double statThickness;
+
+  Label labelID;
+  Label labelX;
+  Label labelY;
+  Label labelHeading;
+  Label labelPen;
+  Label labelThickness;
+
 
   public SubSceneLeft() {
     markerThickness = 2;
@@ -69,7 +82,38 @@ public class SubSceneLeft extends SubScene {
     root.getChildren().add(createTurtle());
     initialX = 0;
     initialY = 0;
+    turtleStatsPopUp();
 
+  }
+
+  private void turtleStatsPopUp(){
+    ScrollPane statsRoot = new ScrollPane();
+    Stage statsStage = new Stage();
+    statsStage.setTitle(myResources.getString("StatsStageTitle"));
+    VBox vb = new VBox();
+
+    labelID = new Label("Turtle ID: " + statID);
+    labelX = new Label("Turtle X: " + statX);
+    labelY = new Label("Turtle Y: " + statY);
+    labelHeading = new Label("Turtle Heading: " + statHeading);
+    labelPen = new Label("Pen Up/Down: " + statPen);
+    labelThickness = new Label("Pen Thickness: " + statThickness);
+
+    vb.getChildren().addAll(labelID, labelX, labelY, labelHeading, labelPen, labelThickness);
+    statsRoot.setContent(vb);
+
+    Scene statsScene = new Scene(statsRoot, 400, 400, Color.LIGHTBLUE);
+    statsStage.setScene(statsScene);
+    statsStage.show();
+  }
+
+ private void updateStatsPopUp(){
+   labelID.setText("Turtle ID: " + statID);
+   labelX.setText("Turtle X: " + statX);
+   labelY.setText("Turtle Y: " + statY);
+   labelHeading.setText("Turtle Heading: " + statHeading);
+   labelPen.setText("Pen Up/Down: " + statPen);
+   labelThickness.setText("Pen Thickness: " + statThickness);
   }
 
   private Animation clipAnimation(Path path) {
@@ -116,10 +160,6 @@ public class SubSceneLeft extends SubScene {
 
   private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton,
                                Button fourthButton) {
-
-    //firstButton.setOnAction(event ->); // fd 50
-
-    //secondButton.setOnAction(event -> displayPopUp());
 
   }
 
@@ -180,6 +220,7 @@ public class SubSceneLeft extends SubScene {
   public void update(Queue<EnumMap<MovingObjectProperties, Object>> queue) {
     this.queue = queue;
     recurse();
+    updateStatsPopUp();
   }
 
   private void recurse() {
@@ -204,12 +245,12 @@ public class SubSceneLeft extends SubScene {
 
   private TranslateTransition move() {
     EnumMap<MovingObjectProperties, Object> movements = queue.remove();
-    System.out.println("Turtle ID: " + movements.get(MovingObjectProperties.ID));
-    System.out.println("X Pos: " + -1 * (Double) movements.get(MovingObjectProperties.X));
-    System.out.println("Y Pos: " + -1 * (Double) movements.get(MovingObjectProperties.Y));
-    System.out.println("Heading: " + (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90);
-    System.out.println("Pen Thickness: " + markerThickness);
-    System.out.println("Pen Up/Down: " + penUpDown());
+    statID = (Integer) movements.get(MovingObjectProperties.ID);
+    statX = -1 * (Double) movements.get(MovingObjectProperties.X);
+    statY = -1 * (Double) movements.get(MovingObjectProperties.Y);
+    statHeading = (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90;
+    statThickness = markerThickness;
+    statPen = penUpDown();
     TranslateTransition t1 = moveTurtle(-1 * (Double) movements.get(MovingObjectProperties.X),
         -1 * (Double) movements.get(MovingObjectProperties.Y),
         (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90);
