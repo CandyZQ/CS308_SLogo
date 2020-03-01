@@ -8,11 +8,15 @@ import slogo.controller.listings.MovingObjectProperties;
 public abstract class SubScene {
 
   //new Locale("fr", "FR")
-  //Locale.getDefault()
+  //new Locale("zh", "CN")
+  //
   protected Group root;
   protected VBox vBox;
+  protected Object language;
+  protected Locale languageLocation;
+
   protected static ResourceBundle myResources =
-      ResourceBundle.getBundle("resources", new Locale("zh", "CN"));
+      ResourceBundle.getBundle("resources", Locale.getDefault());
   protected static ResourceBundle myLanguages =
       ResourceBundle.getBundle("languages", Locale.getDefault());
 
@@ -21,4 +25,8 @@ public abstract class SubScene {
   }
 
   public abstract void update(Queue<EnumMap<MovingObjectProperties, Object>> movements);
+
+//  private String getLanguage() {
+//    languageLocation = new Locale()
+//  }
 }

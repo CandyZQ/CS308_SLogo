@@ -2,7 +2,6 @@ package slogo.view;
 
 
 import java.util.*;
-
 import javafx.collections.FXCollections;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -38,7 +37,6 @@ public class SubSceneRight extends SubScene {
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
   public static final Color INITIAL_MARKER_COLOR = null; // the code for having the pen up
   public static final String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
-  public static final String FAILED_COMMAND = myResources.getString("FailedCommand");
   private static final String EMPTY_COMMAND = myResources.getString("EmptyCommand");
   private static final String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
   private static final String NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
@@ -57,7 +55,6 @@ public class SubSceneRight extends SubScene {
 
 
   private ColorPicker cp;
-  private Object language;
   private Color clickedColor = INITIAL_BACKGROUND_COLOR;
   private Color markerClickedColor = INITIAL_MARKER_COLOR;
   private TextField name;
