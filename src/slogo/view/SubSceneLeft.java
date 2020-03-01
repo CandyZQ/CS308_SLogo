@@ -1,57 +1,119 @@
 package slogo.view;
 
-import java.util.EnumMap;
+import java.util.*;
 
-import java.util.Queue;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import slogo.controller.listings.MovingObjectProperties;
 
 public class SubSceneLeft extends SubScene {
 
 
-  private static final int INITIAL_TURTLE_X = 280;
-  private static final int INITIAL_TURTLE_Y = 230;
+  private static final int INITIAL_TURTLE_X = 300;
+  private static final int INITIAL_TURTLE_Y = 250;
+  private static final double SPACING_CONSTANT = 20;
   private final double TURTLE_SIZE = 60; // turtle is 60 px x 60 px
-  private static final int SLIDER_LOW_VALUE = 1;
-  private static final int SLIDER_HIGH_VALUE = 10;
+  private static final double SLIDER_LOW_VALUE = 0.01;
+  private static final double SLIDER_HIGH_VALUE = 10;
   private static final int SLIDER_STARTING_VALUE = 2;
 
-  private ImageView turtle = new ImageView(new Image("file:resources/defaultTurtle.png"));
+  private static ResourceBundle myResources =
+      ResourceBundle.getBundle("resources", Locale.getDefault());
+
+  private ImageView turtle = new ImageView(new Image(myResources.getString("Turtle")));
   private Rectangle rect;
-  private Slider slider;
+  private Slider turtleSpeed;
+  private Slider thick;
   private double initialX;
   private double initialY;
   private TextField tf;
   private Color markerColor;
+  private double markerThickness;
 
-  private Path path;
+  private ArrayList<Path> pathList;
   private Queue<EnumMap<MovingObjectProperties, Object>> queue;
+
+  private int statID;
+  private double statX;
+  private double statY;
+  private double statHeading;
+  private String statPen;
+  private double statThickness;
+
+  Label labelID;
+  Label labelX;
+  Label labelY;
+  Label labelHeading;
+  Label labelPen;
+  Label labelThickness;
 
 
   public SubSceneLeft() {
+    markerThickness = 2;
     root = new Group();
     vBox = new VBox();
-    vBox.getStyleClass().add("leftvbox");
+    vBox.getStyleClass().add(myResources.getString("VBoxStyle"));
     root.getChildren().add(vBox);
     createRectangle();
-    createSlider();
+    Label label1 = new Label("Turtle Speed");
+    turtleSpeed = createSlider();
+    vBox.getChildren().add(label1);
+    vBox.getChildren().add(turtleSpeed);
+    Label label2 = new Label("Marker Thickness");
+    vBox.getChildren().add(label2);
+    thick = createSlider();
+    vBox.getChildren().add(thick);
+    createButtons("FD 50", "BK 50", "LT 50", "RT 50");
     root.getChildren().add(createTurtle());
     initialX = 0;
     initialY = 0;
+    turtleStatsPopUp();
 
+  }
+
+  private void turtleStatsPopUp(){
+    ScrollPane statsRoot = new ScrollPane();
+    Stage statsStage = new Stage();
+    statsStage.setTitle(myResources.getString("StatsStageTitle"));
+    VBox vb = new VBox();
+
+    labelID = new Label("Turtle ID: " + statID);
+    labelX = new Label("Turtle X: " + statX);
+    labelY = new Label("Turtle Y: " + statY);
+    labelHeading = new Label("Turtle Heading: " + statHeading);
+    labelPen = new Label("Pen Up/Down: " + statPen);
+    labelThickness = new Label("Pen Thickness: " + statThickness);
+
+    vb.getChildren().addAll(labelID, labelX, labelY, labelHeading, labelPen, labelThickness);
+    statsRoot.setContent(vb);
+
+    Scene statsScene = new Scene(statsRoot, 400, 400, Color.LIGHTBLUE);
+    statsStage.setScene(statsScene);
+    statsStage.show();
+  }
+
+ private void updateStatsPopUp(){
+   labelID.setText("Turtle ID: " + statID);
+   labelX.setText("Turtle X: " + statX);
+   labelY.setText("Turtle Y: " + statY);
+   labelHeading.setText("Turtle Heading: " + statHeading);
+   labelPen.setText("Pen Up/Down: " + statPen);
+   labelThickness.setText("Pen Thickness: " + statThickness);
   }
 
   private Animation clipAnimation(Path path) {
@@ -67,7 +129,7 @@ public class SubSceneLeft extends SubScene {
 
     pen.translateXProperty().addListener(pen_Listener);
     pen.translateYProperty().addListener(pen_Listener);
-    PathTransition pathTransition = new PathTransition(Duration.seconds(slider.getValue()), path,
+    PathTransition pathTransition = new PathTransition(Duration.seconds(turtleSpeed.getValue()), path,
         pen);
     pathTransition.setOnFinished(t -> {
       path.setClip(null);
@@ -77,10 +139,34 @@ public class SubSceneLeft extends SubScene {
     return pathTransition;
   }
 
+  private void createButtons(String firstName, String secondName, String thirdName,
+                             String fourthName) {
+    HBox hbox1 = new HBox(30);
+    HBox hbox2 = new HBox(30);
+    hbox1.getStyleClass().add(myResources.getString("HBox"));
+    hbox2.getStyleClass().add(myResources.getString("HBox"));
+    Button firstButton = new Button(firstName);
+    Button secondButton = new Button(secondName);
+    Button thirdButton = new Button(thirdName);
+    Button fourthButton = new Button(fourthName);
+    hbox1.getChildren().addAll(firstButton, secondButton);
+    hbox2.getChildren().addAll(thirdButton, fourthButton);
+    hbox1.setAlignment(Pos.CENTER);
+    hbox2.setAlignment(Pos.CENTER);
+
+    this.buttonListeners(firstButton, secondButton, thirdButton, fourthButton);
+    vBox.getChildren().addAll(hbox1, hbox2);
+  }
+
+  private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton,
+                               Button fourthButton) {
+
+  }
+
 
   private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading) {
     turtle.setRotate(heading);
-    TranslateTransition trans = new TranslateTransition(Duration.seconds(slider.getValue()),
+    TranslateTransition trans = new TranslateTransition(Duration.seconds(turtleSpeed.getValue()),
         turtle);
     trans.setFromX(initialX);
     trans.setFromY(initialY);
@@ -101,7 +187,7 @@ public class SubSceneLeft extends SubScene {
     );
     path.setFill(null);
     path.setStroke(markerColor);
-    path.setStrokeWidth(2);
+    path.setStrokeWidth(thick.getValue());
 
     Animation path_animation = clipAnimation(path);
     path_animation.play();
@@ -113,27 +199,30 @@ public class SubSceneLeft extends SubScene {
   }
 
   private ImageView createTurtle() {
-    turtle.setX(INITIAL_TURTLE_X);
-    turtle.setY(INITIAL_TURTLE_Y);
+//    turtle.setX(INITIAL_TURTLE_X);
+//    turtle.setY(INITIAL_TURTLE_Y);
+    turtle.setX(rect.getBoundsInParent().getCenterX() + SPACING_CONSTANT + TURTLE_SIZE / 2);
+    turtle.setY(rect.getBoundsInParent().getCenterY() + SPACING_CONSTANT + TURTLE_SIZE / 2);
     return turtle;
   }
 
   private void createRectangle() {
     rect = new Rectangle(ViewScreen.STAGE_WIDTH / 2, ViewScreen.STAGE_HEIGHT / 2,
         SubSceneRight.INITIAL_BACKGROUND_COLOR);
-    rect.getStyleClass().add("rectangle");
+    rect.getStyleClass().add(myResources.getString("StyleClass"));
     vBox.getChildren().add(rect);
   }
 
-  private void createSlider() {
-    slider = new Slider(SLIDER_LOW_VALUE, SLIDER_HIGH_VALUE, SLIDER_STARTING_VALUE);
-    vBox.getChildren().add(slider);
+  private Slider createSlider() {
+    return new Slider(SLIDER_LOW_VALUE, SLIDER_HIGH_VALUE, SLIDER_STARTING_VALUE);
+
   }
 
   @Override
   public void update(Queue<EnumMap<MovingObjectProperties, Object>> queue) {
     this.queue = queue;
     recurse();
+    updateStatsPopUp();
   }
 
   private void recurse() {
@@ -158,11 +247,25 @@ public class SubSceneLeft extends SubScene {
 
   private TranslateTransition move() {
     EnumMap<MovingObjectProperties, Object> movements = queue.remove();
+    statID = (Integer) movements.get(MovingObjectProperties.ID);
+    statX = -1 * (Double) movements.get(MovingObjectProperties.X);
+    statY = -1 * (Double) movements.get(MovingObjectProperties.Y);
+    statHeading = (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90;
+    statThickness = markerThickness;
+    statPen = penUpDown();
     TranslateTransition t1 = moveTurtle(-1 * (Double) movements.get(MovingObjectProperties.X),
         -1 * (Double) movements.get(MovingObjectProperties.Y),
         (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90);
     t1.play();
     return t1;
+  }
+
+  // if Pen is Up, return true. Else return false
+  private String penUpDown(){
+    if (markerColor == null){
+      return "Pen Up";
+    }
+    return "Pen Down";
   }
 
   public void setTurtle(Image newTurtle) {
@@ -175,6 +278,10 @@ public class SubSceneLeft extends SubScene {
 
   public void setMarkerColor(Color color) {
     markerColor = color;
+  }
+
+  public void setMarkerThickness(Double size) {
+    markerThickness = size;
   }
 
   public void listenToDisableTextField(TextField tf) {

@@ -60,8 +60,8 @@ public class ViewScreen implements ExternalAPIViewable {
   }
 
   @Override
-  public void exceptionHandling() {
-    scRight.setCommandText(SubSceneRight.FAILED_COMMAND);
+  public void exceptionHandling(String errorMessage) {
+    scRight.setCommandText(errorMessage);
   }
 
   @Override
@@ -80,7 +80,10 @@ public class ViewScreen implements ExternalAPIViewable {
     scLeft.listenToDisableTextField(scRight.getTextField());
     scRight.setVariableTextArea(variables);
     scRight.setUserTextArea(functions);
-    if (commands != null) {
+    if (commands != null && commands.peek() != null) {
+      if (commands.peek().get(MovingObjectProperties.CLEAR).toString().contentEquals("true")) {
+        scLeft.setMarkerColor(null);
+      }
       scRight.setCommandText(SubSceneRight.SUCCESSFUL_COMMAND);
       scLeft.update(commands);
     }
