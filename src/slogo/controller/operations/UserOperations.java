@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import slogo.controller.CommandsMapHelper;
+import slogo.controller.UserDefinedFields;
 import slogo.controller.listings.BasicSyntax;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
@@ -17,9 +18,7 @@ public class UserOperations {
 
   public static final String LOOP_EXPR = ":repcount";
 
-  public UserOperations(Turtle turtle, Map<String, Double> map, Map<String, List<String>> functions) {
-    this.userVars = map;
-    this.functions = functions;
+  public UserOperations(Turtle turtle, UserDefinedFields userDefinedFields) {
   }
 
   public Double makeVariable(String variable, Double expr) throws InvalidArgumentException {

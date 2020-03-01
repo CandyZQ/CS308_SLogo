@@ -3,6 +3,7 @@ package slogo.controller.operations;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import slogo.controller.UserDefinedFields;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
 
@@ -14,8 +15,7 @@ public class MathOperations {
 
   public static final String NONNEGATIVE_ARG = "The argument should be non-negative!";
 
-  public MathOperations(Turtle turtle, Map<String, Double> map, Map<String, List<String>> functions) {
-
+  public MathOperations(Turtle turtle, UserDefinedFields userDefinedFields) {
   }
 
   /**

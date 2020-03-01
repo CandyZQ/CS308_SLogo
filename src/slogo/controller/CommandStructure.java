@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import slogo.controller.listings.CommandType;
 import slogo.controller.listings.MovingObjectProperties;
-import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.WrongCommandFormatException;
 import slogo.model.Turtle;
@@ -57,7 +55,7 @@ class CommandStructure {
     return m.getName();
   }
 
-  Object execute(Turtle turtle, Map<String, Double> userVars, Map<String, List<String>> functions)
+  Object execute(Turtle turtle, UserDefinedFields userDefinedFields)
       throws InvalidArgumentException, WrongCommandFormatException {
     if (needMoreParas()) {
       throw new WrongCommandFormatException(
@@ -66,8 +64,8 @@ class CommandStructure {
 
     Object res = null;
     try {
-      res = m.invoke(c.getConstructor(Turtle.class, Map.class, Map.class)
-          .newInstance(turtle, userVars, functions), paras.toArray(new Object[0]));
+      res = m.invoke(c.getConstructor(Turtle.class, UserDefinedFields.class)
+          .newInstance(turtle, userDefinedFields), paras.toArray(new Object[0]));
     } catch (IllegalArgumentException e) {
       throw new InvalidArgumentException(e);
     } catch (IllegalAccessException e) {

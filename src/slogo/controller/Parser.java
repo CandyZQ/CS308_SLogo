@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -24,17 +23,17 @@ import slogo.model.Turtle;
 
 public class Parser implements BackEndExternalAPI {
   private CommandsMapHelper commandsMapHelper;
+  private UserDefinedFields userDefinedFields;
+
   private Stack<String> commandsLeft;
   private Stack<CommandStructure> pausedCommands;
+
   private List<Turtle> animals;
   private int turtleOperating;
 
-  // List entries: variable and then command
-  private Map<String, List<String>> functions;
-  private Map<String, Double> userVars;
-
   public Parser(int animalNum) {
     commandsMapHelper = new CommandsMapHelper();
+    userDefinedFields = new UserDefinedFields();
     commandsLeft = new Stack<>();
     pausedCommands = new Stack<>();
 
@@ -42,9 +41,6 @@ public class Parser implements BackEndExternalAPI {
     for (int i = 0; i < animalNum; i++) {
       animals.add(new Turtle(i));
     }
-
-    userVars = new HashMap<>();
-    functions = new HashMap<>();
   }
 
   /**
@@ -95,11 +91,11 @@ public class Parser implements BackEndExternalAPI {
    * @return
    */
   public Map<String, Double> gerUserVars() {
-    return Collections.unmodifiableMap(userVars);
+    return userDefinedFields.getUserVars();
   }
 
   public Map<String, List<String>> getFunctions() {
-    return Collections.unmodifiableMap(functions);
+    return userDefinedFields.getFunctions();
   }
 
   private void executeNextCommand(TurtleStatesManager tm)
@@ -127,7 +123,7 @@ public class Parser implements BackEndExternalAPI {
     String returnVal = null;
     while (!pausedCommands.isEmpty()) {
       if (!pausedCommands.peek().needMoreParas()) {
-        returnVal = pausedCommands.pop().execute(animals.get(turtleOperating), userVars, functions)
+        returnVal = pausedCommands.pop().execute(animals.get(turtleOperating), userDefinedFields)
             .toString();
         storeTurtleStates(returnVal, tm);
       }
@@ -171,7 +167,7 @@ public class Parser implements BackEndExternalAPI {
         return true;
       }
       if (commandsMapHelper.isType(next, VARIABLE)) {
-        structure.addPara(userVars.get(next).toString());
+        structure.addPara(userDefinedFields.getVar(next));
       }
       commandsLeft.push(next);
       return false;

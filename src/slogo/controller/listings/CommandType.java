@@ -2,7 +2,7 @@ package slogo.controller.listings;
 
 public enum CommandType {
   TurtleCommands,
-//  TurtleQueries,
+  TurtleQueries,
   MathOperations,
   BooleanOperations,
   UserOperations,
