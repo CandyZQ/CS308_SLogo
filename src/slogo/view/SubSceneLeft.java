@@ -253,7 +253,7 @@ public class SubSceneLeft extends SubScene {
     statHeading = (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90;
     statThickness = markerThickness;
     statPen = penUpDown();
-    TranslateTransition t1 = moveTurtle(-1 * (Double) movements.get(MovingObjectProperties.X),
+    TranslateTransition t1 = moveTurtle((Double) movements.get(MovingObjectProperties.X),
         -1 * (Double) movements.get(MovingObjectProperties.Y),
         (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90);
     t1.play();
