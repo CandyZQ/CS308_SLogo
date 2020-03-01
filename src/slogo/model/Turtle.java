@@ -140,6 +140,10 @@ public class Turtle implements MovingObject {
    */
   @Override
   public double moveDistance(double distance) {
+    //System.out.println("Called move distance to:");
+    //System.out.println(this.stateMap.get(MovingObjectProperties.HEADING));
+    //System.out.println(getCoterminal(
+           // (double) this.stateMap.get(MovingObjectProperties.HEADING), POS_ANGLE));
     double currentHeading = getCoterminal(
         (double) this.stateMap.get(MovingObjectProperties.HEADING), POS_ANGLE);
     double hypotenuse = Math.abs(distance);
@@ -150,6 +154,10 @@ public class Turtle implements MovingObject {
     double currentX = (double) this.stateMap.get(MovingObjectProperties.X);
     double currentY = (double) this.stateMap.get(MovingObjectProperties.Y);
     double[] delta = getDeltas(distance, currentHeading, opposite, adjacent);
+    //System.out.println("Current Pos: "+currentX+", "+currentY);
+    //double newpos = currentX+delta[0];
+    //double newposy = currentY+delta[1];
+    //System.out.println("New Pos: "+newpos+", "+newposy);
     this.stateMap.put(MovingObjectProperties.X, currentX + delta[0]);
     this.stateMap.put(MovingObjectProperties.Y, currentY + delta[1]);
     updateDistanceTravelled(distance);
