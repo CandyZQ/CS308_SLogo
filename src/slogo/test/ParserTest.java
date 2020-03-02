@@ -228,6 +228,39 @@ public class ParserTest {
       e.printStackTrace();
     }
   }
+
+  @Test
+  public void shouldGiveError() {
+    Parser parser = new Parser(1);
+
+    try {
+      parser.setLanguage("English");
+    } catch (LanguageIsNotSupportedException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      Queue<EnumMap<MovingObjectProperties, Object>> q;
+      q = parser.execute("fd 50");
+      printQueue(q);
+      q = parser.execute("f 50");
+      printQueue(q);
+
+    } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
+      System.out.println(".");
+    }
+
+    try {
+      Queue<EnumMap<MovingObjectProperties, Object>> q;
+      q = parser.execute("fd 50");
+      printQueue(q);
+      q = parser.execute("fd 50");
+      printQueue(q);
+    } catch (WrongCommandFormatException | LanguageIsNotSupportedException | InvalidArgumentException | CommandDoesNotExistException e) {
+      e.printStackTrace();
+    }
+
+  }
 }
 
 

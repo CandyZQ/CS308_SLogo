@@ -29,9 +29,14 @@ public class Parser implements BackEndExternalAPI {
   public Parser(int turtleNumber) {
     commandsMapHelper = new CommandsMapHelper();
     userDefinedFields = new UserDefinedFields();
+    tm = new TurtleManager(turtleNumber);
+    initialize();
+  }
+
+  private void initialize() {
     commandsLeft = new Stack<>();
     pausedCommands = new Stack<>();
-    tm = new TurtleManager(turtleNumber);
+    tm.cleanState();
   }
 
   /**
@@ -59,7 +64,7 @@ public class Parser implements BackEndExternalAPI {
   @Override
   public Queue<EnumMap<MovingObjectProperties, Object>> execute(String command)
       throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException {
-    tm.cleanState();
+    initialize();
     fillStack(command);
 
     while (!commandsLeft.empty()) {

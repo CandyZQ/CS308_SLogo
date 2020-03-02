@@ -1,6 +1,5 @@
 package slogo.controller;
 
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.LinkedList;
