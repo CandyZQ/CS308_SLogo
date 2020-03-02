@@ -87,19 +87,32 @@ public class SubSceneRight extends SubScene {
     createHBox();
     createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
     createTextField();
-    listenForSelection();
+    listenForCommandSelection();
     createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
+    listenForVariableSelection();
     createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA);
   }
 
-  private void listenForSelection() {
+  private void listenForCommandSelection() {
     commandTextArea.setOnContextMenuRequested(new EventHandler<Event>()
     {
       @Override
       public void handle(Event arg0)
       {
-        System.out.println("selected text: " +  commandTextArea.getSelectedText()); // clicked command
-        textFieldListener2(commandTextArea.getSelectedText());
+        String selectedText = commandTextArea.getSelectedText();
+        name.setText(selectedText);
+      }
+    });
+  }
+
+  private void listenForVariableSelection() {
+    variableTextArea.setOnContextMenuRequested(new EventHandler<Event>()
+    {
+      @Override
+      public void handle(Event arg0)
+      {
+        String selectedText = variableTextArea.getSelectedText();
+        name.setText(selectedText);
       }
     });
   }
@@ -254,11 +267,6 @@ public class SubSceneRight extends SubScene {
       name.clear();
     }
   }
-
-  private void textFieldListener2(String text) {
-        commandTextArea.setText(commandTextArea.getText() + "\n" + text);
-  }
-
 //  private void createRectangle() {
 //    rect = new Rectangle(50, 50, Color.BLUE);
 //    vBox.getChildren().add(rect);
@@ -266,9 +274,7 @@ public class SubSceneRight extends SubScene {
 
   private void createBackgroundColorPicker() {
     backgroundColorPicker = new ColorPicker(INITIAL_BACKGROUND_COLOR);
-    Label l = new Label("Meh");
-    l.setLabelFor(backgroundColorPicker);
-    vBox.getChildren().addAll(l, backgroundColorPicker);
+    vBox.getChildren().add(backgroundColorPicker);
 
     backgroundColorPicker.setOnAction(event -> {
       clickedColor = backgroundColorPicker.getValue();
