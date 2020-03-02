@@ -222,7 +222,7 @@ public class ParserTest {
       Queue<EnumMap<MovingObjectProperties, Object>> q;
       q = parser.execute("tell [ 0 1 ]");
       printQueue(q);
-      q = parser.execute("fd 50");
+      q = parser.execute("fd product id 5");
       printQueue(q);
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
       e.printStackTrace();
