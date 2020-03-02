@@ -4,6 +4,8 @@ package slogo.view;
 import java.util.*;
 
 import javafx.collections.FXCollections;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -85,8 +87,21 @@ public class SubSceneRight extends SubScene {
     createHBox();
     createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
     createTextField();
+    listenForSelection();
     createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
     createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA);
+  }
+
+  private void listenForSelection() {
+    commandTextArea.setOnContextMenuRequested(new EventHandler<Event>()
+    {
+      @Override
+      public void handle(Event arg0)
+      {
+        System.out.println("selected text:"
+                +  commandTextArea.getSelectedText()); // clicked command
+      }
+    });
   }
 
   private void createHBox() {
