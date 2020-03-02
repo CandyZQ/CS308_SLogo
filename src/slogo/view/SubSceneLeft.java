@@ -17,7 +17,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import slogo.controller.listings.MovingObjectProperties;
@@ -25,15 +24,16 @@ import slogo.controller.listings.MovingObjectProperties;
 public class SubSceneLeft extends SubScene {
 
 
-  private static final int INITIAL_TURTLE_X = 280;
-  private static final int INITIAL_TURTLE_Y = 230;
+  private static final int INITIAL_TURTLE_X = 300;
+  private static final int INITIAL_TURTLE_Y = 250;
+  private static final double SPACING_CONSTANT = 20;
   private final double TURTLE_SIZE = 60; // turtle is 60 px x 60 px
   private static final double SLIDER_LOW_VALUE = 0.01;
   private static final double SLIDER_HIGH_VALUE = 10;
   private static final int SLIDER_STARTING_VALUE = 2;
 
   private static ResourceBundle myResources =
-          ResourceBundle.getBundle("resources", Locale.getDefault());
+      ResourceBundle.getBundle("resources", Locale.getDefault());
 
   private ImageView turtle = new ImageView(new Image(myResources.getString("Turtle")));
   private Rectangle rect;
@@ -199,8 +199,10 @@ public class SubSceneLeft extends SubScene {
   }
 
   private ImageView createTurtle() {
-    turtle.setX(INITIAL_TURTLE_X);
-    turtle.setY(INITIAL_TURTLE_Y);
+//    turtle.setX(INITIAL_TURTLE_X);
+//    turtle.setY(INITIAL_TURTLE_Y);
+    turtle.setX(rect.getBoundsInParent().getCenterX() + SPACING_CONSTANT + TURTLE_SIZE / 2);
+    turtle.setY(rect.getBoundsInParent().getCenterY() + SPACING_CONSTANT + TURTLE_SIZE / 2);
     return turtle;
   }
 
@@ -251,7 +253,7 @@ public class SubSceneLeft extends SubScene {
     statHeading = (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90;
     statThickness = markerThickness;
     statPen = penUpDown();
-    TranslateTransition t1 = moveTurtle(-1 * (Double) movements.get(MovingObjectProperties.X),
+    TranslateTransition t1 = moveTurtle((Double) movements.get(MovingObjectProperties.X),
         -1 * (Double) movements.get(MovingObjectProperties.Y),
         (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90);
     t1.play();
