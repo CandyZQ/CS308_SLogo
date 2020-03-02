@@ -1,3 +1,6 @@
+/**
+ * @author Sarah Gregorich
+ */
 package slogo.controller.scripting;
 
 import java.io.File;
@@ -8,6 +11,9 @@ public class Script {
 
     private File myFile;
     private FileWriter myScript;
+    private static final String ERROR_OPEN = "Cannot open file";
+    private static final String ERROR_CLOSE = "Cannot close file";
+    private static final String ERROR_ADD = "Cannot add command";
 
     /**
      * Creates a Script object using the filename provided, which should be of the form "name.txt"
@@ -15,30 +21,16 @@ public class Script {
      * @param infilename
      */
     public Script(String infilename) {
-        if (!infilename.contains(".txt")) {
-            System.out.println("Bad name"); // @TODO make exception
-        }
         String filename = "resources/"+infilename;
-        try {
-            myFile = new java.io.File(filename);
-            if (myFile.createNewFile()) {
-                System.out.println("File created: " + myFile.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-            openFile(filename);
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            // e.printStackTrace(); @TODO print stack trace
-        }
+        myFile = new java.io.File(filename);
+        openFile(filename);
     }
 
     private void openFile(String filename) {
         try {
             myScript = new FileWriter(filename);
         } catch (IOException e) {
-            System.out.println("An error occurred.");
-            // e.printStackTrace(); @TODO print stack trace
+            System.out.println(ERROR_OPEN);
         }
     }
 
@@ -50,7 +42,7 @@ public class Script {
         try {
             myScript.close();
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            System.out.println(ERROR_CLOSE);
         }
     }
 
@@ -62,7 +54,7 @@ public class Script {
         try {
             myScript.write(command+"\n");
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            System.out.println(ERROR_ADD);
         }
     }
 
@@ -82,7 +74,7 @@ public class Script {
                 }
             }
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            System.out.println(ERROR_ADD);
         }
         closeFile();
     }

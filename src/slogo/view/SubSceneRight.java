@@ -1,19 +1,14 @@
 package slogo.view;
 
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import javafx.collections.FXCollections;
-import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -27,42 +22,42 @@ import java.io.File;
 
 public class SubSceneRight extends SubScene {
 
-
-  private final ImageView helpImage0 = new ImageView(new Image("file:resources/help_title.png"));
-  private final ImageView helpImage1 = new ImageView(new Image("file:resources/basic_syntax.png"));
-  private final ImageView helpImage2 = new ImageView(
-      new Image("file:resources/turtle_commands.png"));
-  private final ImageView helpImage3 = new ImageView(
-      new Image("file:resources/turtle_queries.png"));
-  private final ImageView helpImage4 = new ImageView(
-      new Image("file:resources/math_operations.png"));
+  private final ImageView helpImage0 = new ImageView(new Image(myResources.getString("HelpTitle")));
+  private final ImageView helpImage1 = new ImageView(new Image(myResources.getString("BasicSyntax")));
+  private final ImageView helpImage2 = new ImageView(new Image(myResources.getString("TurtleCommands")));
+  private final ImageView helpImage3 = new ImageView(new Image(myResources.getString("TurtleQueries")));
+  private final ImageView helpImage4 = new ImageView(new Image(myResources.getString("MathOperations")));
   private final ImageView helpImage5 = new ImageView(
-      new Image("file:resources/boolean_operations.png"));
-  private final ImageView helpImage6 = new ImageView(new Image("file:resources/user_defined.png"));
+      new Image(myResources.getString("BooleanOperations")));
+  private final ImageView helpImage6 = new ImageView(
+      new Image(myResources.getString("UserDefined")));
 
 
-  private Image turtle = new Image("file:resources/defaultTurtle.png");
+  private Image turtle = new Image(myResources.getString("Turtle"));
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
   public static final Color INITIAL_MARKER_COLOR = null; // the code for having the pen up
-  public static final String SUCCESSFUL_COMMAND = "Command successfully processed!";
-  public static final String FAILED_COMMAND = "Command not recognized";
-  private static final String EMPTY_COMMAND = "No command entered.";
-  private static final String NEW_MARKER_COLOR = "New Marker Color Chosen: ";
-  private static final String NEW_LANGUAGE = "New Chosen Language: ";
-  private static final String NEW_BACKGROUND_COLOR = "New Background Color Chosen: ";
-  private static final String COMMAND_AREA_TEXT = "Command Display";
-  private final String[] language_names = {"Chinese", "English", "French", "German",
-      "Italian", "Portuguese", "Russian", "Spanish", "Urdu"};
-  private static final String BACKGROUND_COLOR_LABEL = "Change Background Color";
-  private static final String MARKER_COLOR_LABEL = "Change Marker Color";
-  private static final String CHANGE_LANGUAGE_LABEL = "Change Language";
-  private static final String TEXTFIELD_PROMPT_TEXT = "Enter an SLogo Command.";
-  private static final String VARIABLE_AREA_TEXT = "Variable Display";
-  private static final String USER_TEXT_AREA = "User Defined Commands Display";
+  public static final String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
+  private static final String EMPTY_COMMAND = myResources.getString("EmptyCommand");
+  private static final String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
+  private static final String NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
+  private static final String NEW_BACKGROUND_COLOR =
+      myResources.getString("NewBackgroundColor") + " ";
+  private static final String COMMAND_AREA_TEXT = myResources.getString("CommandArea");
+  private static List<String> language_names = new ArrayList<>();
+  private static final String BACKGROUND_COLOR_LABEL = myResources
+      .getString("BackgroundColorLabel");
+  private static final String MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
+  private static final String CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
+  private static final String TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
+  private static final String VARIABLE_AREA_TEXT = myResources.getString("VariableAreaText");
+  private static final String USER_TEXT_AREA = myResources.getString("UserTextArea");
   private final FileChooser fileChooser = new FileChooser();
 
 
   private ColorPicker cp;
+
+  private ColorPicker backgroundColorPicker;
+  private ColorPicker markerColorPicker;
   private Object language;
   private Color clickedColor = INITIAL_BACKGROUND_COLOR;
   private Color markerClickedColor = INITIAL_MARKER_COLOR;
@@ -73,16 +68,19 @@ public class SubSceneRight extends SubScene {
   private String theText;
   private Boolean commandEntered = false;
   private Stage stage;
-  private String commandText;
 
   public SubSceneRight() {
     root = new Group();
     vBox = new VBox();
-    vBox.getStyleClass().add("vbox");
+    for(String key: Collections.list(myLanguages.getKeys())){
+      language_names.add(myLanguages.getString(key));
+    }
+    vBox.getStyleClass().add(myResources.getString("VBox"));
     root.getChildren().add(vBox);
     createLabel(vBox, BACKGROUND_COLOR_LABEL);
     createBackgroundColorPicker();
-    createButtons("Load Turtle", "Get Help", "Reset", "Undo");
+    createButtons(myResources.getString("LoadButton"), myResources.getString("HelpButton"),
+            myResources.getString("ResetButton"), myResources.getString("UndoButton"), myResources.getString("PenUp"));
     createHBox();
     createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
     createTextField();
@@ -92,7 +90,7 @@ public class SubSceneRight extends SubScene {
 
   private void createHBox() {
     HBox hBox = new HBox();
-    hBox.getStyleClass().add("hbox");
+    hBox.getStyleClass().add(myResources.getString("HBox"));
     VBox vBoxLeft = new VBox();
     VBox vBoxRight = new VBox();
     createLabel(vBoxRight, MARKER_COLOR_LABEL);
@@ -104,10 +102,10 @@ public class SubSceneRight extends SubScene {
   }
 
   private void createMarkerColorPicker(Pane pane) {
-    ColorPicker markerCP = new ColorPicker(INITIAL_MARKER_COLOR);
-    pane.getChildren().add(markerCP);
-    markerCP.setOnAction(event -> {
-      markerClickedColor = markerCP.getValue();
+    markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
+    pane.getChildren().add(markerColorPicker);
+    markerColorPicker.setOnAction(event -> {
+      markerClickedColor = markerColorPicker.getValue();
       commandTextArea
           .setText(
               commandTextArea.getText() + "\n" + NEW_MARKER_COLOR + markerClickedColor.toString());
@@ -117,7 +115,7 @@ public class SubSceneRight extends SubScene {
   private void createComboBox(Pane box) {
     ComboBox<String> combo_box = new ComboBox<>(FXCollections.observableArrayList(language_names));
     box.getChildren().add(combo_box);
-    combo_box.setValue(language_names[1]);
+    combo_box.setValue(language_names.get(3));
     language = combo_box.getValue();
     combo_box.setOnAction(event -> {
       language = combo_box.getValue();
@@ -138,38 +136,50 @@ public class SubSceneRight extends SubScene {
 
 
   private void createButtons(String firstName, String secondName, String thirdName,
-      String fourthName) {
+      String fourthName, String fifthName) {
     HBox hbox1 = new HBox(30);
     HBox hbox2 = new HBox(30);
-    hbox1.getStyleClass().add("hbox");
-    hbox2.getStyleClass().add("hbox");
+    HBox hbox3 = new HBox(30);
+    hbox1.getStyleClass().add(myResources.getString("HBox"));
+    hbox2.getStyleClass().add(myResources.getString("HBox"));
+    hbox3.getStyleClass().add(myResources.getString("HBox"));
     Button firstButton = new Button(firstName);
     Button secondButton = new Button(secondName);
     Button thirdButton = new Button(thirdName);
     Button fourthButton = new Button(fourthName);
+    Button fifthButton = new Button(fifthName);
+    firstButton.setWrapText(true);
+    secondButton.setWrapText(true);
+    thirdButton.setWrapText(true);
+    fourthButton.setWrapText(true);
+    fifthButton.setWrapText(true);
     hbox1.getChildren().addAll(firstButton, secondButton);
     hbox2.getChildren().addAll(thirdButton, fourthButton);
+    hbox3.getChildren().addAll(fifthButton);
     hbox1.setAlignment(Pos.CENTER);
     hbox2.setAlignment(Pos.CENTER);
+    hbox3.setAlignment(Pos.CENTER);
 
-    this.buttonListeners(firstButton, secondButton, thirdButton, fourthButton);
-    vBox.getChildren().addAll(hbox1, hbox2);
+    this.buttonListeners(firstButton, secondButton, thirdButton, fourthButton, fifthButton);
+    vBox.getChildren().addAll(hbox1, hbox2, hbox3);
   }
 
   private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton,
-      Button fourthButton) {
+      Button fourthButton, Button fifthButton) {
 
     firstButton.setOnAction(event -> setTurtleImage());
 
     secondButton.setOnAction(event -> displayPopUp());
 
-    /*
-    thirdButton.setOnAction(event ->{
-      moveTurtle(fourthButton);
-    });*/
+    fifthButton.setOnAction(event -> setPenUp());
 
   }
 
+
+  private void setPenUp(){
+    markerClickedColor = null;
+    markerColorPicker.setValue(INITIAL_MARKER_COLOR);
+  }
 
   public void setTurtleImage() {
     File file = fileChooser.showOpenDialog(stage);
@@ -186,34 +196,23 @@ public class SubSceneRight extends SubScene {
   }
 
   private void displayPopUp() {
-    BorderPane helpRoot = new BorderPane();
+    ScrollPane helpRoot = new ScrollPane();
     Stage helpStage = new Stage();
-    helpStage.setTitle("Help Screen");
+    helpStage.setTitle(myResources.getString("HelpStageTitle"));
     VBox vb = new VBox();
 
     vb.getChildren()
         .addAll(helpImage0, helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6);
-    ScrollBar s1 = new ScrollBar();
-    s1.setMin(0);
-    s1.setMax(1400);
-    s1.setOrientation(Orientation.VERTICAL);
-    helpRoot.getChildren().add(vb);
-    helpRoot.setRight(s1);
-    this.listenVBoxScroll(s1, vb);
+    helpRoot.setContent(vb);
     Scene errorScene = setUpPopUp(helpRoot);
     helpStage.setScene(errorScene);
     helpStage.show();
   }
 
 
-  private Scene setUpPopUp(BorderPane helpRoot) {
+  private Scene setUpPopUp(ScrollPane helpRoot) {
 
     return new Scene(helpRoot, 600, 800, Color.LIGHTBLUE);
-  }
-
-  private void listenVBoxScroll(ScrollBar sb, VBox vb) {
-    sb.valueProperty().addListener((ov, old_val, new_val) -> vb.setLayoutY(-new_val.doubleValue()));
-
   }
 
   private void createTextField() {
@@ -246,11 +245,13 @@ public class SubSceneRight extends SubScene {
 //  }
 
   private void createBackgroundColorPicker() {
-    cp = new ColorPicker(INITIAL_BACKGROUND_COLOR);
-    vBox.getChildren().add(cp);
+    backgroundColorPicker = new ColorPicker(INITIAL_BACKGROUND_COLOR);
+    Label l = new Label("Meh");
+    l.setLabelFor(backgroundColorPicker);
+    vBox.getChildren().add(backgroundColorPicker);
 
-    cp.setOnAction(event -> {
-      clickedColor = cp.getValue();
+    backgroundColorPicker.setOnAction(event -> {
+      clickedColor = backgroundColorPicker.getValue();
       commandTextArea.setText(
           commandTextArea.getText() + "\n" + NEW_BACKGROUND_COLOR + clickedColor.toString());
     });
@@ -279,8 +280,7 @@ public class SubSceneRight extends SubScene {
   }
 
   public void setCommandText(String response) {
-    commandText = response;
-    commandTextArea.setText(commandTextArea.getText() + "\n" + commandText);
+    commandTextArea.setText(commandTextArea.getText() + "\n" + response);
   }
 
   public Image getTurtle() {
@@ -302,6 +302,8 @@ public class SubSceneRight extends SubScene {
   public Color getMarkerClickedColor() {
     return markerClickedColor;
   }
+
+
 
   public String getTheText() {
     if (commandEntered) {

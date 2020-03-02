@@ -42,7 +42,7 @@ public class Main extends Application {
             try {
                 step();
             } catch (Exception ex) {
-                viewScreen.exceptionHandling();
+                viewScreen.exceptionHandling(ex.getMessage());
             }
         });
         Timeline animation = new Timeline();

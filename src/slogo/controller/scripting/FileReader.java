@@ -18,6 +18,7 @@ public class FileReader {
     private final static Charset ENCODING = StandardCharsets.UTF_8;
     private Scanner  myScanner;
     private List<String> myCommands = new ArrayList<>();
+    private static final String DELIMITER = "no delimiters for each line";
 
     /**
      Constructor.
@@ -48,7 +49,7 @@ public class FileReader {
     private void processLine(String line){
         //use a second Scanner to parse the content of each line
         try(Scanner scanner = new Scanner(line)){
-            scanner.useDelimiter("no delimiters for each line");
+            scanner.useDelimiter(DELIMITER);
             if (scanner.hasNext()) {
                 myCommands.add(scanner.next());
             }
