@@ -97,8 +97,8 @@ public class SubSceneRight extends SubScene {
       @Override
       public void handle(Event arg0)
       {
-        System.out.println("selected text:"
-                +  commandTextArea.getSelectedText()); // clicked command
+        System.out.println("selected text: " +  commandTextArea.getSelectedText()); // clicked command
+        textFieldListener2(commandTextArea.getSelectedText());
       }
     });
   }
@@ -252,6 +252,10 @@ public class SubSceneRight extends SubScene {
       }
       name.clear();
     }
+  }
+
+  private void textFieldListener2(String text) {
+        commandTextArea.setText(commandTextArea.getText() + "\n" + text);
   }
 
 //  private void createRectangle() {
