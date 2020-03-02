@@ -1,15 +1,13 @@
 package slogo.controller.operations;
 
-import java.util.List;
-import java.util.Map;
+import slogo.controller.TurtleManager;
 import slogo.controller.UserDefinedFields;
 import slogo.model.Turtle;
 
-public class TurtleQueries {
-  Turtle turtle;
+public class TurtleQueries extends Operations{
 
-  public TurtleQueries(Turtle turtle, UserDefinedFields userDefinedFields) {
-    this.turtle = turtle;
+  public TurtleQueries(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {
+    super(turtle, userDefinedFields, tm);
   }
 
 }

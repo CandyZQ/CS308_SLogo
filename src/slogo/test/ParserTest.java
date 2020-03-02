@@ -207,6 +207,27 @@ public class ParserTest {
       e.printStackTrace();
     }
   }
+
+  @Test
+  public void shouldTell() {
+    Parser parser = new Parser(1);
+
+    try {
+      parser.setLanguage("English");
+    } catch (LanguageIsNotSupportedException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      Queue<EnumMap<MovingObjectProperties, Object>> q;
+      q = parser.execute("tell [ 0 1 ]");
+      printQueue(q);
+      q = parser.execute("fd 50");
+      printQueue(q);
+    } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
+      e.printStackTrace();
+    }
+  }
 }
 
 

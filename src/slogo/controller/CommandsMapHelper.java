@@ -22,8 +22,8 @@ public class CommandsMapHelper {
   private List<Languages> supportedLanguages;
   private Languages currnetLan;
 
+  private static Map<String, Pattern> syntaxMap;
   private Map<String, Pattern> commandsMap;
-  private Map<String, Pattern> syntaxMap;
 
   public CommandsMapHelper() {
     supportedLanguages = Arrays.asList(Languages.values());
@@ -61,29 +61,12 @@ public class CommandsMapHelper {
           "Cannot find any commands of the given language " + currnetLan.name() + ".");
     }
     for (String key : commandsMap.keySet()) {
-      if (isMatch(command, commandsMap.get(key))) {
+      if (SyntaxHelper.isMatch(command, commandsMap.get(key))) {
         return findClass(key.toLowerCase());
       }
     }
     throw new CommandDoesNotExistException(
         "Cannot recognize command " + command + " for the given language.");
-  }
-
-  private boolean isMatch(String command, Pattern pattern) {
-    return pattern.matcher(command).matches();
-  }
-
-  private BasicSyntax getInputType(String input) throws InvalidArgumentException {
-    for (String key: syntaxMap.keySet()) {
-      if (isMatch(input, syntaxMap.get(key))) {
-        return BasicSyntax.valueOf(key.toUpperCase());
-      }
-    }
-    throw new InvalidArgumentException("The input " + input + " is not valid in SLogo.");
-  }
-
-  public boolean isType(String input, BasicSyntax type) throws InvalidArgumentException {
-    return getInputType(input).equals(type);
   }
 
   private CommandStructure findClass(String commandName) throws CommandDoesNotExistException {
@@ -111,5 +94,24 @@ public class CommandsMapHelper {
       }
     }
     return null;
+  }
+
+  public static class SyntaxHelper {
+    public static boolean isType(String input, BasicSyntax type) throws InvalidArgumentException {
+      return getInputType(input).equals(type);
+    }
+
+    private static BasicSyntax getInputType(String input) throws InvalidArgumentException {
+      for (String key: syntaxMap.keySet()) {
+        if (isMatch(input, syntaxMap.get(key))) {
+          return BasicSyntax.valueOf(key.toUpperCase());
+        }
+      }
+      throw new InvalidArgumentException("The input " + input + " is not valid in SLogo.");
+    }
+
+    private static boolean isMatch(String command, Pattern pattern) {
+      return pattern.matcher(command).matches();
+    }
   }
 }

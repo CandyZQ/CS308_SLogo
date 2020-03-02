@@ -2,13 +2,14 @@ package slogo.controller.operations;
 
 import java.util.List;
 import java.util.Map;
+import slogo.controller.TurtleManager;
 import slogo.controller.UserDefinedFields;
 import slogo.model.Turtle;
 
-public class BooleanOperations {
+public class BooleanOperations extends Operations{
 
-  public BooleanOperations(Turtle turtle, UserDefinedFields userDefinedFields) {
-
+  public BooleanOperations(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {
+    super(turtle, userDefinedFields, tm);
   }
   /**
    * @param a = expr1

@@ -6,4 +6,5 @@ public enum CommandType {
   MathOperations,
   BooleanOperations,
   UserOperations,
+  MultiTurtleOperations
 }

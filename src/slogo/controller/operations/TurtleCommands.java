@@ -2,16 +2,16 @@ package slogo.controller.operations;
 
 import java.util.List;
 import java.util.Map;
+import slogo.controller.TurtleManager;
 import slogo.controller.UserDefinedFields;
 import slogo.controller.listings.MovingObjectProperties;
 import slogo.model.Turtle;
 
-public class TurtleCommands {
+public class TurtleCommands extends Operations{
 
-  Turtle turtle;
+  public TurtleCommands(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {
+    super(turtle, userDefinedFields, tm);
 
-  public TurtleCommands(Turtle turtle, UserDefinedFields userDefinedFields) {
-    this.turtle = turtle;
   }
 
   public void forward(Double pixels) {

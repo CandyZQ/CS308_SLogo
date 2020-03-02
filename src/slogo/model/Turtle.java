@@ -272,5 +272,4 @@ public class Turtle implements MovingObject {
     return delta;
   }
 
-
 }

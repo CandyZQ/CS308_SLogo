@@ -1,11 +1,15 @@
 package slogo.controller;
 
+import static slogo.controller.listings.BasicSyntax.CONSTANT;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.listings.MovingObjectProperties;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.WrongCommandFormatException;
@@ -55,17 +59,29 @@ class CommandStructure {
     return m.getName();
   }
 
-  Object execute(Turtle turtle, UserDefinedFields userDefinedFields)
+  Object execute(TurtleManager tm, UserDefinedFields userDefinedFields)
       throws InvalidArgumentException, WrongCommandFormatException {
+    Set<Turtle> turtles = tm.getTurtles();
     if (needMoreParas()) {
       throw new WrongCommandFormatException(
           "Internal Error: Still need more parameters before executing");
     }
 
     Object res = null;
+    for (Turtle t: turtles) {
+      res = singleTurtleExecute(t, userDefinedFields, tm);
+      storeTurtleStates(res.toString(), tm, t);
+    }
+
+    return res;
+  }
+
+  private Object singleTurtleExecute(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm)
+      throws InvalidArgumentException {
+    Object res = null;
     try {
-      res = m.invoke(c.getConstructor(Turtle.class, UserDefinedFields.class)
-          .newInstance(turtle, userDefinedFields), paras.toArray(new Object[0]));
+      res = m.invoke(c.getConstructor(Turtle.class, UserDefinedFields.class, TurtleManager.class)
+          .newInstance(turtle, userDefinedFields, tm), paras.toArray(new Object[0]));
     } catch (IllegalArgumentException e) {
       throw new InvalidArgumentException(e);
     } catch (IllegalAccessException e) {
@@ -75,6 +91,23 @@ class CommandStructure {
     }
 
     return res != null ? res : turtle.getState().get(MovingObjectProperties.RETURN_VALUE);
+  }
+
+  private void storeTurtleStates(String returnVal, TurtleManager tm, Turtle t) {
+    try {
+      if (SyntaxHelper.isType(returnVal, CONSTANT)) {
+        tm.putReturnValue(returnVal, t);
+      }
+//    } catch (InvalidArgumentException e) {
+//      String[] ss = returnVal.split(" ");
+//      for (int i = ss.length - 1; i >= 0; i--) {
+//        commandsLeft.push(ss[i]);
+//      }
+//    }
+    } catch (Exception e) {
+
+    }
+    tm.addStates(t);
   }
 
 }
