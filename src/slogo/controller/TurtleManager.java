@@ -65,8 +65,8 @@ public class TurtleManager {
     activeTurtles = new HashSet<>();
   }
 
-  void putReturnValue(String returnVal, Turtle t) {
+  void putReturnValue(Object returnVal, Turtle t) {
     Integer id = (Integer) t.getState().get(MovingObjectProperties.ID);
-    turtles[id].getState().put(MovingObjectProperties.ID, returnVal);
+    turtles[id].getState().put(MovingObjectProperties.RETURN_VALUE, returnVal);
   }
 }

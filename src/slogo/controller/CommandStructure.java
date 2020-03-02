@@ -70,7 +70,7 @@ class CommandStructure {
     Object res = null;
     for (Turtle t: turtles) {
       res = singleTurtleExecute(t, userDefinedFields, tm);
-      storeTurtleStates(res.toString(), tm, t);
+      storeTurtleStates(res, tm, t);
     }
 
     return res;
@@ -93,9 +93,9 @@ class CommandStructure {
     return res != null ? res : turtle.getState().get(MovingObjectProperties.RETURN_VALUE);
   }
 
-  private void storeTurtleStates(String returnVal, TurtleManager tm, Turtle t) {
+  private void storeTurtleStates(Object returnVal, TurtleManager tm, Turtle t) {
     try {
-      if (SyntaxHelper.isType(returnVal, CONSTANT)) {
+      if (SyntaxHelper.isType(returnVal.toString(), CONSTANT)) {
         tm.putReturnValue(returnVal, t);
       }
 //    } catch (InvalidArgumentException e) {

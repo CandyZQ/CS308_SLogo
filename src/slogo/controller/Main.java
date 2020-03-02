@@ -42,6 +42,7 @@ public class Main extends Application {
             try {
                 step();
             } catch (Exception ex) {
+                //ex.printStackTrace();
                 viewScreen.exceptionHandling(ex.getMessage());
             }
         });
