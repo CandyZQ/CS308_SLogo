@@ -17,6 +17,7 @@ import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 import slogo.exceptions.WrongCommandFormatException;
+import slogo.model.Turtle;
 
 public class Parser implements BackEndExternalAPI {
   private CommandsMapHelper commandsMapHelper;
@@ -67,8 +68,12 @@ public class Parser implements BackEndExternalAPI {
     initialize();
     fillStack(command);
 
-    while (!commandsLeft.empty()) {
-      executeNextCommand(tm);
+    Stack<String> temp = (Stack<String>) commandsLeft.clone();
+    for (Turtle t: tm.getTurtles()) {
+      commandsLeft = (Stack<String>) temp.clone();
+      while (!commandsLeft.empty()) {
+        executeNextCommand(t);
+      }
     }
     return tm.getTurtleStates();
   }
@@ -93,7 +98,7 @@ public class Parser implements BackEndExternalAPI {
     return userDefinedFields.getFunctions();
   }
 
-  private void executeNextCommand(TurtleManager tm)
+  private void executeNextCommand(Turtle t)
       throws CommandDoesNotExistException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException {
     String commandName = popNext();
     if (!SyntaxHelper.isType(commandName, COMMAND)) {
@@ -110,18 +115,22 @@ public class Parser implements BackEndExternalAPI {
       }
     }
     pausedCommands.add(current);
-    checkPausedCommands(tm);
+    checkPausedCommands(tm, t);
   }
 
-  private void checkPausedCommands(TurtleManager tm)
+  private void checkPausedCommands(TurtleManager tm, Turtle t)
       throws InvalidArgumentException, WrongCommandFormatException {
     String returnVal = null;
     while (!pausedCommands.isEmpty()) {
       if (!pausedCommands.peek().needMoreParas()) {
-        returnVal = pausedCommands.pop().execute(tm, userDefinedFields).toString();
-      }
-      if (!pausedCommands.isEmpty() && returnVal != null && pausedCommands.peek().needMoreParas()) {
+        returnVal = pausedCommands.pop().singleExecute(tm, userDefinedFields, t).toString();
+      } else if (!pausedCommands.isEmpty() && returnVal != null) {
         pausedCommands.peek().addPara(returnVal);
+        while (!commandsLeft.empty()) {
+          if (!canAddPara(pausedCommands.peek())) {
+            break;
+          }
+        }
         returnVal = null;
       }
     }

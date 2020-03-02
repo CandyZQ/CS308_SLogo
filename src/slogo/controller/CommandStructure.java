@@ -7,10 +7,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.listings.MovingObjectProperties;
+import slogo.controller.operations.TurtleCommands;
+import slogo.controller.operations.TurtleQueries;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.WrongCommandFormatException;
 import slogo.model.Turtle;
@@ -59,29 +60,17 @@ class CommandStructure {
     return m.getName();
   }
 
-  Object execute(TurtleManager tm, UserDefinedFields userDefinedFields)
+  Object singleExecute(TurtleManager tm, UserDefinedFields userDefinedFields, Turtle t)
       throws InvalidArgumentException, WrongCommandFormatException {
-    Set<Turtle> turtles = tm.getTurtles();
     if (needMoreParas()) {
       throw new WrongCommandFormatException(
           "Internal Error: Still need more parameters before executing");
     }
 
     Object res = null;
-    for (Turtle t: turtles) {
-      res = singleTurtleExecute(t, userDefinedFields, tm);
-      storeTurtleStates(res, tm, t);
-    }
-
-    return res;
-  }
-
-  private Object singleTurtleExecute(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm)
-      throws InvalidArgumentException {
-    Object res = null;
     try {
       res = m.invoke(c.getConstructor(Turtle.class, UserDefinedFields.class, TurtleManager.class)
-          .newInstance(turtle, userDefinedFields, tm), paras.toArray(new Object[0]));
+          .newInstance(t, userDefinedFields, tm), paras.toArray(new Object[0]));
     } catch (IllegalArgumentException e) {
       throw new InvalidArgumentException(e);
     } catch (IllegalAccessException e) {
@@ -90,7 +79,8 @@ class CommandStructure {
       // TODO: do something?
     }
 
-    return res != null ? res : turtle.getState().get(MovingObjectProperties.RETURN_VALUE);
+    storeTurtleStates(res, tm, t);
+    return res != null ? res : t.getState().get(MovingObjectProperties.RETURN_VALUE);
   }
 
   private void storeTurtleStates(Object returnVal, TurtleManager tm, Turtle t) {
@@ -109,5 +99,4 @@ class CommandStructure {
     }
     tm.addStates(t);
   }
-
 }

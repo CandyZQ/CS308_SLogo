@@ -68,4 +68,8 @@ public class TurtleManager {
     Integer id = (Integer) t.getState().get(MovingObjectProperties.ID);
     turtles[id].getState().put(MovingObjectProperties.RETURN_VALUE, returnVal);
   }
+
+  int getActiveTurtleNum() {
+    return activeTurtles.size();
+  }
 }
