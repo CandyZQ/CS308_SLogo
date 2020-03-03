@@ -267,11 +267,6 @@ public class SubSceneRight extends SubScene {
       name.clear();
     }
   }
-//  private void createRectangle() {
-//    rect = new Rectangle(50, 50, Color.BLUE);
-//    vBox.getChildren().add(rect);
-//  }
-
   private void createBackgroundColorPicker() {
     backgroundColorPicker = new ColorPicker(INITIAL_BACKGROUND_COLOR);
     vBox.getChildren().add(backgroundColorPicker);
