@@ -33,7 +33,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws LanguageIsNotSupportedException {
         viewScreen = new ViewScreen(primaryStage);
-        parser = new Parser(1);
+        parser = new Parser(2);
         parser.setLanguage(viewScreen.getLanguage());
         setTiming();
     }
@@ -63,7 +63,7 @@ public class Main extends Application {
             commands = parser.execute(inputString);
         }
         parser.setLanguage(viewScreen.getLanguage());
-        ViewScreen.update(commands, parser.gerUserVars(), parser.getFunctions());
+        viewScreen.update(commands, parser.gerUserVars(), parser.getFunctions());
     }
 }
 

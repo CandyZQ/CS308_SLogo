@@ -3,6 +3,8 @@ package slogo.view;
 
 import java.util.*;
 import javafx.collections.FXCollections;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -26,7 +28,8 @@ public class SubSceneRight extends SubScene {
   private final ImageView helpImage1 = new ImageView(new Image(myResources.getString("BasicSyntax")));
   private final ImageView helpImage2 = new ImageView(new Image(myResources.getString("TurtleCommands")));
   private final ImageView helpImage3 = new ImageView(new Image(myResources.getString("TurtleQueries")));
-  private final ImageView helpImage4 = new ImageView(new Image(myResources.getString("MathOperations")));
+  private final ImageView helpImage4 = new ImageView(
+      new Image(myResources.getString("MathOperations")));
   private final ImageView helpImage5 = new ImageView(
       new Image(myResources.getString("BooleanOperations")));
   private final ImageView helpImage6 = new ImageView(
@@ -36,21 +39,21 @@ public class SubSceneRight extends SubScene {
   private Image turtle = new Image(myResources.getString("Turtle"));
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
   public static final Color INITIAL_MARKER_COLOR = null; // the code for having the pen up
-  public static final String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
-  private static final String EMPTY_COMMAND = myResources.getString("EmptyCommand");
-  private static final String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
-  private static final String NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
-  private static final String NEW_BACKGROUND_COLOR =
+  public static String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
+  private static String EMPTY_COMMAND = myResources.getString("EmptyCommand");
+  private static String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
+  private static String NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
+  private static String NEW_BACKGROUND_COLOR =
       myResources.getString("NewBackgroundColor") + " ";
-  private static final String COMMAND_AREA_TEXT = myResources.getString("CommandArea");
+  private static String COMMAND_AREA_TEXT = myResources.getString("CommandArea");
   private static List<String> language_names = new ArrayList<>();
-  private static final String BACKGROUND_COLOR_LABEL = myResources
+  private static String BACKGROUND_COLOR_LABEL = myResources
       .getString("BackgroundColorLabel");
-  private static final String MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
-  private static final String CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
-  private static final String TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
-  private static final String VARIABLE_AREA_TEXT = myResources.getString("VariableAreaText");
-  private static final String USER_TEXT_AREA = myResources.getString("UserTextArea");
+  private static String MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
+  private static String CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
+  private static String TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
+  private static String VARIABLE_AREA_TEXT = myResources.getString("VariableAreaText");
+  private static String USER_TEXT_AREA = myResources.getString("UserTextArea");
   private final FileChooser fileChooser = new FileChooser();
 
 
@@ -58,7 +61,7 @@ public class SubSceneRight extends SubScene {
 
   private ColorPicker backgroundColorPicker;
   private ColorPicker markerColorPicker;
-  private Object language;
+  //private Object language;
   private Color clickedColor = INITIAL_BACKGROUND_COLOR;
   private Color markerClickedColor = INITIAL_MARKER_COLOR;
   private TextField name;
@@ -88,8 +91,34 @@ public class SubSceneRight extends SubScene {
     createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
     createTextField();
     scriptRunTextField(); // added for scripting
+    listenForCommandSelection();
     createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
+    listenForVariableSelection();
     createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA);
+  }
+
+  private void listenForCommandSelection() {
+    commandTextArea.setOnContextMenuRequested(new EventHandler<Event>()
+    {
+      @Override
+      public void handle(Event arg0)
+      {
+        String selectedText = commandTextArea.getSelectedText();
+        name.setText(selectedText);
+      }
+    });
+  }
+
+  private void listenForVariableSelection() {
+    variableTextArea.setOnContextMenuRequested(new EventHandler<Event>()
+    {
+      @Override
+      public void handle(Event arg0)
+      {
+        String selectedText = variableTextArea.getSelectedText();
+        name.setText(selectedText);
+      }
+    });
   }
 
   private void createHBox() {
@@ -267,11 +296,8 @@ public class SubSceneRight extends SubScene {
     }
   }
 
-
   private void createBackgroundColorPicker() {
     backgroundColorPicker = new ColorPicker(INITIAL_BACKGROUND_COLOR);
-    Label l = new Label("Meh");
-    l.setLabelFor(backgroundColorPicker);
     vBox.getChildren().add(backgroundColorPicker);
 
     backgroundColorPicker.setOnAction(event -> {
@@ -301,6 +327,23 @@ public class SubSceneRight extends SubScene {
 
   @Override
   public void update(Queue<EnumMap<MovingObjectProperties, Object>> movements) {
+  }
+
+  @Override
+  public void updateDisplayWords() {
+    SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
+    VARIABLE_AREA_TEXT = myResources.getString("VariableAreaText");
+    EMPTY_COMMAND = myResources.getString("EmptyCommand");
+    NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
+    NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
+    NEW_BACKGROUND_COLOR = myResources.getString("NewBackgroundColor") + " ";
+    MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
+    CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
+    TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
+    USER_TEXT_AREA = myResources.getString("UserTextArea");
+    for (String key : Collections.list(myLanguages.getKeys())) {
+      language_names.add(myLanguages.getString(key));
+    }
   }
 
   public void setCommandText(String response) {

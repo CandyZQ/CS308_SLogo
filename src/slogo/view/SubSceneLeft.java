@@ -260,6 +260,10 @@ public class SubSceneLeft extends SubScene {
     updateStatsPopUp();
   }
 
+  public void updateDisplayWords() {
+    rect.getStyleClass().add(myResources.getString("StyleClass"));
+  }
+
   private void recurse() {
     if (!queue.isEmpty()) {
       tf.setEditable(false); // .setVisible() will alternatively make it go away
