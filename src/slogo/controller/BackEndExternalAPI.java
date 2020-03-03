@@ -1,5 +1,6 @@
 package slogo.controller;
 
+import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Queue;
@@ -26,6 +27,8 @@ import slogo.exceptions.WrongCommandFormatException;
  * format fulfills the format of that command. Multiple exceptions can be thrown in this process.
  */
 public interface BackEndExternalAPI {
+
+  Queue<EnumMap<MovingObjectProperties, Object>> runScript(String command) throws IOException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException;
 
   /**
    * Sets the desired language commands the user passed will be interpreted in. This method can be

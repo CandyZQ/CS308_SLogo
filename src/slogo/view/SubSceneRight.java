@@ -62,6 +62,9 @@ public class SubSceneRight extends SubScene {
   private Color clickedColor = INITIAL_BACKGROUND_COLOR;
   private Color markerClickedColor = INITIAL_MARKER_COLOR;
   private TextField name;
+  private TextField scriptFile;
+  private String scriptName;
+  private boolean runScript = false;
   private TextArea commandTextArea;
   private TextArea variableTextArea;
   private TextArea userDefinedCommandsTextArea;
@@ -84,6 +87,7 @@ public class SubSceneRight extends SubScene {
     createHBox();
     createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
     createTextField();
+    scriptRunTextField(); // added for scripting
     createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
     createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA);
   }
@@ -225,6 +229,25 @@ public class SubSceneRight extends SubScene {
     root.setOnKeyPressed(ke -> textFieldListener(ke.getCode()));
   }
 
+  private void scriptRunTextField() {
+    scriptFile = new TextField();
+    scriptFile.setPromptText("Enter file name of SLogo script"); // @TODO add to resource file so changes with language
+    scriptFile.getText();
+    vBox.getChildren().add(scriptFile);
+
+    //Setting an action for the Submit button
+    //root.setOnKeyPressed(ke -> scriptEnterListener(ke.getCode()));
+  }
+
+  public boolean getRunScript() {
+    return runScript;
+  }
+
+  public String getScript() {
+    runScript = false;
+    return scriptName;
+  }
+
 
   private void textFieldListener(KeyCode code) {
     if (code == KeyCode.ENTER) {
@@ -236,6 +259,11 @@ public class SubSceneRight extends SubScene {
         commandTextArea.setText(commandTextArea.getText() + "\n" + EMPTY_COMMAND);
       }
       name.clear();
+      if ((scriptFile.getText() != null && !scriptFile.getText().isEmpty())) {
+        scriptName = scriptFile.getText().toLowerCase();
+        runScript = true;
+        scriptFile.clear();
+      }
     }
   }
 

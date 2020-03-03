@@ -70,6 +70,11 @@ public class ViewScreen implements ExternalAPIViewable {
   }
 
 
+  public boolean getRunScript() { return scRight.getRunScript();}
+
+  public String getScript() { return scRight.getScript();}
+
+
   public static void update(
       Queue<EnumMap<MovingObjectProperties, Object>> commands,
       Map<String, Double> variables,

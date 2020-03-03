@@ -6,13 +6,13 @@ import static slogo.controller.listings.BasicSyntax.CONSTANT;
 import static slogo.controller.listings.BasicSyntax.LISTEND;
 import static slogo.controller.listings.BasicSyntax.LISTSTART;
 import static slogo.controller.listings.BasicSyntax.VARIABLE;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Stack;
+
+import java.io.IOException;
+import java.util.*;
+
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.listings.MovingObjectProperties;
+import slogo.controller.scripting.FileReader;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
@@ -66,6 +66,23 @@ public class Parser implements BackEndExternalAPI {
       executeNextCommand(tm);
     }
     return tm.getTurtleStates();
+  }
+
+  @Override
+  public Queue<EnumMap<MovingObjectProperties, Object>> runScript(String filename) throws IOException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException {
+    Queue<EnumMap<MovingObjectProperties, Object>> commandResults = new LinkedList<>();
+    Queue<EnumMap<MovingObjectProperties, Object>> commandResult;
+    EnumMap<MovingObjectProperties, Object> turtleState;
+    FileReader file = new FileReader(filename);
+    List<String> commands = file.processScript();
+    for (int i = 0; i < commands.size(); i++) {
+      commandResult = execute(commands.get(i));
+      while(!commandResult.isEmpty()) {
+        turtleState = commandResult.remove();
+        commandResults.add(turtleState);
+      }
+    }
+    return commandResults;
   }
 
   private void fillStack(String command) {
