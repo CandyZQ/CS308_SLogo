@@ -20,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import slogo.controller.listings.MovingObjectProperties;
+import slogo.controller.scripting.Script;
 
 public class SubSceneLeft extends SubScene {
 
@@ -62,6 +63,11 @@ public class SubSceneLeft extends SubScene {
   Label labelPen;
   Label labelThickness;
 
+  TextArea scriptTextArea;
+  TextField scriptName;
+  Button scriptSave;
+  private static final int SCRIPT_WIDTH = 400;
+  private static final int SCRIPT_HEIGHT = 400;
 
   public SubSceneLeft() {
     markerThickness = 2;
@@ -83,6 +89,7 @@ public class SubSceneLeft extends SubScene {
     initialX = 0;
     initialY = 0;
     turtleStatsPopUp();
+    scriptPopUp();
 
   }
 
@@ -105,6 +112,34 @@ public class SubSceneLeft extends SubScene {
     Scene statsScene = new Scene(statsRoot, 400, 400, Color.LIGHTBLUE);
     statsStage.setScene(statsScene);
     statsStage.show();
+  }
+
+  private void scriptPopUp(){ // @TODO make pretty?
+    ScrollPane scriptRoot = new ScrollPane();
+    Stage scriptStage = new Stage();
+    // scriptStage.setTitle(myResources.getString("ScriptStageTitle")); @TODO attach to resource file so language changes
+    scriptStage.setTitle("New Script");
+    VBox vb = new VBox();
+
+    scriptName = new TextField();
+    scriptTextArea = new TextArea();
+    scriptTextArea.setPrefWidth(SCRIPT_WIDTH);
+    scriptTextArea.setPrefHeight(SCRIPT_WIDTH*2);
+    scriptSave = new Button();
+    scriptSave.setText("Save"); // @TODO attach to resource file so language changes
+    scriptSave.setOnAction(event -> saveNewScript());
+
+    vb.getChildren().addAll(scriptSave, scriptName, scriptTextArea);
+    scriptRoot.setContent(vb);
+
+    Scene statsScene = new Scene(scriptRoot, SCRIPT_WIDTH, SCRIPT_HEIGHT, Color.LIGHTBLUE);
+    scriptStage.setScene(statsScene);
+    scriptStage.show();
+  }
+
+  private void saveNewScript() {
+    Script script = new Script(scriptName.getText());
+    script.addAll(scriptTextArea.getText());
   }
 
  private void updateStatsPopUp(){
@@ -223,6 +258,10 @@ public class SubSceneLeft extends SubScene {
     this.queue = queue;
     recurse();
     updateStatsPopUp();
+  }
+
+  public void updateDisplayWords() {
+    rect.getStyleClass().add(myResources.getString("StyleClass"));
   }
 
   private void recurse() {

@@ -1,5 +1,6 @@
 package slogo.controller;
 
+import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Queue;
 import javafx.animation.KeyFrame;
@@ -32,7 +33,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws LanguageIsNotSupportedException {
         viewScreen = new ViewScreen(primaryStage);
-        parser = new Parser(1);
+        parser = new Parser(2);
         parser.setLanguage(viewScreen.getLanguage());
         setTiming();
     }
@@ -42,7 +43,6 @@ public class Main extends Application {
             try {
                 step();
             } catch (Exception ex) {
-                //ex.printStackTrace();
                 viewScreen.exceptionHandling(ex.getMessage());
             }
         });
@@ -53,14 +53,17 @@ public class Main extends Application {
     }
 
     private void step()
-        throws WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException {
+            throws WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException, IOException {
         String inputString = viewScreen.getInputString();
+        boolean runScript = viewScreen.getRunScript();
         Queue<EnumMap<MovingObjectProperties, Object>> commands = null;
-        if (inputString != null) {
+        if (runScript) {
+            commands = parser.runScript(viewScreen.getScript());
+        } else if (inputString != null) {
             commands = parser.execute(inputString);
         }
         parser.setLanguage(viewScreen.getLanguage());
-        ViewScreen.update(commands, parser.gerUserVars(), parser.getFunctions());
+        viewScreen.update(commands, parser.gerUserVars(), parser.getFunctions());
     }
 }
 

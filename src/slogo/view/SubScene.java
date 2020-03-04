@@ -1,6 +1,11 @@
 package slogo.view;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Queue;
+import java.util.ResourceBundle;
 import javafx.scene.Group;
 import javafx.scene.layout.VBox;
 import slogo.controller.listings.MovingObjectProperties;
@@ -12,8 +17,12 @@ public abstract class SubScene {
   //
   protected Group root;
   protected VBox vBox;
-  protected Object language;
-  protected Locale languageLocation;
+  protected static Object language;
+  protected static Map<String, List<String>> languageLocation = Map
+      .of("French", List.of("fr", "FR"), "Spanish", List.of("es", "ES"), "English",
+          List.of("en", "EN"), "Russian", List.of("ru", "RU"), "German", List.of("de", "DE"),
+          "Chinese", List.of("zh", "CN"), "Italian", List.of("it", "IT"), "Portuguese",
+          List.of("pt", "PT"));
 
   protected static ResourceBundle myResources =
       ResourceBundle.getBundle("resources", Locale.getDefault());
@@ -26,7 +35,11 @@ public abstract class SubScene {
 
   public abstract void update(Queue<EnumMap<MovingObjectProperties, Object>> movements);
 
-//  private String getLanguage() {
-//    languageLocation = new Locale()
-//  }
+  public static void updateResourceBundle() {
+    myResources = ResourceBundle.getBundle("resources",
+        new Locale(languageLocation.get(language).get(0), languageLocation.get(language).get(1)));
+
+  }
+
+  public abstract void updateDisplayWords();
 }

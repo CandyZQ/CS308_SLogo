@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Queue;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-
 import javafx.stage.Stage;
 import slogo.controller.listings.MovingObjectProperties;
 
@@ -70,10 +69,17 @@ public class ViewScreen implements ExternalAPIViewable {
   }
 
 
-  public static void update(
+  public boolean getRunScript() { return scRight.getRunScript();}
+
+  public String getScript() { return scRight.getScript();}
+
+
+  public void update(
       Queue<EnumMap<MovingObjectProperties, Object>> commands,
       Map<String, Double> variables,
       Map<String, List<String>> functions) {
+    SubScene.updateResourceBundle();
+    scRight.updateDisplayWords();
     scLeft.setRectangleColor(scRight.getClickedColor());
     scLeft.setMarkerColor(scRight.getMarkerClickedColor());
     scLeft.setTurtle(scRight.getTurtle());
