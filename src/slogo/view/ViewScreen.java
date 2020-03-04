@@ -16,6 +16,7 @@ public class ViewScreen implements ExternalAPIViewable {
   public static final String STAGE_TITLE = "SLOGO";
   public static final String STYLE_SHEET = "style.css";
 
+
   private static SubSceneLeft scLeft;
   private static SubSceneRight scRight;
   private Stage stage;
