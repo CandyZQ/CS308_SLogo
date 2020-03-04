@@ -212,7 +212,8 @@ public class ParserTest {
     try {
       Queue<EnumMap<MovingObjectProperties, Object>> q;
       q = parser.execute("tell [ 0 1 ]");
-//      printQueue(q);
+      printQueue(q);
+//      q = parser.execute("fd 50");
       q = parser.execute("fd product id 5");
       printQueue(q);
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
@@ -259,7 +260,7 @@ public class ParserTest {
       Map<MovingObjectProperties, Object> map = q.poll();
 //      System.out.println(map.get(MovingObjectProperties.Y));
 //      System.out.println(map.get(MovingObjectProperties.HEADING));
-      System.out.println(map.get(MovingObjectProperties.RETURN_VALUE));
+      System.out.println(map.get(MovingObjectProperties.ID) + ": " + map.get(MovingObjectProperties.RETURN_VALUE));
     }
   }
 
