@@ -137,12 +137,11 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("if equal? 50 50 [ fd 50 ]");
-//      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
-//      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
-      printQueue(q);
-//      q = parser.execute("if 0 [ fd 50 ]");
+      Queue<EnumMap<MovingObjectProperties, Object>> q;
+//      q = parser.execute("if equal? 50 50 [ fd 50 ]");
 //      printQueue(q);
+      q = parser.execute("if 1 [ fd 50 ]");
+      printQueue(q);
 //      q = parser.execute("ifelse 0 [ fd 50 ] [ fd 100 ]");
 //      printQueue(q);
 
@@ -175,7 +174,7 @@ public class ParserTest {
   }
 
   @Test
-  public void shouldCommand() {
+  public void shouldFunction() {
     Parser parser = new Parser(1);
 
     try {
@@ -258,9 +257,10 @@ public class ParserTest {
   private void printQueue(Queue<EnumMap<MovingObjectProperties, Object>> q) {
     while (!q.isEmpty()) {
       Map<MovingObjectProperties, Object> map = q.poll();
-//      System.out.println(map.get(MovingObjectProperties.Y));
+
 //      System.out.println(map.get(MovingObjectProperties.HEADING));
-      System.out.println(map.get(MovingObjectProperties.ID) + ": " + map.get(MovingObjectProperties.RETURN_VALUE));
+      System.out.println("ID: " + map.get(MovingObjectProperties.ID) + ", Return: " + map.get(MovingObjectProperties.RETURN_VALUE));
+      System.out.println("Y: " + map.get(MovingObjectProperties.Y));
     }
   }
 

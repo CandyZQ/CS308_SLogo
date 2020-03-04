@@ -7,17 +7,13 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.listings.MovingObjectProperties;
-import slogo.controller.operations.TurtleCommands;
-import slogo.controller.operations.TurtleQueries;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.WrongCommandFormatException;
 import slogo.model.Turtle;
 
 class CommandStructure {
-
   Class<?> c;
   Method m;
   List<Object> paras;
@@ -60,6 +56,10 @@ class CommandStructure {
     return m.getName();
   }
 
+  Object[] getMethodInvokePara() {
+    return paras.toArray(new Object[0]);
+  }
+
   Object singleExecute(TurtleManager tm, UserDefinedFields userDefinedFields, Turtle t)
       throws InvalidArgumentException, WrongCommandFormatException {
     if (needMoreParas()) {
@@ -70,7 +70,7 @@ class CommandStructure {
     Object res = null;
     try {
       res = m.invoke(c.getConstructor(Turtle.class, UserDefinedFields.class, TurtleManager.class)
-          .newInstance(t, userDefinedFields, tm), paras.toArray(new Object[0]));
+          .newInstance(t, userDefinedFields, tm), getMethodInvokePara());
     } catch (IllegalArgumentException e) {
       throw new InvalidArgumentException(e);
     } catch (IllegalAccessException e) {
