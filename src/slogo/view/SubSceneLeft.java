@@ -22,9 +22,10 @@ import slogo.controller.scripting.Script;
 
 public class SubSceneLeft extends SubScene {
 
-  private static final int INITIAL_TURTLE_X = 300;
-  private static final int INITIAL_TURTLE_Y = 250;
-  private static final double SPACING_CONSTANT = 20;
+
+  private static int INITIAL_TURTLE_X; // = 300
+  private static int INITIAL_TURTLE_Y; //  = 250
+  private final double TURTLE_SIZE = 60; // turtle is 60 px x 60 px
   private static final double SLIDER_LOW_VALUE = 0.01;
   private static final double SLIDER_HIGH_VALUE = 10;
   private static final int SLIDER_STARTING_VALUE = 2;
@@ -34,10 +35,6 @@ public class SubSceneLeft extends SubScene {
 
   private static ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
   private Turtle turtle = new Turtle(res.getString("Turtle"), 0);
-  private final List<String> buttonNames = new ArrayList<>(
-      Arrays.asList(res.getString("FD50"), res.getString("BK50"),
-          res.getString("LT50"), res.getString("RT50")));
-
 
   private Rectangle rect;
   private Slider turtleSpeed;
@@ -47,6 +44,10 @@ public class SubSceneLeft extends SubScene {
   private TextField tf;
   private Color markerColor;
   private double markerThickness;
+
+  private ArrayList<Path> pathList;
+  private Queue<Map<MovingObjectProperties, Object>> queue;
+
   private int statID;
   private double statX;
   private double statY;
@@ -57,11 +58,10 @@ public class SubSceneLeft extends SubScene {
   private TextArea scriptTextArea;
   private TextField scriptName;
   private Button scriptSave;
-  private Queue<Map<MovingObjectProperties, Object>> queue;
-  private String command;
 
+  private ButtonG group;
 
-  public SubSceneLeft() {
+  public SubSceneLeft(String[] dispCommands) {
     markerThickness = 2;
     initialX = 0;
     initialY = 0;
@@ -70,6 +70,8 @@ public class SubSceneLeft extends SubScene {
     vBox.getStyleClass().add(res.getString("VBoxStyle"));
     root.getChildren().add(vBox);
     createRectangle();
+    INITIAL_TURTLE_X = (int) Math.round(rect.getX() + rect.getWidth()/2 + TURTLE_SIZE/2 - 30);
+    INITIAL_TURTLE_Y = (int) Math.round(rect.getY() + rect.getHeight()/2 + TURTLE_SIZE/2 - 30);
 
     createAddLabel(res.getString("TurtleSpeedLabel"));
     turtleSpeed = createSlider();
@@ -78,11 +80,16 @@ public class SubSceneLeft extends SubScene {
     createAddLabel(res.getString("MarkerThicknessLabel"));
     thick = createSlider();
     vBox.getChildren().add(thick);
+    group = new ButtonG(dispCommands);
 
-    ButtonGroup group = new ButtonGroup(buttonNames);
+    for (int i = 0; i < group.getButtons().size(); i++) {
+      Button button = group.getButtons().get(i);
+      String commando = button.getText();
+      button.setOnAction(e -> setCommand(commando));
+    }
+
+    commandEntered = false;
     vBox.getChildren().add(group.getBoxes());
-    buttonListeners(group);
-
     root.getChildren().add(createTurtle());
 
     turtleStatsPopUp();
@@ -111,27 +118,6 @@ public class SubSceneLeft extends SubScene {
     statsStage.setScene(statsScene);
     statsStage.show();
   }
-
-  private void buttonListeners(ButtonGroup group) {
-
-    List<Button> buttons = group.getButtons();
-    buttons.get(0).setOnAction(event -> setCommand("fd 50"));
-    buttons.get(1).setOnAction(event -> setCommand("bk 50"));
-    buttons.get(2).setOnAction(event -> setCommand("lt 50"));
-    buttons.get(3).setOnAction(event -> setCommand("rt 50"));
-
-  }
-
-  private void setCommand(String command){
-        this.command = command;
-  }
-
-  public String getCommand(){
-    String temp = command;
-    command = null;
-    return temp;
-  }
-
 
   private void scriptPopUp(){ // @TODO make pretty?
     ScrollPane scriptRoot = new ScrollPane();
@@ -218,6 +204,28 @@ public class SubSceneLeft extends SubScene {
     return t1;
   }
 
+  public void updateButtons(String[] displayCo) {
+    vBox.getChildren().remove(group.getBoxes());
+    group = new ButtonG(displayCo);
+    for (int i = 0; i < group.getButtons().size(); i++) {
+      Button button = group.getButtons().get(i);
+      String commando = button.getText();
+      button.setOnAction(e -> setCommand(commando));
+    }
+    vBox.getChildren().add(group.getBoxes());
+  }
+
+  private void setCommand(String command) {
+    theText = command;
+    commandEntered = true;
+  }
+
+  public String getCommand(){
+    String temp = theText;
+    theText = null;
+    return temp;
+  }
+
   private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading) {
     turtle.changeHeading(heading);
     TranslateTransition trans = new TranslateTransition(Duration.seconds(turtleSpeed.getValue()), turtle);
@@ -249,8 +257,8 @@ public class SubSceneLeft extends SubScene {
   }
 
   private ImageView createTurtle() {
-    turtle.setX(rect.getBoundsInParent().getCenterX() + SPACING_CONSTANT + Turtle.size / 2);
-    turtle.setY(rect.getBoundsInParent().getCenterY() + SPACING_CONSTANT + Turtle.size / 2);
+    turtle.setX(INITIAL_TURTLE_X);
+    turtle.setY(INITIAL_TURTLE_Y);
     return turtle;
   }
 
@@ -268,8 +276,6 @@ public class SubSceneLeft extends SubScene {
   @Override
   public void update(Queue<Map<MovingObjectProperties, Object>> queue) {
     this.queue = queue;
-//    while(!queue.isEmpty()) {
-//      System.out.println(queue.remove().get(MovingObjectProperties.Y));} //to show issue with queue
     recurse();
     updateStatsPopUp();
   }
@@ -278,7 +284,6 @@ public class SubSceneLeft extends SubScene {
     rect.getStyleClass().add(res.getString("StyleClass"));
   }
 
-  // if Pen is Up, return true, else return false
   private String penUpDown(){
     if (markerColor == null){
       return "Pen Up";

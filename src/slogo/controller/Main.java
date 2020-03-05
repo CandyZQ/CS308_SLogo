@@ -1,7 +1,6 @@
 package slogo.controller;
 
 import java.io.IOException;
-import java.util.EnumMap;
 import java.util.Map;
 import java.util.Queue;
 import javafx.animation.KeyFrame;
@@ -24,6 +23,7 @@ public class Main extends Application {
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private ViewScreen viewScreen;
     private Parser parser;
+    private String[] displayCommands;
 
     /**
      * Start the program.
@@ -37,9 +37,8 @@ public class Main extends Application {
         viewScreen = new ViewScreen(primaryStage);
         parser = new Parser(1);
         parser.setLanguage(viewScreen.getLanguage());
+        displayCommands = parser.setLanguage(viewScreen.getLanguage());
         setTiming();
-
-
     }
 
     private void setTiming() {
@@ -67,8 +66,8 @@ public class Main extends Application {
             commands = parser.execute(inputString);
         }
         //viewScreen.getColor(String);
-        parser.setLanguage(viewScreen.getLanguage());
-        viewScreen.update(commands, parser.gerUserVars(), parser.getFunctions());
+        displayCommands = parser.setLanguage(viewScreen.getLanguage());
+        viewScreen.update(commands, parser.gerUserVars(), parser.getFunctions(), displayCommands);
         if (viewScreen.getWindowBoolean()){
             newWindow();
         }
@@ -76,16 +75,14 @@ public class Main extends Application {
 
     private void newWindow(){
         Stage newStage = new Stage();
-        Thread thread = new Thread(() -> {
-            Platform.runLater(() -> {
-                Main newSimul = new Main();
-                try {
-                    newSimul.start(newStage);
-                } catch (LanguageIsNotSupportedException e) {
-                    System.out.println("Exception");
-                }
-            });
-        });
+        Thread thread = new Thread(() -> Platform.runLater(() -> {
+            Main newSimul = new Main();
+            try {
+                newSimul.start(newStage);
+            } catch (LanguageIsNotSupportedException e) {
+                System.out.println("Excet");
+            }
+        }));
         thread.start();
     }
 }

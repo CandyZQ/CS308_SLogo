@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.print.DocFlavor.STRING;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.listings.BasicSyntax;
 import slogo.exceptions.InvalidArgumentException;

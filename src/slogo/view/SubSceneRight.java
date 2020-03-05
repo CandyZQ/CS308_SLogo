@@ -64,14 +64,14 @@ public class SubSceneRight extends SubScene {
   private TextArea commandTextArea;
   private TextArea variableTextArea;
   private TextArea userDefinedCommandsTextArea;
-  private String theText;
-  private Boolean commandEntered = false;
   private Stage stage;
   private final List<String> buttonNames = new ArrayList<>(
       Arrays.asList(myResources.getString("LoadButton"),
           myResources.getString("HelpButton"), myResources.getString("ResetButton"),
           myResources.getString("UndoButton"),
           myResources.getString("PenUp")));
+
+  private static final int SPACING = 30;
 
   public SubSceneRight() {
     root = new Group();
@@ -95,9 +95,7 @@ public class SubSceneRight extends SubScene {
     buttonListeners(group);
     scriptRunTextField(); // added for scripting
     listenForCommandSelection();
-    //createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
     listenForVariableSelection();
-    //createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA);
   }
 
   private void makeHBox(Region left, Region right, String style) {
@@ -126,19 +124,6 @@ public class SubSceneRight extends SubScene {
       name.setText(selectedText);
     });
   }
-
-//  private void createHBox() {
-//    HBox hBox = new HBox();
-//    hBox.getStyleClass().add(myResources.getString("HBox"));
-//    VBox vBoxLeft = new VBox();
-//    VBox vBoxRight = new VBox();
-//    createLabel(vBoxRight, MARKER_COLOR_LABEL);
-//    createMarkerColorPicker();
-//    createLabel(vBoxLeft, CHANGE_LANGUAGE_LABEL);
-//    createComboBox();
-//    hBox.getChildren().addAll(vBoxLeft, vBoxRight);
-//    vBox.getChildren().add(hBox);
-//  }
 
   private Region createMarkerColorPicker() {
     markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
@@ -196,14 +181,10 @@ public class SubSceneRight extends SubScene {
   }
 
   private void buttonListeners(ButtonGroup group) {
-
     List<Button> buttons = group.getButtons();
     buttons.get(0).setOnAction(event -> setTurtleImage());
-
     buttons.get(1).setOnAction(event -> displayPopUp());
-
     buttons.get(4).setOnAction(event -> setPenUp());
-
   }
 
   private void setPenUp() {
@@ -241,7 +222,6 @@ public class SubSceneRight extends SubScene {
 
 
   private Scene setUpPopUp(ScrollPane helpRoot) {
-
     return new Scene(helpRoot, 600, 800, Color.LIGHTBLUE);
   }
 
@@ -275,6 +255,12 @@ public class SubSceneRight extends SubScene {
     return scriptName;
   }
 
+  public void execute(String command) {
+    //name.setText(command);
+    //textFieldListener(KeyCode.ENTER);
+    theText = command;
+    commandEntered = true;
+  }
 
   private void textFieldListener(KeyCode code) {
     if (code == KeyCode.ENTER) {
@@ -329,13 +315,6 @@ public class SubSceneRight extends SubScene {
         .get(MovingObjectProperties.CLEAR)) {
       markerClickedColor = null;
       markerColorPicker.setValue(null);
-    }
-  }
-
-  public void executeFixedCommand(String command){
-    if (command != null) {
-      name.setText(command);
-      textFieldListener(KeyCode.ENTER);
     }
   }
 
