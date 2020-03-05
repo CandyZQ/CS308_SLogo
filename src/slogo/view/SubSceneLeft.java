@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -26,7 +25,6 @@ public class SubSceneLeft extends SubScene {
 
   private static int INITIAL_TURTLE_X; // = 300
   private static int INITIAL_TURTLE_Y; //  = 250
-  private static final double SPACING_CONSTANT = 20;
   private final double TURTLE_SIZE = 60; // turtle is 60 px x 60 px
   private static final double SLIDER_LOW_VALUE = 0.01;
   private static final double SLIDER_HIGH_VALUE = 10;
@@ -37,11 +35,7 @@ public class SubSceneLeft extends SubScene {
 
   private static ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
   private Turtle turtle = new Turtle(res.getString("Turtle"), 0);
-  private final List<String> buttonNames = new ArrayList<>(
-      Arrays.asList(res.getString("FD50"), res.getString("BK50"),
-          res.getString("LT50"), res.getString("RT50")));
 
-  private ImageView turtle = new ImageView(new Image(myResources.getString("Turtle")));
   private Rectangle rect;
   private Slider turtleSpeed;
   private Slider thick;
@@ -64,24 +58,8 @@ public class SubSceneLeft extends SubScene {
   private TextArea scriptTextArea;
   private TextField scriptName;
   private Button scriptSave;
-  private Queue<Map<MovingObjectProperties, Object>> queue;
-  private String command;
-
-  Label labelID;
-  Label labelX;
-  Label labelY;
-  Label labelHeading;
-  Label labelPen;
-  Label labelThickness;
-
-  TextArea scriptTextArea;
-  TextField scriptName;
-  Button scriptSave;
-  private static final int SCRIPT_WIDTH = 400;
-  private static final int SCRIPT_HEIGHT = 400;
 
   private ButtonG group;
-  private ArrayList<String> commandsToDo = new ArrayList<>();
 
   public SubSceneLeft(String[] dispCommands) {
     markerThickness = 2;
@@ -94,7 +72,6 @@ public class SubSceneLeft extends SubScene {
     createRectangle();
     INITIAL_TURTLE_X = (int) Math.round(rect.getX() + rect.getWidth()/2 + TURTLE_SIZE/2 - 30);
     INITIAL_TURTLE_Y = (int) Math.round(rect.getY() + rect.getHeight()/2 + TURTLE_SIZE/2 - 30);
-    Label label1 = new Label("Turtle Speed");
 
     createAddLabel(res.getString("TurtleSpeedLabel"));
     turtleSpeed = createSlider();
@@ -141,27 +118,6 @@ public class SubSceneLeft extends SubScene {
     statsStage.setScene(statsScene);
     statsStage.show();
   }
-
-  private void buttonListeners(ButtonGroup group) {
-
-    List<Button> buttons = group.getButtons();
-    buttons.get(0).setOnAction(event -> setCommand("fd 50"));
-    buttons.get(1).setOnAction(event -> setCommand("bk 50"));
-    buttons.get(2).setOnAction(event -> setCommand("lt 50"));
-    buttons.get(3).setOnAction(event -> setCommand("rt 50"));
-
-  }
-
-  private void setCommand(String command){
-        this.command = command;
-  }
-
-  public String getCommand(){
-    String temp = command;
-    command = null;
-    return temp;
-  }
-
 
   private void scriptPopUp(){ // @TODO make pretty?
     ScrollPane scriptRoot = new ScrollPane();
@@ -262,7 +218,6 @@ public class SubSceneLeft extends SubScene {
   private void setCommand(String command) {
     theText = command;
     commandEntered = true;
-    System.out.println("Command Set");
   }
 
   public String getCommand(){
@@ -270,12 +225,6 @@ public class SubSceneLeft extends SubScene {
     theText = null;
     return temp;
   }
-
-  private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton,
-                               Button fourthButton) {
-
-  }
-
 
   private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading) {
     turtle.changeHeading(heading);

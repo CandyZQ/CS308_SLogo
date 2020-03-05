@@ -24,7 +24,6 @@ public class ViewScreen implements ExternalAPIViewable {
   private Scene scene;
 
   private String[] displayCommands;
-  private ArrayList<String> commandsToDo;
 
   public ViewScreen(Stage stage) {
     this.stage = stage;
