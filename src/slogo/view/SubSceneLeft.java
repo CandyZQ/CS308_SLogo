@@ -58,6 +58,7 @@ public class SubSceneLeft extends SubScene {
   private TextField scriptName;
   private Button scriptSave;
   private Queue<Map<MovingObjectProperties, Object>> queue;
+  private String command;
 
 
   public SubSceneLeft() {
@@ -82,6 +83,8 @@ public class SubSceneLeft extends SubScene {
 
     ButtonGroup group = new ButtonGroup(buttonNames);
     vBox.getChildren().add(group.getBoxes());
+    buttonListeners(group);
+
     root.getChildren().add(createTurtle());
 
     turtleStatsPopUp();
@@ -112,6 +115,27 @@ public class SubSceneLeft extends SubScene {
     statsStage.setScene(statsScene);
     statsStage.show();
   }
+
+  private void buttonListeners(ButtonGroup group) {
+
+    List<Button> buttons = group.getButtons();
+    buttons.get(0).setOnAction(event -> setCommand("fd 50"));
+    buttons.get(1).setOnAction(event -> setCommand("bk 50"));
+    buttons.get(2).setOnAction(event -> setCommand("lt 50"));
+    buttons.get(3).setOnAction(event -> setCommand("rt 50"));
+
+  }
+
+  private void setCommand(String command){
+        this.command = command;
+  }
+
+  public String getCommand(){
+    String temp = command;
+    command = null;
+    return temp;
+  }
+
 
   private void scriptPopUp(){ // @TODO make pretty?
     ScrollPane scriptRoot = new ScrollPane();
