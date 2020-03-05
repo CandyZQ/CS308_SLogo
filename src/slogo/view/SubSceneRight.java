@@ -64,14 +64,16 @@ public class SubSceneRight extends SubScene {
   private TextArea commandTextArea;
   private TextArea variableTextArea;
   private TextArea userDefinedCommandsTextArea;
-  private String theText;
-  private Boolean commandEntered = false;
+  //private String theText;
+  //private Boolean commandEntered = false;
   private Stage stage;
   private final List<String> buttonNames = new ArrayList<>(
       Arrays.asList(myResources.getString("LoadButton"),
           myResources.getString("HelpButton"), myResources.getString("ResetButton"),
           myResources.getString("UndoButton"),
           myResources.getString("PenUp")));
+
+  private static final int SPACING = 30;
 
   public SubSceneRight() {
     root = new Group();
@@ -203,7 +205,6 @@ public class SubSceneRight extends SubScene {
     buttons.get(1).setOnAction(event -> displayPopUp());
 
     buttons.get(4).setOnAction(event -> setPenUp());
-
   }
 
   private void setPenUp() {
@@ -241,7 +242,6 @@ public class SubSceneRight extends SubScene {
 
 
   private Scene setUpPopUp(ScrollPane helpRoot) {
-
     return new Scene(helpRoot, 600, 800, Color.LIGHTBLUE);
   }
 
@@ -275,6 +275,12 @@ public class SubSceneRight extends SubScene {
     return scriptName;
   }
 
+  public void execute(String command) {
+    //name.setText(command);
+    //textFieldListener(KeyCode.ENTER);
+    theText = command;
+    commandEntered = true;
+  }
 
   private void textFieldListener(KeyCode code) {
     if (code == KeyCode.ENTER) {
@@ -329,13 +335,6 @@ public class SubSceneRight extends SubScene {
         .get(MovingObjectProperties.CLEAR)) {
       markerClickedColor = null;
       markerColorPicker.setValue(null);
-    }
-  }
-
-  public void executeFixedCommand(String command){
-    if (command != null) {
-      name.setText(command);
-      textFieldListener(KeyCode.ENTER);
     }
   }
 
