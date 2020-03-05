@@ -17,8 +17,11 @@ import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 import slogo.exceptions.WrongCommandFormatException;
+import slogo.model.Turtle;
 
 public class Parser implements BackEndExternalAPI {
+
+  public static final String FUNCTION_METHOD = "doFunction";
   private CommandsMapHelper commandsMapHelper;
   private UserDefinedFields userDefinedFields;
   private TurtleManager tm;
@@ -29,9 +32,14 @@ public class Parser implements BackEndExternalAPI {
   public Parser(int turtleNumber) {
     commandsMapHelper = new CommandsMapHelper();
     userDefinedFields = new UserDefinedFields();
+    tm = new TurtleManager(turtleNumber);
+    initialize();
+  }
+
+  private void initialize() {
     commandsLeft = new Stack<>();
     pausedCommands = new Stack<>();
-    tm = new TurtleManager(turtleNumber);
+    tm.cleanState();
   }
 
   /**
@@ -59,17 +67,22 @@ public class Parser implements BackEndExternalAPI {
   @Override
   public Queue<EnumMap<MovingObjectProperties, Object>> execute(String command)
       throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException {
-    tm.cleanState();
+    initialize();
     fillStack(command);
 
-    while (!commandsLeft.empty()) {
-      executeNextCommand(tm);
+    Stack<String> temp = (Stack<String>) commandsLeft.clone();
+    for (Turtle t : tm.getTurtles()) {
+      commandsLeft = (Stack<String>) temp.clone();
+      while (!commandsLeft.empty()) {
+        executeNextCommand(t);
+      }
     }
     return tm.getTurtleStates();
   }
 
   @Override
-  public Queue<EnumMap<MovingObjectProperties, Object>> runScript(String filename) throws IOException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException {
+  public Queue<EnumMap<MovingObjectProperties, Object>> runScript(String filename)
+      throws IOException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException {
     Queue<EnumMap<MovingObjectProperties, Object>> commandResults = new LinkedList<>();
     Queue<EnumMap<MovingObjectProperties, Object>> commandResult;
     EnumMap<MovingObjectProperties, Object> turtleState;
@@ -77,7 +90,7 @@ public class Parser implements BackEndExternalAPI {
     List<String> commands = file.processScript();
     for (int i = 0; i < commands.size(); i++) {
       commandResult = execute(commands.get(i));
-      while(!commandResult.isEmpty()) {
+      while (!commandResult.isEmpty()) {
         turtleState = commandResult.remove();
         commandResults.add(turtleState);
       }
@@ -88,7 +101,9 @@ public class Parser implements BackEndExternalAPI {
   private void fillStack(String command) {
     String[] c = command.split(" ");
     for (int i = c.length - 1; i >= 0; i--) {
-      commandsLeft.push(c[i]);
+      if (!c[i].equals("")) {
+        commandsLeft.push(c[i]);
+      }
     }
   }
 
@@ -105,35 +120,64 @@ public class Parser implements BackEndExternalAPI {
     return userDefinedFields.getFunctions();
   }
 
-  private void executeNextCommand(TurtleManager tm)
+  private void executeNextCommand(Turtle t)
       throws CommandDoesNotExistException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException {
     String commandName = popNext();
-    if (!SyntaxHelper.isType(commandName, COMMAND)) {
-      throw new InvalidArgumentException(
-          "The command " + commandName + " is not a valid SLogo command!");
-    }
-    CommandStructure current = commandsMapHelper.convertUserInput(commandName);
+    CommandStructure current;
+    if (userDefinedFields.isFunction(commandName)) {
+      current = processFunction(commandName);
+    } else {
+      if (!SyntaxHelper.isType(commandName, COMMAND)) {
+        throw new InvalidArgumentException(
+            "The command " + commandName + " is not a valid SLogo command!");
+      }
+      current = commandsMapHelper.convertUserInput(commandName);
 
-    while (current.needMoreParas()) {
-      // execute if other commands need to be executed for return values
-      if (!canAddPara(current)) {
-        pausedCommands.add(current);
-        return;
+      while (current.needMoreParas()) {
+        // execute if other commands need to be executed for return values
+        if (!canAddPara(current)) {
+          pausedCommands.add(current);
+          return;
+        }
       }
     }
+
     pausedCommands.add(current);
-    checkPausedCommands(tm);
+    checkPausedCommands(tm, t);
   }
 
-  private void checkPausedCommands(TurtleManager tm)
+  private FunctionStructure processFunction(String function)
+      throws LanguageIsNotSupportedException, CommandDoesNotExistException, InvalidArgumentException {
+    FunctionStructure current = (FunctionStructure) commandsMapHelper
+        .convertUserInput(FUNCTION_METHOD);
+    current.setParaNum(userDefinedFields.getFuncParaNum(function) + 1);
+    current.addPara(function);
+    return current;
+  }
+
+  private void checkPausedCommands(TurtleManager tm, Turtle t)
       throws InvalidArgumentException, WrongCommandFormatException {
     String returnVal = null;
+    boolean hasExtra = false;
     while (!pausedCommands.isEmpty()) {
       if (!pausedCommands.peek().needMoreParas()) {
-        returnVal = pausedCommands.pop().execute(tm, userDefinedFields).toString();
-      }
-      if (!pausedCommands.isEmpty() && returnVal != null && pausedCommands.peek().needMoreParas()) {
-        pausedCommands.peek().addPara(returnVal);
+        returnVal = pausedCommands.pop().singleExecute(tm, userDefinedFields, t).toString();
+        String extra = userDefinedFields.getExtraCommands();
+        if (!extra.equals("")) {
+          fillStack(extra);
+          hasExtra = true;
+        } else {
+          hasExtra = false;
+        }
+      } else if (!pausedCommands.isEmpty() && !hasExtra) {
+        if (returnVal != null) {
+          pausedCommands.peek().addPara(returnVal);
+        }
+        while (!commandsLeft.empty()) {
+          if (!canAddPara(pausedCommands.peek())) {
+            break;
+          }
+        }
         returnVal = null;
       }
     }
@@ -153,6 +197,7 @@ public class Parser implements BackEndExternalAPI {
       }
       if (SyntaxHelper.isType(next, VARIABLE)) {
         structure.addPara(userDefinedFields.getVar(next));
+        return true;
       }
       commandsLeft.push(next);
       return false;

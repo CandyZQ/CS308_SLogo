@@ -1,6 +1,5 @@
 package slogo.controller;
 
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -68,5 +67,9 @@ public class TurtleManager {
   void putReturnValue(Object returnVal, Turtle t) {
     Integer id = (Integer) t.getState().get(MovingObjectProperties.ID);
     turtles[id].getState().put(MovingObjectProperties.RETURN_VALUE, returnVal);
+  }
+
+  int getActiveTurtleNum() {
+    return activeTurtles.size();
   }
 }

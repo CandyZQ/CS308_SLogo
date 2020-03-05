@@ -7,8 +7,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.listings.MovingObjectProperties;
 import slogo.exceptions.InvalidArgumentException;
@@ -16,7 +14,6 @@ import slogo.exceptions.WrongCommandFormatException;
 import slogo.model.Turtle;
 
 class CommandStructure {
-
   Class<?> c;
   Method m;
   List<Object> paras;
@@ -59,38 +56,31 @@ class CommandStructure {
     return m.getName();
   }
 
-  Object execute(TurtleManager tm, UserDefinedFields userDefinedFields)
+  Object[] getMethodInvokePara() {
+    return paras.toArray(new Object[0]);
+  }
+
+  Object singleExecute(TurtleManager tm, UserDefinedFields userDefinedFields, Turtle t)
       throws InvalidArgumentException, WrongCommandFormatException {
-    Set<Turtle> turtles = tm.getTurtles();
     if (needMoreParas()) {
       throw new WrongCommandFormatException(
           "Internal Error: Still need more parameters before executing");
     }
 
     Object res = null;
-    for (Turtle t: turtles) {
-      res = singleTurtleExecute(t, userDefinedFields, tm);
-      storeTurtleStates(res, tm, t);
-    }
-
-    return res;
-  }
-
-  private Object singleTurtleExecute(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm)
-      throws InvalidArgumentException {
-    Object res = null;
     try {
       res = m.invoke(c.getConstructor(Turtle.class, UserDefinedFields.class, TurtleManager.class)
-          .newInstance(turtle, userDefinedFields, tm), paras.toArray(new Object[0]));
+          .newInstance(t, userDefinedFields, tm), getMethodInvokePara());
     } catch (IllegalArgumentException e) {
       throw new InvalidArgumentException(e);
     } catch (IllegalAccessException e) {
       System.out.println("The method " + m.getName() + " called is not accessible");
     } catch (InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-      // TODO: do something?
+      System.out.println(e.getClass() + " occurred while running the command.");
     }
 
-    return res != null ? res : turtle.getState().get(MovingObjectProperties.RETURN_VALUE);
+    storeTurtleStates(res, tm, t);
+    return res != null ? res : t.getState().get(MovingObjectProperties.RETURN_VALUE);
   }
 
   private void storeTurtleStates(Object returnVal, TurtleManager tm, Turtle t) {
@@ -109,5 +99,4 @@ class CommandStructure {
     }
     tm.addStates(t);
   }
-
 }
