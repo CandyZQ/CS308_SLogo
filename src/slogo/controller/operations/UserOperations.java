@@ -1,11 +1,8 @@
 package slogo.controller.operations;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import slogo.controller.CommandsMapHelper;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.TurtleManager;
 import slogo.controller.UserDefinedFields;
@@ -29,7 +26,7 @@ public class UserOperations extends Operations{
     if (!SyntaxHelper.isType(variable, BasicSyntax.VARIABLE)) {
       throw new InvalidArgumentException("The first argument is not in the form of a variable.");
     }
-    userDefinedFields.setUserVars(variable, expr);
+    userDefinedFields.putUserVar(variable, expr);
     return expr;
   }
 
@@ -37,16 +34,18 @@ public class UserOperations extends Operations{
 //    return loop(1, expr,1, commands, LOOP_EXPR);
 //  }
 //
-//  private String loop(Integer start, Integer end, Integer increment, String commands, String variable) {
+//  private void loop(Integer start, Integer end, Integer increment, String commands, String variable)
+//      throws InvalidArgumentException {
 //    StringBuilder sb = new StringBuilder();
-//    userVars.put(variable, new Double(start));
-//    String as = commands.substring(2, commands.length() - 1);
-//    for (; userVars.get(variable) <= end; userVars.put(variable, userVars.get(variable) + increment)) {
+//    userDefinedFields.putUserVar(variable, Double.valueOf(start));
+//    String as = commands.substring(TRIM, commands.length() - TRIM);
+//    for (; userDefinedFields.getUserVar(variable) <= end; userDefinedFields.incrementVarBy(variable, Double.valueOf(increment))) {
 //      sb.append(as);
+//      sb.append(" ");
 //    }
-//    return sb.toString();
+//    userDefinedFields.setExtraCommands(sb.toString());
 //  }
-//
+////
 //   public String doTimes(String vl, String commands) throws InvalidArgumentException {
 //    String variable = vl.split(" ")[1];
 //    checkType(variable, BasicSyntax.VARIABLE, 1);
@@ -107,6 +106,6 @@ public class UserOperations extends Operations{
         current.add(v);
       }
     }
-    userDefinedFields.setFunction(commandName, current);
+    userDefinedFields.putFunction(commandName, current);
   }
 }

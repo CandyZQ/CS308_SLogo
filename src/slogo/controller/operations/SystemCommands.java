@@ -1,6 +1,5 @@
 package slogo.controller.operations;
 
-import java.util.ArrayList;
 import java.util.List;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.TurtleManager;
@@ -35,7 +34,7 @@ public class SystemCommands extends Operations {
         throw new InvalidArgumentException(
             "The " + i + "th argument passed in of " + funcName + " is not a constant!");
       }
-      userDefinedFields.setUserVars(variables.get(i), Double.valueOf(info.get(i)));
+      userDefinedFields.putUserVar(variables.get(i), Double.valueOf(info.get(i)));
     }
 
     userDefinedFields.setExtraCommands(commands);

@@ -23,13 +23,11 @@ public class TurtleQueries extends Operations{
     return (Double) turtle.getState().get(MovingObjectProperties.HEADING);
   }
 
-  // TODO: confirm number
-  public Integer isPenDown() {
-    return (Integer) turtle.getState().get(MovingObjectProperties.PEN);
+  public Boolean isPenDown() {
+    return (Boolean) (turtle.getState().get(MovingObjectProperties.PEN));
   }
 
-  // TODO: confirm number
-  public Integer isShowing() {
-    return (Integer) turtle.getState().get(MovingObjectProperties.VISIBILITY);
+  public Boolean isShowing() {
+    return (Boolean) turtle.getState().get(MovingObjectProperties.VISIBILITY);
   }
 }

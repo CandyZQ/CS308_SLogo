@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.print.DocFlavor.STRING;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.listings.BasicSyntax;
 import slogo.exceptions.InvalidArgumentException;
@@ -38,7 +39,7 @@ public class UserDefinedFields {
     return Collections.unmodifiableMap(userVars);
   }
 
-  public void setUserVars(String name, Double value) throws InvalidArgumentException {
+  public void putUserVar(String name, Double value) throws InvalidArgumentException {
     if (!SyntaxHelper.isType(name, BasicSyntax.VARIABLE)) {
       throw new InvalidArgumentException("All variables start with : , but " + name + " is not");
     }
@@ -46,7 +47,15 @@ public class UserDefinedFields {
     userVars.put(name, value);
   }
 
-  public void setFunction(String commandName, List<String> current) {
+  public Double getUserVar(String name) {
+    return userVars.get(name);
+  }
+
+  public void incrementVarBy(String name, Double amount) {
+    userVars.put(name, userVars.get(name) + amount);
+  }
+
+  public void putFunction(String commandName, List<String> current) {
     functions.put(commandName, current);
   }
 
