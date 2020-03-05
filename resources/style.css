@@ -38,6 +38,7 @@
   -fx-display-caret: true;
   -fx-pref-width: 100;
   -fx-pref-rows: 10;
+
 }
 
 .text-area .content {

@@ -4,9 +4,12 @@ package slogo.view;
 import java.io.File;
 import java.util.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -64,10 +67,11 @@ public class SubSceneRight extends SubScene {
   private String theText;
   private Boolean commandEntered = false;
   private Stage stage;
-  private boolean window = false;
-  private final List<String> buttonNames = new ArrayList<String>(Arrays.asList(myResources.getString("LoadButton"),
-          myResources.getString("HelpButton"), myResources.getString("ResetButton"), myResources.getString("UndoButton"),
-          myResources.getString("PenUp"), myResources.getString("NewWindow")));
+  private final List<String> buttonNames = new ArrayList<>(
+      Arrays.asList(myResources.getString("LoadButton"),
+          myResources.getString("HelpButton"), myResources.getString("ResetButton"),
+          myResources.getString("UndoButton"),
+          myResources.getString("PenUp")));
 
   public SubSceneRight() {
     root = new Group();
@@ -77,6 +81,7 @@ public class SubSceneRight extends SubScene {
     for (String key : Collections.list(myLanguages.getKeys())) {
       language_names.add(myLanguages.getString(key));
     }
+    vBox.getChildren().add(createTable(new TableView<>()));
     makeHBox(createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT),
         createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA), "thishbox");
     vBox.getChildren().add(createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT));
@@ -122,6 +127,19 @@ public class SubSceneRight extends SubScene {
     });
   }
 
+//  private void createHBox() {
+//    HBox hBox = new HBox();
+//    hBox.getStyleClass().add(myResources.getString("HBox"));
+//    VBox vBoxLeft = new VBox();
+//    VBox vBoxRight = new VBox();
+//    createLabel(vBoxRight, MARKER_COLOR_LABEL);
+//    createMarkerColorPicker();
+//    createLabel(vBoxLeft, CHANGE_LANGUAGE_LABEL);
+//    createComboBox();
+//    hBox.getChildren().addAll(vBoxLeft, vBoxRight);
+//    vBox.getChildren().add(hBox);
+//  }
+
   private Region createMarkerColorPicker() {
     markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
     markerColorPicker.setOnAction(event -> {
@@ -150,6 +168,29 @@ public class SubSceneRight extends SubScene {
     return area;
   }
 
+  private Control createTable(TableView<VariableItems> table) {
+    TableColumn<VariableItems, String> column1 = new TableColumn<>("First Name");
+    column1.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+
+    TableColumn<VariableItems, String> column2 = new TableColumn<>("Last Name");
+    column2.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+
+    table.getColumns().add(column1);
+    table.getColumns().add(column2);
+    //ObservableList<String> bleh = new SortedList<String>();
+    ObservableList<VariableItems> data =
+        FXCollections.observableArrayList(
+            new VariableItems("Jacob", "Smith"),
+            new VariableItems("Isabella", "Johnson"),
+            new VariableItems("Ethan", "Williams"),
+            new VariableItems("Emma", "Jones"),
+            new VariableItems("Michael", "Brown")
+        );
+    data.add(new VariableItems("One", "Two"));
+    table.setItems(data);
+    return table;
+  }
+
   private Region createLabel(String text) {
     return new Label(text + ':');
   }
@@ -163,18 +204,6 @@ public class SubSceneRight extends SubScene {
 
     buttons.get(4).setOnAction(event -> setPenUp());
 
-    buttons.get(5).setOnAction(event -> setWindowBoolean());
-
-  }
-
-  private void setWindowBoolean(){
-    this.window = true;
-  }
-
-  public boolean getWindowBoolean(){
-    boolean temp = window;
-    window = false;
-    return temp;
   }
 
   private void setPenUp() {
