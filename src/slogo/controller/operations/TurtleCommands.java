@@ -44,22 +44,22 @@ public class TurtleCommands extends Operations{
   }
 
   public void penDown() {
-    turtle.getState().put(MovingObjectProperties.PEN, 1);
+    turtle.getState().put(MovingObjectProperties.PEN, true);
     turtle.getState().put(MovingObjectProperties.RETURN_VALUE, 1);
   }
 
   public void penUp() {
-    turtle.getState().put(MovingObjectProperties.PEN, 0);
+    turtle.getState().put(MovingObjectProperties.PEN, false);
     turtle.getState().put(MovingObjectProperties.RETURN_VALUE, 0);
   }
 
   public void showTurtle() {
-    turtle.getState().put(MovingObjectProperties.VISIBILITY, 1);
+    turtle.getState().put(MovingObjectProperties.VISIBILITY, true);
     turtle.getState().put(MovingObjectProperties.RETURN_VALUE, 1);
   }
 
   public void hideTurtle() {
-    turtle.getState().put(MovingObjectProperties.VISIBILITY, 0);
+    turtle.getState().put(MovingObjectProperties.VISIBILITY, false);
     turtle.getState().put(MovingObjectProperties.RETURN_VALUE, 0);
   }
 

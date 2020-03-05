@@ -34,7 +34,7 @@ public class SubSceneLeft extends SubScene {
   private static final int SLIDER_STARTING_VALUE = 2;
 
   private static ResourceBundle myResources =
-      ResourceBundle.getBundle("resources", Locale.getDefault());
+          ResourceBundle.getBundle("resources", Locale.getDefault());
 
   private ImageView turtle = new ImageView(new Image(myResources.getString("Turtle")));
   private Rectangle rect;
@@ -47,7 +47,7 @@ public class SubSceneLeft extends SubScene {
   private double markerThickness;
 
   private ArrayList<Path> pathList;
-  private Queue<EnumMap<MovingObjectProperties, Object>> queue;
+  private Queue<Map<MovingObjectProperties, Object>> queue;
 
   private int statID;
   private double statX;
@@ -144,13 +144,13 @@ public class SubSceneLeft extends SubScene {
     script.addAll(scriptTextArea.getText());
   }
 
- private void updateStatsPopUp(){
-   labelID.setText("Turtle ID: " + statID);
-   labelX.setText("Turtle X: " + statX);
-   labelY.setText("Turtle Y: " + statY);
-   labelHeading.setText("Turtle Heading: " + statHeading);
-   labelPen.setText("Pen Up/Down: " + statPen);
-   labelThickness.setText("Pen Thickness: " + statThickness);
+  private void updateStatsPopUp(){
+    labelID.setText("Turtle ID: " + statID);
+    labelX.setText("Turtle X: " + statX);
+    labelY.setText("Turtle Y: " + statY);
+    labelHeading.setText("Turtle Heading: " + statHeading);
+    labelPen.setText("Pen Up/Down: " + statPen);
+    labelThickness.setText("Pen Thickness: " + statThickness);
   }
 
   private Animation clipAnimation(Path path) {
@@ -167,7 +167,7 @@ public class SubSceneLeft extends SubScene {
     pen.translateXProperty().addListener(pen_Listener);
     pen.translateYProperty().addListener(pen_Listener);
     PathTransition pathTransition = new PathTransition(Duration.seconds(turtleSpeed.getValue()), path,
-        pen);
+            pen);
     pathTransition.setOnFinished(t -> {
       path.setClip(null);
       clip.getChildren().clear();
@@ -204,7 +204,7 @@ public class SubSceneLeft extends SubScene {
   private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading) {
     turtle.setRotate(heading);
     TranslateTransition trans = new TranslateTransition(Duration.seconds(turtleSpeed.getValue()),
-        turtle);
+            turtle);
     trans.setFromX(initialX);
     trans.setFromY(initialY);
 
@@ -216,10 +216,10 @@ public class SubSceneLeft extends SubScene {
 
     path.getElements().addAll(
 
-        new MoveTo(INITIAL_TURTLE_X + initialX + TURTLE_SIZE / 2,
-            INITIAL_TURTLE_Y + initialY + TURTLE_SIZE / 2),
-        new LineTo(INITIAL_TURTLE_X + xFinal + TURTLE_SIZE / 2,
-            INITIAL_TURTLE_Y + yFinal + TURTLE_SIZE / 2)
+            new MoveTo(INITIAL_TURTLE_X + initialX + TURTLE_SIZE / 2,
+                    INITIAL_TURTLE_Y + initialY + TURTLE_SIZE / 2),
+            new LineTo(INITIAL_TURTLE_X + xFinal + TURTLE_SIZE / 2,
+                    INITIAL_TURTLE_Y + yFinal + TURTLE_SIZE / 2)
 
     );
     path.setFill(null);
@@ -245,7 +245,7 @@ public class SubSceneLeft extends SubScene {
 
   private void createRectangle() {
     rect = new Rectangle(ViewScreen.STAGE_WIDTH / 2, ViewScreen.STAGE_HEIGHT / 2,
-        SubSceneRight.INITIAL_BACKGROUND_COLOR);
+            SubSceneRight.INITIAL_BACKGROUND_COLOR);
     rect.getStyleClass().add(myResources.getString("StyleClass"));
     vBox.getChildren().add(rect);
   }
@@ -256,7 +256,7 @@ public class SubSceneLeft extends SubScene {
   }
 
   @Override
-  public void update(Queue<EnumMap<MovingObjectProperties, Object>> queue) {
+  public void update(Queue<Map<MovingObjectProperties, Object>> queue) {
     this.queue = queue;
     recurse();
     updateStatsPopUp();
@@ -287,7 +287,7 @@ public class SubSceneLeft extends SubScene {
   }
 
   private TranslateTransition move() {
-    EnumMap<MovingObjectProperties, Object> movements = queue.remove();
+    Map<MovingObjectProperties, Object> movements = queue.remove();
     statID = (Integer) movements.get(MovingObjectProperties.ID);
     statX = -1 * (Double) movements.get(MovingObjectProperties.X);
     statY = -1 * (Double) movements.get(MovingObjectProperties.Y);
@@ -295,8 +295,8 @@ public class SubSceneLeft extends SubScene {
     statThickness = markerThickness;
     statPen = penUpDown();
     TranslateTransition t1 = moveTurtle((Double) movements.get(MovingObjectProperties.X),
-        -1 * (Double) movements.get(MovingObjectProperties.Y),
-        (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90);
+            -1 * (Double) movements.get(MovingObjectProperties.Y),
+            (Double) movements.get(MovingObjectProperties.HEADING) * -1 + 90);
     t1.play();
     return t1;
   }

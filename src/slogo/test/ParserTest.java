@@ -1,6 +1,6 @@
 package slogo.test;
 
-import java.util.EnumMap;
+import java.util.Map;
 import java.util.Map;
 import java.util.Queue;
 import org.junit.Assert;
@@ -24,7 +24,7 @@ public class ParserTest {
       e.printStackTrace();
     }
 
-    Queue<EnumMap<MovingObjectProperties, Object>> q = null;
+    Queue<Map<MovingObjectProperties, Object>> q = null;
     try {
       q = parser.execute("FORWARD 50");
       Assert.assertEquals(50D, q.peek().get(MovingObjectProperties.Y));
@@ -67,7 +67,7 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("goto 3 4");
+      Queue<Map<MovingObjectProperties, Object>> q = parser.execute("goto 3 4");
       Assert.assertEquals(3D, q.peek().get(MovingObjectProperties.X));
       Assert.assertEquals(4D, q.peek().get(MovingObjectProperties.Y));
       Assert.assertEquals(5D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
@@ -92,7 +92,7 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("forward sum 10 sum 25 50");
+      Queue<Map<MovingObjectProperties, Object>> q = parser.execute("forward sum 10 sum 25 50");
       q.poll();
       q.poll();
       Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
@@ -101,15 +101,6 @@ public class ParserTest {
 
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
       e.printStackTrace();
-    }
-  }
-
-  private void printQueue(Queue<EnumMap<MovingObjectProperties, Object>> q) {
-    while (!q.isEmpty()) {
-      Map<MovingObjectProperties, Object> map = q.poll();
-      System.out.println(map.get(MovingObjectProperties.Y));
-//      System.out.println(map.get(MovingObjectProperties.HEADING));
-//      System.out.println(map.get(MovingObjectProperties.RETURN_VALUE));
     }
   }
 
@@ -124,9 +115,9 @@ public class ParserTest {
     }
 
     try {
-//      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("repeat 2 [ fd 50 ]");
-//      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("dotimes [ :a 3 ] [ fd 50 ]");
-      Queue<EnumMap<MovingObjectProperties, Object>> q = parser
+//      Queue<Map<MovingObjectProperties, Object>> q = parser.execute("repeat 2 [ fd 50 ]");
+//      Queue<Map<MovingObjectProperties, Object>> q = parser.execute("dotimes [ :a 3 ] [ fd 50 ]");
+      Queue<Map<MovingObjectProperties, Object>> q = parser
           .execute("for [ :b 2 6 3 ] [ fd 50 ]");
       printQueue(q);
 
@@ -146,12 +137,11 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("if equal? 50 50 [ fd 50 ]");
-//      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
-//      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
-      printQueue(q);
-//      q = parser.execute("if 0 [ fd 50 ]");
+      Queue<Map<MovingObjectProperties, Object>> q;
+//      q = parser.execute("if equal? 50 50 [ fd 50 ]");
 //      printQueue(q);
+      q = parser.execute("if 1 [ fd 50 ]");
+      printQueue(q);
 //      q = parser.execute("ifelse 0 [ fd 50 ] [ fd 100 ]");
 //      printQueue(q);
 
@@ -171,7 +161,7 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q;
+      Queue<Map<MovingObjectProperties, Object>> q;
       q = parser.execute("make :a 1");
       q = parser.execute("fd :a");
 //      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
@@ -184,7 +174,7 @@ public class ParserTest {
   }
 
   @Test
-  public void shouldCommand() {
+  public void shouldFunction() {
     Parser parser = new Parser(1);
 
     try {
@@ -194,11 +184,11 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q;
-      q = parser.execute("to hi [ ] [ fd 50 ]");
+      Queue<Map<MovingObjectProperties, Object>> q;
+      q = parser.execute("to hi [ :a ] [ fd :a ]");
       printQueue(q);
 
-      q = parser.execute("hi");
+      q = parser.execute("hi 1");
 //      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
 //      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
       printQueue(q);
@@ -219,15 +209,83 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q;
+      Queue<Map<MovingObjectProperties, Object>> q;
       q = parser.execute("tell [ 0 1 ]");
       printQueue(q);
+//      q = parser.execute("fd 50");
       q = parser.execute("fd product id 5");
       printQueue(q);
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
       e.printStackTrace();
     }
   }
+
+  @Test
+  public void shouldGiveError() {
+    Parser parser = new Parser(1);
+
+    try {
+      parser.setLanguage("English");
+    } catch (LanguageIsNotSupportedException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      Queue<Map<MovingObjectProperties, Object>> q;
+      q = parser.execute("fd 50");
+      printQueue(q);
+      q = parser.execute("f 50");
+      printQueue(q);
+
+    } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
+      System.out.println(".");
+    }
+
+    try {
+      Queue<Map<MovingObjectProperties, Object>> q;
+      q = parser.execute("fd 50");
+      printQueue(q);
+      q = parser.execute("fd 50");
+      printQueue(q);
+    } catch (WrongCommandFormatException | LanguageIsNotSupportedException | InvalidArgumentException | CommandDoesNotExistException e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  @Test
+  public void complicatedCommand() {
+    Parser parser = new Parser(1);
+
+    try {
+      parser.setLanguage("English");
+    } catch (LanguageIsNotSupportedException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      Queue<Map<MovingObjectProperties, Object>> q;
+      q = parser.execute("for [ :v 0 99 0 ] [ set :v sum ycor fd 1 ]");
+      printQueue(q);
+
+    } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
+      System.out.println(".");
+    }
+  }
+
+
+  private void printQueue(Queue<Map<MovingObjectProperties, Object>> q) {
+    while (!q.isEmpty()) {
+      Map<MovingObjectProperties, Object> map = q.poll();
+
+//      System.out.println(map.get(MovingObjectProperties.HEADING));
+      System.out.println("ID: " + map.get(MovingObjectProperties.ID) + ", Return: " + map.get(MovingObjectProperties.RETURN_VALUE));
+      System.out.println("Y: " + map.get(MovingObjectProperties.Y));
+    }
+  }
+
+
+
 }
 
 

@@ -1,6 +1,5 @@
 package slogo.view;
 
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -33,7 +32,7 @@ public abstract class SubScene {
     return root;
   }
 
-  public abstract void update(Queue<EnumMap<MovingObjectProperties, Object>> movements);
+  public abstract void update(Queue<Map<MovingObjectProperties, Object>> movements);
 
   public static void updateResourceBundle() {
     myResources = ResourceBundle.getBundle("resources",
