@@ -332,6 +332,13 @@ public class SubSceneRight extends SubScene {
     }
   }
 
+  public void executeFixedCommand(String command){
+    if (command != null) {
+      name.setText(command);
+      textFieldListener(KeyCode.ENTER);
+    }
+  }
+
   @Override
   public void updateDisplayWords() {
     SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");

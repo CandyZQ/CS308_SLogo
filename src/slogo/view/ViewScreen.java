@@ -88,6 +88,7 @@ public class ViewScreen implements ExternalAPIViewable {
     scLeft.listenToDisableTextField(scRight.getTextField());
     scRight.setVariableTextArea(variables);
     scRight.setUserTextArea(functions);
+    scRight.executeFixedCommand(scLeft.getCommand());
     if (commands != null && commands.peek() != null) {
 //      if (commands.peek().get(MovingObjectProperties.CLEAR).toString().contentEquals("true")) {
 //        scLeft.setMarkerColor(null);
