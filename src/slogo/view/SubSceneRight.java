@@ -2,12 +2,26 @@ package slogo.view;
 
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,8 +37,10 @@ import slogo.controller.listings.MovingObjectProperties;
 public class SubSceneRight extends SubScene {
 
   private final ImageView helpImage0 = new ImageView(new Image(myResources.getString("HelpTitle")));
-  private final ImageView helpImage1 = new ImageView(new Image(myResources.getString("BasicSyntax")));
-  private final ImageView helpImage2 = new ImageView(new Image(myResources.getString("TurtleCommands")));
+  private final ImageView helpImage1 = new ImageView(
+      new Image(myResources.getString("BasicSyntax")));
+  private final ImageView helpImage2 = new ImageView(
+      new Image(myResources.getString("TurtleCommands")));
   private final ImageView helpImage3 = new ImageView(
       new Image(myResources.getString("TurtleQueries")));
   private final ImageView helpImage4 = new ImageView(

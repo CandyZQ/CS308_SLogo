@@ -22,7 +22,6 @@ import slogo.controller.scripting.Script;
 
 public class SubSceneLeft extends SubScene {
 
-
   private static int INITIAL_TURTLE_X; // = 300
   private static int INITIAL_TURTLE_Y; //  = 250
   private final double TURTLE_SIZE = 60; // turtle is 60 px x 60 px
@@ -58,6 +57,7 @@ public class SubSceneLeft extends SubScene {
   private TextArea scriptTextArea;
   private TextField scriptName;
   private Button scriptSave;
+  private static final int SPACING = 30;
 
   private ButtonG group;
 
@@ -70,8 +70,10 @@ public class SubSceneLeft extends SubScene {
     vBox.getStyleClass().add(res.getString("VBoxStyle"));
     root.getChildren().add(vBox);
     createRectangle();
-    INITIAL_TURTLE_X = (int) Math.round(rect.getX() + rect.getWidth()/2 + TURTLE_SIZE/2 - 30);
-    INITIAL_TURTLE_Y = (int) Math.round(rect.getY() + rect.getHeight()/2 + TURTLE_SIZE/2 - 30);
+    INITIAL_TURTLE_X = (int) Math
+        .round(rect.getX() + rect.getWidth() / 2 + TURTLE_SIZE / 2 - SPACING);
+    INITIAL_TURTLE_Y = (int) Math
+        .round(rect.getY() + rect.getHeight() / 2 + TURTLE_SIZE / 2 - SPACING);
 
     createAddLabel(res.getString("TurtleSpeedLabel"));
     turtleSpeed = createSlider();
