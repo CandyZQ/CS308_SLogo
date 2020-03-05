@@ -4,27 +4,27 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class ButtonGroup {
+public class ButtonG {
 
     private HBox box;
-    private List<HBox> hboxes;
+    private ArrayList<HBox> hboxes;
     private VBox vbox;
     private final int VBOX_SPACING = 20;
+    private ArrayList<Button> buttons;
+    private ArrayList<String> commands;
+    private String commandToDo;
+    private boolean ctd = false;
 
-    private List<Button> buttons;
-
-    private List<String> numButtons;
-
-
+    private String[] numButtons;
     private static ResourceBundle myResources =
             ResourceBundle.getBundle("resources", Locale.getDefault());
 
-    public ButtonGroup(List<String> number){
+    public ButtonG(String[] number){
         vbox = new VBox(VBOX_SPACING);
         numButtons = number;
         hboxes = new ArrayList<>();
@@ -35,12 +35,13 @@ public class ButtonGroup {
     }
 
     private void createButtons(){
-        for(int i =0; i<numButtons.size(); i++){
-            buttons.add(new Button(numButtons.get(i)));
+        commands = new ArrayList<>();
+        for(int i =0; i<numButtons.length; i++){
+            commands.add(numButtons[i].split("\\|")[0]+" 50");
+            buttons.add(new Button(commands.get(i)));
             buttons.get(i).setWrapText(true);
         }
     }
-
     private void formatHBoxes(){
         int extent;
         if(buttons.size() % 2 == 0){
@@ -81,7 +82,7 @@ public class ButtonGroup {
         }
     }
 
-    public List<Button> getButtons(){
+    public ArrayList<Button> getButtons(){
         return buttons;
     }
 

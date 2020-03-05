@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -22,9 +23,11 @@ import slogo.controller.scripting.Script;
 
 public class SubSceneLeft extends SubScene {
 
-  private static final int INITIAL_TURTLE_X = 300;
-  private static final int INITIAL_TURTLE_Y = 250;
+
+  private static int INITIAL_TURTLE_X; // = 300
+  private static int INITIAL_TURTLE_Y; //  = 250
   private static final double SPACING_CONSTANT = 20;
+  private final double TURTLE_SIZE = 60; // turtle is 60 px x 60 px
   private static final double SLIDER_LOW_VALUE = 0.01;
   private static final double SLIDER_HIGH_VALUE = 10;
   private static final int SLIDER_STARTING_VALUE = 2;
@@ -38,7 +41,7 @@ public class SubSceneLeft extends SubScene {
       Arrays.asList(res.getString("FD50"), res.getString("BK50"),
           res.getString("LT50"), res.getString("RT50")));
 
-
+  private ImageView turtle = new ImageView(new Image(myResources.getString("Turtle")));
   private Rectangle rect;
   private Slider turtleSpeed;
   private Slider thick;
@@ -47,6 +50,10 @@ public class SubSceneLeft extends SubScene {
   private TextField tf;
   private Color markerColor;
   private double markerThickness;
+
+  private ArrayList<Path> pathList;
+  private Queue<Map<MovingObjectProperties, Object>> queue;
+
   private int statID;
   private double statX;
   private double statY;
@@ -60,8 +67,23 @@ public class SubSceneLeft extends SubScene {
   private Queue<Map<MovingObjectProperties, Object>> queue;
   private String command;
 
+  Label labelID;
+  Label labelX;
+  Label labelY;
+  Label labelHeading;
+  Label labelPen;
+  Label labelThickness;
 
-  public SubSceneLeft() {
+  TextArea scriptTextArea;
+  TextField scriptName;
+  Button scriptSave;
+  private static final int SCRIPT_WIDTH = 400;
+  private static final int SCRIPT_HEIGHT = 400;
+
+  private ButtonG group;
+  private ArrayList<String> commandsToDo = new ArrayList<>();
+
+  public SubSceneLeft(String[] dispCommands) {
     markerThickness = 2;
     initialX = 0;
     initialY = 0;
@@ -70,6 +92,9 @@ public class SubSceneLeft extends SubScene {
     vBox.getStyleClass().add(res.getString("VBoxStyle"));
     root.getChildren().add(vBox);
     createRectangle();
+    INITIAL_TURTLE_X = (int) Math.round(rect.getX() + rect.getWidth()/2 + TURTLE_SIZE/2 - 30);
+    INITIAL_TURTLE_Y = (int) Math.round(rect.getY() + rect.getHeight()/2 + TURTLE_SIZE/2 - 30);
+    Label label1 = new Label("Turtle Speed");
 
     createAddLabel(res.getString("TurtleSpeedLabel"));
     turtleSpeed = createSlider();
@@ -78,11 +103,16 @@ public class SubSceneLeft extends SubScene {
     createAddLabel(res.getString("MarkerThicknessLabel"));
     thick = createSlider();
     vBox.getChildren().add(thick);
+    group = new ButtonG(dispCommands);
 
-    ButtonGroup group = new ButtonGroup(buttonNames);
+    for (int i = 0; i < group.getButtons().size(); i++) {
+      Button button = group.getButtons().get(i);
+      String commando = button.getText();
+      button.setOnAction(e -> setCommand(commando));
+    }
+
+    commandEntered = false;
     vBox.getChildren().add(group.getBoxes());
-    buttonListeners(group);
-
     root.getChildren().add(createTurtle());
 
     turtleStatsPopUp();
@@ -218,6 +248,35 @@ public class SubSceneLeft extends SubScene {
     return t1;
   }
 
+  public void updateButtons(String[] displayCo) {
+    vBox.getChildren().remove(group.getBoxes());
+    group = new ButtonG(displayCo);
+    for (int i = 0; i < group.getButtons().size(); i++) {
+      Button button = group.getButtons().get(i);
+      String commando = button.getText();
+      button.setOnAction(e -> setCommand(commando));
+    }
+    vBox.getChildren().add(group.getBoxes());
+  }
+
+  private void setCommand(String command) {
+    theText = command;
+    commandEntered = true;
+    System.out.println("Command Set");
+  }
+
+  public String getCommand(){
+    String temp = theText;
+    theText = null;
+    return temp;
+  }
+
+  private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton,
+                               Button fourthButton) {
+
+  }
+
+
   private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading) {
     turtle.changeHeading(heading);
     TranslateTransition trans = new TranslateTransition(Duration.seconds(turtleSpeed.getValue()), turtle);
@@ -249,8 +308,10 @@ public class SubSceneLeft extends SubScene {
   }
 
   private ImageView createTurtle() {
-    turtle.setX(rect.getBoundsInParent().getCenterX() + SPACING_CONSTANT + Turtle.size / 2);
-    turtle.setY(rect.getBoundsInParent().getCenterY() + SPACING_CONSTANT + Turtle.size / 2);
+    turtle.setX(INITIAL_TURTLE_X);
+    turtle.setY(INITIAL_TURTLE_Y);
+    //turtle.setX(rect.getBoundsInParent().getCenterX() + SPACING_CONSTANT + TURTLE_SIZE / 2);
+    //turtle.setY(rect.getBoundsInParent().getCenterY() + SPACING_CONSTANT + TURTLE_SIZE / 2);
     return turtle;
   }
 

@@ -34,16 +34,34 @@ public class CommandsMapHelper {
     syntaxMap = setUpCommandMap(SYNTAX_FILE);
   }
 
-  void setLanguage(String language) throws LanguageIsNotSupportedException {
+  String[] setLanguage(String language) throws LanguageIsNotSupportedException {
     for (Languages l : supportedLanguages) {
       if (l.name().toUpperCase().equals(language.toUpperCase())) {
         currnetLan = l;
         commandsMap = setUpCommandMap(currnetLan.name());
-        return;
+        return getDisplayCommands(currnetLan.name());
       }
     }
     throw new LanguageIsNotSupportedException(
         "Input language " + language.toUpperCase() + " is not supported!");
+  }
+
+  public String[] getDisplayCommands(String filename) {
+    var resources = ResourceBundle.getBundle(RESOURCE_DIR + filename);
+    String[] displayCommands = {"fd 50", "bk 50", "left 50", "right 50"};
+    for (var key : Collections.list(resources.getKeys())) {
+      String regex = resources.getString(key);
+      if (key.equals("Forward")) {
+        displayCommands[0] = String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
+      } else if (key.equals("Backward")) {
+        displayCommands[1] = String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
+      } else if (key.equals("Left")) {
+        displayCommands[2] = String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
+      } else if (key.equals("Right")) {
+        displayCommands[3] = String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
+      }
+    }
+    return displayCommands;
   }
 
   private Map<String, Pattern> setUpCommandMap(String filename) {

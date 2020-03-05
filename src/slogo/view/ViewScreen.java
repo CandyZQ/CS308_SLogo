@@ -12,8 +12,8 @@ import slogo.controller.listings.MovingObjectProperties;
 
 public class ViewScreen implements ExternalAPIViewable {
 
-  public static final double STAGE_HEIGHT = 800;
-  public static final double STAGE_WIDTH = 1000;
+  public static final double STAGE_HEIGHT = 600;
+  public static final double STAGE_WIDTH = 800;
   public static final String STAGE_TITLE = "SLOGO";
   public static final String STYLE_SHEET = "style.css";
 
@@ -22,6 +22,9 @@ public class ViewScreen implements ExternalAPIViewable {
   private static SubSceneRight scRight;
   private Stage stage;
   private Scene scene;
+
+  private String[] displayCommands;
+  private ArrayList<String> commandsToDo;
 
   public ViewScreen(Stage stage) {
     this.stage = stage;
@@ -38,7 +41,8 @@ public class ViewScreen implements ExternalAPIViewable {
     scRight = new SubSceneRight();
     scRight.assignStage(stage);
     root.setRight(scRight.getRoot());
-    scLeft = new SubSceneLeft();
+    displayCommands = new String[]{"FD 50", "BK 50", "LT 50", "RT 50"};
+    scLeft = new SubSceneLeft(displayCommands);
     root.setLeft(scLeft.getRoot());
     setAsScene(new Scene(root, ObjectsViewable.STAGE_WIDTH, ObjectsViewable.STAGE_HEIGHT));
     stage.setScene(scene);
@@ -79,7 +83,8 @@ public class ViewScreen implements ExternalAPIViewable {
   public void update(
       Queue<Map<MovingObjectProperties, Object>> commands,
       Map<String, Double> variables,
-      Map<String, List<String>> functions) {
+      Map<String, List<String>> functions,
+      String[] dispCommands) {
     SubScene.updateResourceBundle();
     scRight.updateDisplayWords();
     scLeft.setRectangleColor(scRight.getClickedColor());
@@ -88,14 +93,15 @@ public class ViewScreen implements ExternalAPIViewable {
     scLeft.listenToDisableTextField(scRight.getTextField());
     scRight.setVariableTextArea(variables);
     scRight.setUserTextArea(functions);
-    scRight.executeFixedCommand(scLeft.getCommand());
+    scRight.execute(scLeft.getCommand());
     if (commands != null && commands.peek() != null) {
-//      if (commands.peek().get(MovingObjectProperties.CLEAR).toString().contentEquals("true")) {
-//        scLeft.setMarkerColor(null);
-//      }
       scRight.setCommandText(SubSceneRight.SUCCESSFUL_COMMAND);
       scLeft.update(commands);
       scRight.update(commands);
+    }
+    if (!dispCommands[0].equals(displayCommands[0])) {
+      scLeft.updateButtons(dispCommands);
+      displayCommands = dispCommands;
     }
   }
 
