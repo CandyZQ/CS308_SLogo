@@ -1,24 +1,11 @@
 package slogo.view;
 
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import javafx.collections.FXCollections;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -33,18 +20,12 @@ import slogo.controller.listings.MovingObjectProperties;
 public class SubSceneRight extends SubScene {
 
   private final ImageView helpImage0 = new ImageView(new Image(myResources.getString("HelpTitle")));
-  private final ImageView helpImage1 = new ImageView(
-      new Image(myResources.getString("BasicSyntax")));
-  private final ImageView helpImage2 = new ImageView(
-      new Image(myResources.getString("TurtleCommands")));
-  private final ImageView helpImage3 = new ImageView(
-      new Image(myResources.getString("TurtleQueries")));
-  private final ImageView helpImage4 = new ImageView(
-      new Image(myResources.getString("MathOperations")));
-  private final ImageView helpImage5 = new ImageView(
-      new Image(myResources.getString("BooleanOperations")));
-  private final ImageView helpImage6 = new ImageView(
-      new Image(myResources.getString("UserDefined")));
+  private final ImageView helpImage1 = new ImageView(new Image(myResources.getString("BasicSyntax")));
+  private final ImageView helpImage2 = new ImageView(new Image(myResources.getString("TurtleCommands")));
+  private final ImageView helpImage3 = new ImageView(new Image(myResources.getString("TurtleQueries")));
+  private final ImageView helpImage4 = new ImageView(new Image(myResources.getString("MathOperations")));
+  private final ImageView helpImage5 = new ImageView(new Image(myResources.getString("BooleanOperations")));
+  private final ImageView helpImage6 = new ImageView(new Image(myResources.getString("UserDefined")));
 
 
   private Turtle turtle = new Turtle(myResources.getString("Turtle"), 0);
@@ -82,10 +63,8 @@ public class SubSceneRight extends SubScene {
   private String theText;
   private Boolean commandEntered = false;
   private Stage stage;
-  private final ArrayList<String> buttonNames = new ArrayList<>(
-      Arrays.asList(myResources.getString("LoadButton"),
-          myResources.getString("HelpButton"), myResources.getString("ResetButton"),
-          myResources.getString("UndoButton"),
+  private final List<String> buttonNames = new ArrayList<String>(Arrays.asList(myResources.getString("LoadButton"),
+          myResources.getString("HelpButton"), myResources.getString("ResetButton"), myResources.getString("UndoButton"),
           myResources.getString("PenUp")));
 
   public SubSceneRight() {
@@ -188,7 +167,7 @@ public class SubSceneRight extends SubScene {
 
   private void buttonListeners(ButtonGroup group) {
 
-    ArrayList<Button> buttons = group.getButtons();
+    List<Button> buttons = group.getButtons();
     buttons.get(0).setOnAction(event -> setTurtleImage());
 
     buttons.get(1).setOnAction(event -> displayPopUp());
@@ -293,6 +272,17 @@ public class SubSceneRight extends SubScene {
       clickedColor = backgroundColorPicker.getValue();
       commandTextArea.setText(
           commandTextArea.getText() + "\n" + NEW_BACKGROUND_COLOR + clickedColor.toString());
+    });
+  }
+
+  private void createMarkerColorPicker(Pane pane) {
+    markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
+    pane.getChildren().add(markerColorPicker);
+    markerColorPicker.setOnAction(event -> {
+      markerClickedColor = markerColorPicker.getValue();
+      commandTextArea
+              .setText(
+                      commandTextArea.getText() + "\n" + NEW_MARKER_COLOR + markerClickedColor.toString());
     });
   }
 

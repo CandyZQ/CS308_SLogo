@@ -43,7 +43,7 @@ public class SubSceneLeft extends SubScene {
   private Color markerColor;
   private double markerThickness;
 
-  private final ArrayList<String> buttonNames = new ArrayList<String>(Arrays.asList("FD 50","BK 50","LT 50", "RT 50"));
+  private final List<String> buttonNames = new ArrayList<String>(Arrays.asList("FD 50","BK 50","LT 50", "RT 50"));
 
   private Queue<Map<MovingObjectProperties, Object>> queue;
 
