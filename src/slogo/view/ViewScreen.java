@@ -93,6 +93,7 @@ public class ViewScreen implements ExternalAPIViewable {
       }
       scRight.setCommandText(SubSceneRight.SUCCESSFUL_COMMAND);
       scLeft.update(commands);
+      scRight.update(commands);
     }
   }
 
