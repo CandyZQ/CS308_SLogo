@@ -64,8 +64,6 @@ public class SubSceneRight extends SubScene {
   private TextArea commandTextArea;
   private TextArea variableTextArea;
   private TextArea userDefinedCommandsTextArea;
-  //private String theText;
-  //private Boolean commandEntered = false;
   private Stage stage;
   private final List<String> buttonNames = new ArrayList<>(
       Arrays.asList(myResources.getString("LoadButton"),
@@ -97,9 +95,7 @@ public class SubSceneRight extends SubScene {
     buttonListeners(group);
     scriptRunTextField(); // added for scripting
     listenForCommandSelection();
-    //createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
     listenForVariableSelection();
-    //createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA);
   }
 
   private void makeHBox(Region left, Region right, String style) {
@@ -128,19 +124,6 @@ public class SubSceneRight extends SubScene {
       name.setText(selectedText);
     });
   }
-
-//  private void createHBox() {
-//    HBox hBox = new HBox();
-//    hBox.getStyleClass().add(myResources.getString("HBox"));
-//    VBox vBoxLeft = new VBox();
-//    VBox vBoxRight = new VBox();
-//    createLabel(vBoxRight, MARKER_COLOR_LABEL);
-//    createMarkerColorPicker();
-//    createLabel(vBoxLeft, CHANGE_LANGUAGE_LABEL);
-//    createComboBox();
-//    hBox.getChildren().addAll(vBoxLeft, vBoxRight);
-//    vBox.getChildren().add(hBox);
-//  }
 
   private Region createMarkerColorPicker() {
     markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
@@ -198,12 +181,9 @@ public class SubSceneRight extends SubScene {
   }
 
   private void buttonListeners(ButtonGroup group) {
-
     List<Button> buttons = group.getButtons();
     buttons.get(0).setOnAction(event -> setTurtleImage());
-
     buttons.get(1).setOnAction(event -> displayPopUp());
-
     buttons.get(4).setOnAction(event -> setPenUp());
   }
 

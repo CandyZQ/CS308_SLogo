@@ -259,8 +259,6 @@ public class SubSceneLeft extends SubScene {
   private ImageView createTurtle() {
     turtle.setX(INITIAL_TURTLE_X);
     turtle.setY(INITIAL_TURTLE_Y);
-    //turtle.setX(rect.getBoundsInParent().getCenterX() + SPACING_CONSTANT + TURTLE_SIZE / 2);
-    //turtle.setY(rect.getBoundsInParent().getCenterY() + SPACING_CONSTANT + TURTLE_SIZE / 2);
     return turtle;
   }
 
@@ -278,8 +276,6 @@ public class SubSceneLeft extends SubScene {
   @Override
   public void update(Queue<Map<MovingObjectProperties, Object>> queue) {
     this.queue = queue;
-//    while(!queue.isEmpty()) {
-//      System.out.println(queue.remove().get(MovingObjectProperties.Y));} //to show issue with queue
     recurse();
     updateStatsPopUp();
   }
@@ -288,7 +284,6 @@ public class SubSceneLeft extends SubScene {
     rect.getStyleClass().add(res.getString("StyleClass"));
   }
 
-  // if Pen is Up, return true, else return false
   private String penUpDown(){
     if (markerColor == null){
       return "Pen Up";
