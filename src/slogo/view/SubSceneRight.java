@@ -36,7 +36,7 @@ public class SubSceneRight extends SubScene {
       new Image(myResources.getString("UserDefined")));
 
 
-  private Image turtle = new Image(myResources.getString("Turtle"));
+  private Turtle turtle = new Turtle(myResources.getString("Turtle"), 0);
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
   public static final Color INITIAL_MARKER_COLOR = null; // the code for having the pen up
   public static String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
@@ -74,6 +74,9 @@ public class SubSceneRight extends SubScene {
   private String theText;
   private Boolean commandEntered = false;
   private Stage stage;
+  private final ArrayList<String> buttonNames = new ArrayList<String>(Arrays.asList(myResources.getString("LoadButton"),
+          myResources.getString("HelpButton"), myResources.getString("ResetButton"), myResources.getString("UndoButton"),
+          myResources.getString("PenUp")));
 
   public SubSceneRight() {
     root = new Group();
@@ -85,8 +88,9 @@ public class SubSceneRight extends SubScene {
     root.getChildren().add(vBox);
     createLabel(vBox, BACKGROUND_COLOR_LABEL);
     createBackgroundColorPicker();
-    createButtons(myResources.getString("LoadButton"), myResources.getString("HelpButton"),
-            myResources.getString("ResetButton"), myResources.getString("UndoButton"), myResources.getString("PenUp"));
+    ButtonGroup group = new ButtonGroup(buttonNames);
+    vBox.getChildren().add(group.getBoxes());
+    buttonListeners(group);
     createHBox();
     createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
     createTextField();
@@ -167,47 +171,16 @@ public class SubSceneRight extends SubScene {
     pane.getChildren().addAll(label);
   }
 
+  private void buttonListeners(ButtonGroup group) {
 
-  private void createButtons(String firstName, String secondName, String thirdName,
-      String fourthName, String fifthName) {
-    HBox hbox1 = new HBox(30);
-    HBox hbox2 = new HBox(30);
-    HBox hbox3 = new HBox(30);
-    hbox1.getStyleClass().add(myResources.getString("HBox"));
-    hbox2.getStyleClass().add(myResources.getString("HBox"));
-    hbox3.getStyleClass().add(myResources.getString("HBox"));
-    Button firstButton = new Button(firstName);
-    Button secondButton = new Button(secondName);
-    Button thirdButton = new Button(thirdName);
-    Button fourthButton = new Button(fourthName);
-    Button fifthButton = new Button(fifthName);
-    firstButton.setWrapText(true);
-    secondButton.setWrapText(true);
-    thirdButton.setWrapText(true);
-    fourthButton.setWrapText(true);
-    fifthButton.setWrapText(true);
-    hbox1.getChildren().addAll(firstButton, secondButton);
-    hbox2.getChildren().addAll(thirdButton, fourthButton);
-    hbox3.getChildren().addAll(fifthButton);
-    hbox1.setAlignment(Pos.CENTER);
-    hbox2.setAlignment(Pos.CENTER);
-    hbox3.setAlignment(Pos.CENTER);
+    ArrayList<Button> buttons = group.getButtons();
+    buttons.get(0).setOnAction(event -> setTurtleImage());
 
-    this.buttonListeners(firstButton, secondButton, thirdButton, fourthButton, fifthButton);
-    vBox.getChildren().addAll(hbox1, hbox2, hbox3);
-  }
+    buttons.get(1).setOnAction(event -> displayPopUp());
 
-  private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton,
-      Button fourthButton, Button fifthButton) {
-
-    firstButton.setOnAction(event -> setTurtleImage());
-
-    secondButton.setOnAction(event -> displayPopUp());
-
-    fifthButton.setOnAction(event -> setPenUp());
+    buttons.get(4).setOnAction(event -> setPenUp());
 
   }
-
 
   private void setPenUp(){
     markerClickedColor = null;
@@ -217,7 +190,7 @@ public class SubSceneRight extends SubScene {
   public void setTurtleImage() {
     File file = fileChooser.showOpenDialog(stage);
     if (file != null) {
-      turtle = new Image(file.toURI().toString(), 60, 60, false, true);
+      turtle = new Turtle(file.toURI().toString(), 0);
       //turtle.setX(150);
       //turtle.setY(150);
     }
@@ -351,7 +324,7 @@ public class SubSceneRight extends SubScene {
   }
 
   public Image getTurtle() {
-    return turtle;
+    return turtle.getTurtleImage();
   }
 
   public TextField getTextField() {
@@ -369,9 +342,7 @@ public class SubSceneRight extends SubScene {
   public Color getMarkerClickedColor() {
     return markerClickedColor;
   }
-
-
-
+  
   public String getTheText() {
     if (commandEntered) {
       commandEntered = false;

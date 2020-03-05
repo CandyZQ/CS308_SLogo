@@ -6,13 +6,11 @@ import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -28,15 +26,14 @@ public class SubSceneLeft extends SubScene {
   private static final int INITIAL_TURTLE_X = 300;
   private static final int INITIAL_TURTLE_Y = 250;
   private static final double SPACING_CONSTANT = 20;
-  private final double TURTLE_SIZE = 60; // turtle is 60 px x 60 px
   private static final double SLIDER_LOW_VALUE = 0.01;
   private static final double SLIDER_HIGH_VALUE = 10;
   private static final int SLIDER_STARTING_VALUE = 2;
 
   private static ResourceBundle myResources =
-      ResourceBundle.getBundle("resources", Locale.getDefault());
+          ResourceBundle.getBundle("resources", Locale.getDefault());
 
-  private ImageView turtle = new ImageView(new Image(myResources.getString("Turtle")));
+  private Turtle turtle = new Turtle(myResources.getString("Turtle"), 0);
   private Rectangle rect;
   private Slider turtleSpeed;
   private Slider thick;
@@ -46,7 +43,8 @@ public class SubSceneLeft extends SubScene {
   private Color markerColor;
   private double markerThickness;
 
-  private ArrayList<Path> pathList;
+  private final ArrayList<String> buttonNames = new ArrayList<String>(Arrays.asList("FD 50","BK 50","LT 50", "RT 50"));
+
   private Queue<EnumMap<MovingObjectProperties, Object>> queue;
 
   private int statID;
@@ -84,7 +82,8 @@ public class SubSceneLeft extends SubScene {
     vBox.getChildren().add(label2);
     thick = createSlider();
     vBox.getChildren().add(thick);
-    createButtons("FD 50", "BK 50", "LT 50", "RT 50");
+    ButtonGroup group = new ButtonGroup(buttonNames);
+    vBox.getChildren().add(group.getBoxes());
     root.getChildren().add(createTurtle());
     initialX = 0;
     initialY = 0;
@@ -174,33 +173,8 @@ public class SubSceneLeft extends SubScene {
     return pathTransition;
   }
 
-  private void createButtons(String firstName, String secondName, String thirdName,
-                             String fourthName) {
-    HBox hbox1 = new HBox(30);
-    HBox hbox2 = new HBox(30);
-    hbox1.getStyleClass().add(myResources.getString("HBox"));
-    hbox2.getStyleClass().add(myResources.getString("HBox"));
-    Button firstButton = new Button(firstName);
-    Button secondButton = new Button(secondName);
-    Button thirdButton = new Button(thirdName);
-    Button fourthButton = new Button(fourthName);
-    hbox1.getChildren().addAll(firstButton, secondButton);
-    hbox2.getChildren().addAll(thirdButton, fourthButton);
-    hbox1.setAlignment(Pos.CENTER);
-    hbox2.setAlignment(Pos.CENTER);
-
-    this.buttonListeners(firstButton, secondButton, thirdButton, fourthButton);
-    vBox.getChildren().addAll(hbox1, hbox2);
-  }
-
-  private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton,
-                               Button fourthButton) {
-
-  }
-
-
   private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading) {
-    turtle.setRotate(heading);
+    turtle.changeHeading(heading);
     TranslateTransition trans = new TranslateTransition(Duration.seconds(turtleSpeed.getValue()),
         turtle);
     trans.setFromX(initialX);
@@ -214,10 +188,10 @@ public class SubSceneLeft extends SubScene {
 
     path.getElements().addAll(
 
-        new MoveTo(INITIAL_TURTLE_X + initialX + TURTLE_SIZE / 2,
-            INITIAL_TURTLE_Y + initialY + TURTLE_SIZE / 2),
-        new LineTo(INITIAL_TURTLE_X + xFinal + TURTLE_SIZE / 2,
-            INITIAL_TURTLE_Y + yFinal + TURTLE_SIZE / 2)
+        new MoveTo(INITIAL_TURTLE_X + initialX + Turtle.size / 2,
+            INITIAL_TURTLE_Y + initialY + Turtle.size / 2),
+        new LineTo(INITIAL_TURTLE_X + xFinal + Turtle.size / 2,
+            INITIAL_TURTLE_Y + yFinal + Turtle.size / 2)
 
     );
     path.setFill(null);
@@ -234,10 +208,8 @@ public class SubSceneLeft extends SubScene {
   }
 
   private ImageView createTurtle() {
-//    turtle.setX(INITIAL_TURTLE_X);
-//    turtle.setY(INITIAL_TURTLE_Y);
-    turtle.setX(rect.getBoundsInParent().getCenterX() + SPACING_CONSTANT + TURTLE_SIZE / 2);
-    turtle.setY(rect.getBoundsInParent().getCenterY() + SPACING_CONSTANT + TURTLE_SIZE / 2);
+    turtle.setX(rect.getBoundsInParent().getCenterX() + SPACING_CONSTANT + Turtle.size / 2);
+    turtle.setY(rect.getBoundsInParent().getCenterY() + SPACING_CONSTANT + Turtle.size / 2);
     return turtle;
   }
 
