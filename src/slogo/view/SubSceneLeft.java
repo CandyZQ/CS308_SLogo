@@ -25,8 +25,8 @@ import slogo.controller.scripting.Script;
 public class SubSceneLeft extends SubScene {
 
 
-  private static final int INITIAL_TURTLE_X = 300;
-  private static final int INITIAL_TURTLE_Y = 250;
+  private static int INITIAL_TURTLE_X; // = 300
+  private static int INITIAL_TURTLE_Y; //  = 250
   private static final double SPACING_CONSTANT = 20;
   private final double TURTLE_SIZE = 60; // turtle is 60 px x 60 px
   private static final double SLIDER_LOW_VALUE = 0.01;
@@ -76,6 +76,8 @@ public class SubSceneLeft extends SubScene {
     vBox.getStyleClass().add(myResources.getString("VBoxStyle"));
     root.getChildren().add(vBox);
     createRectangle();
+    INITIAL_TURTLE_X = (int) Math.round(rect.getX() + rect.getWidth()/2 + TURTLE_SIZE/2 - 30);
+    INITIAL_TURTLE_Y = (int) Math.round(rect.getY() + rect.getHeight()/2 + TURTLE_SIZE/2 - 30);
     Label label1 = new Label("Turtle Speed");
     turtleSpeed = createSlider();
     vBox.getChildren().add(label1);
@@ -234,10 +236,10 @@ public class SubSceneLeft extends SubScene {
   }
 
   private ImageView createTurtle() {
-//    turtle.setX(INITIAL_TURTLE_X);
-//    turtle.setY(INITIAL_TURTLE_Y);
-    turtle.setX(rect.getBoundsInParent().getCenterX() + SPACING_CONSTANT + TURTLE_SIZE / 2);
-    turtle.setY(rect.getBoundsInParent().getCenterY() + SPACING_CONSTANT + TURTLE_SIZE / 2);
+    turtle.setX(INITIAL_TURTLE_X);
+    turtle.setY(INITIAL_TURTLE_Y);
+    //turtle.setX(rect.getBoundsInParent().getCenterX() + SPACING_CONSTANT + TURTLE_SIZE / 2);
+    //turtle.setY(rect.getBoundsInParent().getCenterY() + SPACING_CONSTANT + TURTLE_SIZE / 2);
     return turtle;
   }
 

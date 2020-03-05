@@ -75,6 +75,8 @@ public class SubSceneRight extends SubScene {
   private Boolean commandEntered = false;
   private Stage stage;
 
+  private static final int SPACING = 30;
+
   public SubSceneRight() {
     root = new Group();
     vBox = new VBox();
@@ -170,9 +172,9 @@ public class SubSceneRight extends SubScene {
 
   private void createButtons(String firstName, String secondName, String thirdName,
       String fourthName, String fifthName) {
-    HBox hbox1 = new HBox(30);
-    HBox hbox2 = new HBox(30);
-    HBox hbox3 = new HBox(30);
+    HBox hbox1 = new HBox(SPACING);
+    HBox hbox2 = new HBox(SPACING);
+    HBox hbox3 = new HBox(SPACING);
     hbox1.getStyleClass().add(myResources.getString("HBox"));
     hbox2.getStyleClass().add(myResources.getString("HBox"));
     hbox3.getStyleClass().add(myResources.getString("HBox"));
@@ -244,7 +246,6 @@ public class SubSceneRight extends SubScene {
 
 
   private Scene setUpPopUp(ScrollPane helpRoot) {
-
     return new Scene(helpRoot, 600, 800, Color.LIGHTBLUE);
   }
 
