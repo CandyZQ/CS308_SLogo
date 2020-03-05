@@ -20,18 +20,16 @@ public class Turtle implements MovingObject {
           MovingObjectProperties.RETURN_VALUE, 0.0D);
   private double myDistanceTravelled;
 
-  private static final double UP_ANGLE = 90;
-  private static final double LEFT_ANGLE = 180;
-  private static final double DOWN_ANGLE = 270;
-  private static final double RIGHT_ANGLE = 360;
-
-  private static final boolean RESTRICT_HEADING = true;
-  private static final double MIN_ANGLE = -360;
-  private static final double MAX_ANGLE = 360;
-  private static final double POS_ANGLE = 0;
-
-  private static final double INF_ANGLE = 1000000;
-  private static final String HEADING_TOO_LARGE = "New heading is too large";
+  public static final double UP_ANGLE = 90;
+  public static final double LEFT_ANGLE = 180;
+  public static final double DOWN_ANGLE = 270;
+  public static final double RIGHT_ANGLE = 360;
+  public static final double MIN_ANGLE = -360;
+  public static final double MAX_ANGLE = 360;
+  public static final double POS_ANGLE = 0;
+  public static final double INF_ANGLE = 1000000;
+  public static final boolean RESTRICT_HEADING = true;
+  public static final String HEADING_TOO_LARGE = "New heading is too large";
   // Default for calculating rotation is difference moving counterclockwise
 
   /**
