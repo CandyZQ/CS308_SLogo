@@ -41,7 +41,7 @@ public class Parser implements BackEndExternalAPI {
   }
 
   private void initialize() {
-    commandsLeft = new Stack<>();
+    commandsLeft = new Stack<String>();
     pausedCommands = new Stack<>();
     tm.cleanState();
   }
@@ -74,7 +74,7 @@ public class Parser implements BackEndExternalAPI {
     initialize();
     fillStack(command);
 
-    Stack<String> temp = (Stack<String>) commandsLeft.clone();
+    Stack<String> temp = cloneStack(commandsLeft);
       for (Turtle t : tm.getTurtles()) {
       commandsLeft = (Stack<String>) temp.clone();
       while (!commandsLeft.empty()) {
@@ -82,6 +82,12 @@ public class Parser implements BackEndExternalAPI {
       }
     }
     return tm.getTurtleStates();
+  }
+
+  private Stack<String> cloneStack(Stack<String> stack) {
+    Stack<String> res = new Stack<>();
+    res.addAll(stack);
+    return res;
   }
 
   @Override
@@ -121,7 +127,7 @@ public class Parser implements BackEndExternalAPI {
   }
 
   public Map<String, List<String>> getFunctions() {
-    return userDefinedFields.getFunctions();
+    return userDefinedFields.getFunctions(); 
   }
 
   private void executeNextCommand(Turtle t)
@@ -138,14 +144,12 @@ public class Parser implements BackEndExternalAPI {
       current = commandsMapHelper.convertUserInput(commandName);
 
       while (current.needMoreParas()) {
-        // execute if other commands need to be executed for return values
         if (!canAddPara(current)) {
           pausedCommands.add(current);
           return;
         }
       }
     }
-
     pausedCommands.add(current);
     checkPausedCommands(tm, t);
   }
@@ -230,15 +234,6 @@ public class Parser implements BackEndExternalAPI {
         next.append(s);
       }
     }
-
-//    if (functions.containsKey(next.toString())) {
-//      List<String> com = functions.get(next.toString());
-//      String[] ss = com.get(1).split(" ");
-//      for (int i = ss.length - 1; i >= 0; i--) {
-//        commandsLeft.push(ss[i]);
-//      }
-//      next = new StringBuilder(popNext());
-//    }
 
     return next.toString();
   }
