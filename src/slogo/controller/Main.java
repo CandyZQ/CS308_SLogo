@@ -38,6 +38,8 @@ public class Main extends Application {
         parser = new Parser(2);
         parser.setLanguage(viewScreen.getLanguage());
         setTiming();
+
+
     }
 
     private void setTiming() {
@@ -67,6 +69,9 @@ public class Main extends Application {
         //viewScreen.getColor(String);
         parser.setLanguage(viewScreen.getLanguage());
         viewScreen.update(commands, parser.gerUserVars(), parser.getFunctions());
+        if (viewScreen.getWindowBoolean()){
+            newWindow();
+        }
     }
 
     private void newWindow(){
@@ -77,7 +82,7 @@ public class Main extends Application {
                 try {
                     newSimul.start(newStage);
                 } catch (LanguageIsNotSupportedException e) {
-                    System.out.println("Excet");
+                    System.out.println("Exception");
                 }
             });
         });

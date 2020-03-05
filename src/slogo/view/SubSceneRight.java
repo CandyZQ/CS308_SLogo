@@ -64,9 +64,10 @@ public class SubSceneRight extends SubScene {
   private String theText;
   private Boolean commandEntered = false;
   private Stage stage;
+  private boolean window = false;
   private final List<String> buttonNames = new ArrayList<String>(Arrays.asList(myResources.getString("LoadButton"),
           myResources.getString("HelpButton"), myResources.getString("ResetButton"), myResources.getString("UndoButton"),
-          myResources.getString("PenUp")));
+          myResources.getString("PenUp"), myResources.getString("NewWindow")));
 
   public SubSceneRight() {
     root = new Group();
@@ -121,19 +122,6 @@ public class SubSceneRight extends SubScene {
     });
   }
 
-//  private void createHBox() {
-//    HBox hBox = new HBox();
-//    hBox.getStyleClass().add(myResources.getString("HBox"));
-//    VBox vBoxLeft = new VBox();
-//    VBox vBoxRight = new VBox();
-//    createLabel(vBoxRight, MARKER_COLOR_LABEL);
-//    createMarkerColorPicker();
-//    createLabel(vBoxLeft, CHANGE_LANGUAGE_LABEL);
-//    createComboBox();
-//    hBox.getChildren().addAll(vBoxLeft, vBoxRight);
-//    vBox.getChildren().add(hBox);
-//  }
-
   private Region createMarkerColorPicker() {
     markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
     markerColorPicker.setOnAction(event -> {
@@ -175,6 +163,18 @@ public class SubSceneRight extends SubScene {
 
     buttons.get(4).setOnAction(event -> setPenUp());
 
+    buttons.get(5).setOnAction(event -> setWindowBoolean());
+
+  }
+
+  private void setWindowBoolean(){
+    this.window = true;
+  }
+
+  public boolean getWindowBoolean(){
+    boolean temp = window;
+    window = false;
+    return temp;
   }
 
   private void setPenUp() {
