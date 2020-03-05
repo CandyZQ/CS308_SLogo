@@ -7,7 +7,6 @@ import javafx.animation.PathTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -35,7 +34,8 @@ public class SubSceneLeft extends SubScene {
 
   private static ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
   private Turtle turtle = new Turtle(res.getString("Turtle"), 0);
-  private final List<String> buttonNames = new ArrayList<String>(Arrays.asList(res.getString("FD50"),res.getString("BK50"),
+  private final List<String> buttonNames = new ArrayList<>(
+      Arrays.asList(res.getString("FD50"), res.getString("BK50"),
           res.getString("LT50"), res.getString("RT50")));
 
 
@@ -74,11 +74,9 @@ public class SubSceneLeft extends SubScene {
     turtleSpeed = createSlider();
     vBox.getChildren().add(turtleSpeed);
 
-
     createAddLabel(res.getString("MarkerThicknessLabel"));
     thick = createSlider();
     vBox.getChildren().add(thick);
-
 
     ButtonGroup group = new ButtonGroup(buttonNames);
     vBox.getChildren().add(group.getBoxes());
@@ -86,8 +84,6 @@ public class SubSceneLeft extends SubScene {
 
     turtleStatsPopUp();
     scriptPopUp();
-
-
   }
 
   private void createAddLabel(String displayLabel){
@@ -175,7 +171,6 @@ public class SubSceneLeft extends SubScene {
       t1.setOnFinished(event -> {
 
         if (!queue.isEmpty()) {
-
           TranslateTransition t2 = move();
           t2.setOnFinished(event1 -> recurse());
         } else {
@@ -226,7 +221,6 @@ public class SubSceneLeft extends SubScene {
 
     initialX = xFinal;
     initialY = yFinal;
-
     return trans;
   }
 
@@ -245,12 +239,13 @@ public class SubSceneLeft extends SubScene {
 
   private Slider createSlider() {
     return new Slider(SLIDER_LOW_VALUE, SLIDER_HIGH_VALUE, SLIDER_STARTING_VALUE);
-
   }
 
   @Override
   public void update(Queue<Map<MovingObjectProperties, Object>> queue) {
     this.queue = queue;
+//    while(!queue.isEmpty()) {
+//      System.out.println(queue.remove().get(MovingObjectProperties.Y));} //to show issue with queue
     recurse();
     updateStatsPopUp();
   }
@@ -259,7 +254,7 @@ public class SubSceneLeft extends SubScene {
     rect.getStyleClass().add(res.getString("StyleClass"));
   }
 
-  // if Pen is Up, return true. Else return false
+  // if Pen is Up, return true, else return false
   private String penUpDown(){
     if (markerColor == null){
       return "Pen Up";

@@ -8,7 +8,7 @@ public class Turtle extends ImageView {
 
     private int turtleID;
     private Image turtleImage;
-    public static final int size = 60;
+    public static final double size = 60;
 
     public Turtle(String imagePath, int ID){
         turtleImage = new Image(imagePath);
