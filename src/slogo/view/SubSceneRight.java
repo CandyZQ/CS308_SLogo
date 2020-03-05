@@ -299,7 +299,7 @@ public class SubSceneRight extends SubScene {
   }
 
   @Override
-  public void update(Queue<EnumMap<MovingObjectProperties, Object>> movements) {
+  public void update(Queue<Map<MovingObjectProperties, Object>> movements) {
     if (!(boolean) movements.remove().get(MovingObjectProperties.PEN)) {
       markerClickedColor = null;
       markerColorPicker.setValue(markerClickedColor);

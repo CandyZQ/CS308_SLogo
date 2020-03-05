@@ -45,7 +45,7 @@ public class SubSceneLeft extends SubScene {
 
   private final ArrayList<String> buttonNames = new ArrayList<String>(Arrays.asList("FD 50","BK 50","LT 50", "RT 50"));
 
-  private Queue<EnumMap<MovingObjectProperties, Object>> queue;
+  private Queue<Map<MovingObjectProperties, Object>> queue;
 
   private int statID;
   private double statX;
@@ -226,7 +226,7 @@ public class SubSceneLeft extends SubScene {
   }
 
   @Override
-  public void update(Queue<EnumMap<MovingObjectProperties, Object>> queue) {
+  public void update(Queue<Map<MovingObjectProperties, Object>> queue) {
     this.queue = queue;
     recurse();
     updateStatsPopUp();
@@ -257,7 +257,7 @@ public class SubSceneLeft extends SubScene {
   }
 
   private TranslateTransition move() {
-    EnumMap<MovingObjectProperties, Object> movements = queue.remove();
+    Map<MovingObjectProperties, Object> movements = queue.remove();
     statID = (Integer) movements.get(MovingObjectProperties.ID);
     statX = -1 * (Double) movements.get(MovingObjectProperties.X);
     statY = -1 * (Double) movements.get(MovingObjectProperties.Y);
