@@ -30,7 +30,7 @@ public class ParserTest {
       Assert.assertEquals(50D, q.peek().get(MovingObjectProperties.Y));
       Assert.assertEquals(50D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
 
-      q = parser.execute("fd 30");
+      q = parser.execute("fd 30 fd 30");
       Assert.assertEquals(80D, q.peek().get(MovingObjectProperties.Y));
       Assert.assertEquals(30D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
@@ -115,10 +115,10 @@ public class ParserTest {
     }
 
     try {
-//      Queue<Map<MovingObjectProperties, Object>> q = parser.execute("repeat 2 [ fd 50 ]");
+      Queue<Map<MovingObjectProperties, Object>> q = parser.execute("repeat 2 [ fd 50 ]");
 //      Queue<Map<MovingObjectProperties, Object>> q = parser.execute("dotimes [ :a 3 ] [ fd 50 ]");
-      Queue<Map<MovingObjectProperties, Object>> q = parser
-          .execute("for [ :b 2 6 3 ] [ fd 50 ]");
+//      Queue<Map<MovingObjectProperties, Object>> q = parser
+//          .execute("for [ :b 2 6 3 ] [ fd 50 ]");
       printQueue(q);
 
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
@@ -232,25 +232,11 @@ public class ParserTest {
 
     try {
       Queue<Map<MovingObjectProperties, Object>> q;
-      q = parser.execute("fd 50");
-      printQueue(q);
-      q = parser.execute("f 50");
-      printQueue(q);
-
-    } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
-      System.out.println(".");
-    }
-
-    try {
-      Queue<Map<MovingObjectProperties, Object>> q;
-      q = parser.execute("fd 50");
-      printQueue(q);
-      q = parser.execute("fd 50");
+      q = parser.execute("fd 50 fd 50");
       printQueue(q);
     } catch (WrongCommandFormatException | LanguageIsNotSupportedException | InvalidArgumentException | CommandDoesNotExistException e) {
       e.printStackTrace();
     }
-
   }
 
   @Test
@@ -265,7 +251,7 @@ public class ParserTest {
 
     try {
       Queue<Map<MovingObjectProperties, Object>> q;
-      q = parser.execute("for [ :v 0 99 0 ] [ set :v sum ycor fd 1 ]");
+      q = parser.execute("for [ :v 0 99 0 ] [ fd 1 set :v xcor ]");
       printQueue(q);
 
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
