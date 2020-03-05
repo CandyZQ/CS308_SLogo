@@ -28,6 +28,9 @@ public abstract class SubScene {
   protected static ResourceBundle myLanguages =
       ResourceBundle.getBundle("languages", Locale.getDefault());
 
+  public boolean commandEntered = false;
+  public String theText;
+
   public Group getRoot() {
     return root;
   }

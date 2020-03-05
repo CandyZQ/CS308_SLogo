@@ -36,7 +36,7 @@ public interface BackEndExternalAPI {
    *
    * @param language the language user inputs will be in
    */
-  void setLanguage(String language) throws LanguageIsNotSupportedException;
+  String[] setLanguage(String language) throws LanguageIsNotSupportedException;
 
   /**
    * Accepts one command from user input and updates the backend states accordingly
