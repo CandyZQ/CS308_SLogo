@@ -75,16 +75,14 @@ public class Main extends Application {
 
     private void newWindow(){
         Stage newStage = new Stage();
-        Thread thread = new Thread(() -> {
-            Platform.runLater(() -> {
-                Main newSimul = new Main();
-                try {
-                    newSimul.start(newStage);
-                } catch (LanguageIsNotSupportedException e) {
-                    System.out.println("Excet");
-                }
-            });
-        });
+        Thread thread = new Thread(() -> Platform.runLater(() -> {
+            Main newSimul = new Main();
+            try {
+                newSimul.start(newStage);
+            } catch (LanguageIsNotSupportedException e) {
+                System.out.println("Excet");
+            }
+        }));
         thread.start();
     }
 }

@@ -93,8 +93,7 @@ public class ViewScreen implements ExternalAPIViewable {
     scLeft.listenToDisableTextField(scRight.getTextField());
     scRight.setVariableTextArea(variables);
     scRight.setUserTextArea(functions);
-    windowBoolean = scRight.getWindowBoolean();
-    scRight.executeFixedCommand(scLeft.getCommand());
+    //windowBoolean = scRight.getWindowBoolean();
     scRight.execute(scLeft.getCommand());
     if (commands != null && commands.peek() != null) {
 //      if (commands.peek().get(MovingObjectProperties.CLEAR).toString().contentEquals("true")) {
