@@ -18,10 +18,12 @@ public class ViewScreen implements ExternalAPIViewable {
   public static final String STYLE_SHEET = "style.css";
 
 
+
   private static SubSceneLeft scLeft;
   private static SubSceneRight scRight;
   private Stage stage;
   private Scene scene;
+  private boolean windowBoolean;
 
   public ViewScreen(Stage stage) {
     this.stage = stage;
@@ -88,6 +90,8 @@ public class ViewScreen implements ExternalAPIViewable {
     scLeft.listenToDisableTextField(scRight.getTextField());
     scRight.setVariableTextArea(variables);
     scRight.setUserTextArea(functions);
+    windowBoolean = scRight.getWindowBoolean();
+    scRight.executeFixedCommand(scLeft.getCommand());
     if (commands != null && commands.peek() != null) {
 //      if (commands.peek().get(MovingObjectProperties.CLEAR).toString().contentEquals("true")) {
 //        scLeft.setMarkerColor(null);
@@ -106,5 +110,9 @@ public class ViewScreen implements ExternalAPIViewable {
   @Override
   public void getColor(String hexColor) {
     scLeft.setMarkerColor(Color.web(hexColor));
+  }
+
+  public boolean getWindowBoolean(){
+    return windowBoolean;
   }
 }
