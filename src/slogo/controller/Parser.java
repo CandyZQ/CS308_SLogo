@@ -65,7 +65,7 @@ public class Parser implements BackEndExternalAPI {
    * @throws InvalidArgumentException
    */
   @Override
-  public Queue<EnumMap<MovingObjectProperties, Object>> execute(String command)
+  public Queue<Map<MovingObjectProperties, Object>> execute(String command)
       throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException {
     initialize();
     fillStack(command);
@@ -81,11 +81,11 @@ public class Parser implements BackEndExternalAPI {
   }
 
   @Override
-  public Queue<EnumMap<MovingObjectProperties, Object>> runScript(String filename)
+  public Queue<Map<MovingObjectProperties, Object>> runScript(String filename)
       throws IOException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException {
-    Queue<EnumMap<MovingObjectProperties, Object>> commandResults = new LinkedList<>();
-    Queue<EnumMap<MovingObjectProperties, Object>> commandResult;
-    EnumMap<MovingObjectProperties, Object> turtleState;
+    Queue<Map<MovingObjectProperties, Object>> commandResults = new LinkedList<>();
+    Queue<Map<MovingObjectProperties, Object>> commandResult;
+    Map<MovingObjectProperties, Object> turtleState;
     FileReader file = new FileReader(filename);
     List<String> commands = file.processScript();
     for (int i = 0; i < commands.size(); i++) {

@@ -34,18 +34,18 @@ public class UserOperations extends Operations{
 //    return loop(1, expr,1, commands, LOOP_EXPR);
 //  }
 //
-//  private void loop(Integer start, Integer end, Integer increment, String commands, String variable)
-//      throws InvalidArgumentException {
-//    StringBuilder sb = new StringBuilder();
-//    userDefinedFields.putUserVar(variable, Double.valueOf(start));
-//    String as = commands.substring(TRIM, commands.length() - TRIM);
-//    for (; userDefinedFields.getUserVar(variable) <= end; userDefinedFields.incrementVarBy(variable, Double.valueOf(increment))) {
-//      sb.append(as);
-//      sb.append(" ");
-//    }
-//    userDefinedFields.setExtraCommands(sb.toString());
-//  }
-////
+  private void loop(Integer start, Integer end, Integer increment, String commands, String variable)
+      throws InvalidArgumentException {
+    StringBuilder sb = new StringBuilder();
+    userDefinedFields.putUserVar(variable, Double.valueOf(start));
+    String as = commands.substring(TRIM, commands.length() - TRIM);
+    for (; userDefinedFields.getUserVar(variable) <= end; userDefinedFields.incrementVarBy(variable, Double.valueOf(increment))) {
+      sb.append(as);
+      sb.append(" ");
+    }
+    userDefinedFields.setExtraCommands(sb.toString());
+  }
+//
 //   public String doTimes(String vl, String commands) throws InvalidArgumentException {
 //    String variable = vl.split(" ")[1];
 //    checkType(variable, BasicSyntax.VARIABLE, 1);
