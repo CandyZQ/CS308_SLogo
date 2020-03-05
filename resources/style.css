@@ -57,3 +57,8 @@
   -fx-padding: 80;
   -fx-spacing: 20;
 }
+
+.thishbox {
+  -fx-alignment: center;
+  -fx-background-color: BLACK;
+}
