@@ -65,4 +65,9 @@ public interface ExternalAPIViewable {
    * @return The string of the language that was selected to identify the commands in.
    */
   String getLanguage();
+
+  /**
+   * @return
+   */
+  void getColor(String hexColor);
 }

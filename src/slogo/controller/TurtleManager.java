@@ -1,9 +1,9 @@
 package slogo.controller;
 
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import slogo.controller.listings.MovingObjectProperties;
@@ -15,7 +15,7 @@ public class TurtleManager {
   private Turtle[] turtles;
   private Set<Turtle> activeTurtles;
   private Set<Integer> turtlesExisted;
-  private Queue<EnumMap<MovingObjectProperties, Object>> turtleStates;
+  private Queue<Map<MovingObjectProperties, Object>> turtleStates;
 
   public TurtleManager(int turtleNumber) {
     turtles = new Turtle[TURTLE_NUM_MAX];
@@ -30,7 +30,7 @@ public class TurtleManager {
     turtleStates = new LinkedList<>();
   }
 
-  public Queue<EnumMap<MovingObjectProperties, Object>> getTurtleStates() {
+  public Queue<Map<MovingObjectProperties, Object>> getTurtleStates() {
     return turtleStates;
   }
 
@@ -68,5 +68,9 @@ public class TurtleManager {
   void putReturnValue(Object returnVal, Turtle t) {
     Integer id = (Integer) t.getState().get(MovingObjectProperties.ID);
     turtles[id].getState().put(MovingObjectProperties.RETURN_VALUE, returnVal);
+  }
+
+  int getActiveTurtleNum() {
+    return activeTurtles.size();
   }
 }

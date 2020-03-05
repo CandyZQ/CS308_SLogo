@@ -33,7 +33,7 @@ public abstract class SubScene {
     return root;
   }
 
-  public abstract void update(Queue<EnumMap<MovingObjectProperties, Object>> movements);
+  public abstract void update(Queue<Map<MovingObjectProperties, Object>> movements);
 
   public static void updateResourceBundle() {
     myResources = ResourceBundle.getBundle("resources",

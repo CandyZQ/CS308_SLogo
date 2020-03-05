@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import slogo.controller.listings.BasicSyntax;
 import slogo.controller.listings.CommandType;
@@ -16,6 +17,7 @@ import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 
 public class CommandsMapHelper {
+
   public static final String RESOURCE_DIR = "resources/languages/";
   public static final String SYNTAX_FILE = "Syntax";
 
@@ -60,6 +62,11 @@ public class CommandsMapHelper {
       throw new LanguageIsNotSupportedException(
           "Cannot find any commands of the given language " + currnetLan.name() + ".");
     }
+
+    if (command.equals(Parser.FUNCTION_METHOD)) {
+      return findClass(command.toLowerCase());
+    }
+
     for (String key : commandsMap.keySet()) {
       if (SyntaxHelper.isMatch(command, commandsMap.get(key))) {
         return findClass(key.toLowerCase());
@@ -75,7 +82,8 @@ public class CommandsMapHelper {
         Class<?> commandsClass = Class.forName("slogo.controller.operations." + c.name());
         Method method = findMethod(commandsClass.getDeclaredMethods(), commandName);
         if (method != null) {
-          return new CommandStructure(commandsClass, method);
+          return c.equals(CommandType.SystemCommands) ? new FunctionStructure(commandsClass, method)
+              : new CommandStructure(commandsClass, method);
         }
       } catch (ClassNotFoundException e) {
         System.out.println(
@@ -97,12 +105,13 @@ public class CommandsMapHelper {
   }
 
   public static class SyntaxHelper {
+
     public static boolean isType(String input, BasicSyntax type) throws InvalidArgumentException {
       return getInputType(input).equals(type);
     }
 
     private static BasicSyntax getInputType(String input) throws InvalidArgumentException {
-      for (String key: syntaxMap.keySet()) {
+      for (String key : syntaxMap.keySet()) {
         if (isMatch(input, syntaxMap.get(key))) {
           return BasicSyntax.valueOf(key.toUpperCase());
         }

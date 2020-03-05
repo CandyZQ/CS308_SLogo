@@ -28,7 +28,7 @@ import slogo.exceptions.WrongCommandFormatException;
  */
 public interface BackEndExternalAPI {
 
-  Queue<EnumMap<MovingObjectProperties, Object>> runScript(String command) throws IOException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException;
+  Queue<Map<MovingObjectProperties, Object>> runScript(String command) throws IOException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException;
 
   /**
    * Sets the desired language commands the user passed will be interpreted in. This method can be
@@ -44,6 +44,6 @@ public interface BackEndExternalAPI {
    * @param command the command that the user inputs
    * @return a {@code Queue} of {@code Map} that represents states of the backend
    */
-  Queue<EnumMap<MovingObjectProperties, Object>> execute(String command)
+  Queue<Map<MovingObjectProperties, Object>> execute(String command)
       throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException;
 }
