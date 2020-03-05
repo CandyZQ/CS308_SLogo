@@ -28,12 +28,9 @@ public class SubSceneRight extends SubScene {
   private final ImageView helpImage1 = new ImageView(new Image(myResources.getString("BasicSyntax")));
   private final ImageView helpImage2 = new ImageView(new Image(myResources.getString("TurtleCommands")));
   private final ImageView helpImage3 = new ImageView(new Image(myResources.getString("TurtleQueries")));
-  private final ImageView helpImage4 = new ImageView(
-      new Image(myResources.getString("MathOperations")));
-  private final ImageView helpImage5 = new ImageView(
-      new Image(myResources.getString("BooleanOperations")));
-  private final ImageView helpImage6 = new ImageView(
-      new Image(myResources.getString("UserDefined")));
+  private final ImageView helpImage4 = new ImageView(new Image(myResources.getString("MathOperations")));
+  private final ImageView helpImage5 = new ImageView(new Image(myResources.getString("BooleanOperations")));
+  private final ImageView helpImage6 = new ImageView(new Image(myResources.getString("UserDefined")));
 
 
   private Turtle turtle = new Turtle(myResources.getString("Turtle"), 0);
@@ -74,7 +71,7 @@ public class SubSceneRight extends SubScene {
   private String theText;
   private Boolean commandEntered = false;
   private Stage stage;
-  private final ArrayList<String> buttonNames = new ArrayList<String>(Arrays.asList(myResources.getString("LoadButton"),
+  private final List<String> buttonNames = new ArrayList<String>(Arrays.asList(myResources.getString("LoadButton"),
           myResources.getString("HelpButton"), myResources.getString("ResetButton"), myResources.getString("UndoButton"),
           myResources.getString("PenUp")));
 
@@ -138,16 +135,7 @@ public class SubSceneRight extends SubScene {
     vBox.getChildren().add(hBox);
   }
 
-  private void createMarkerColorPicker(Pane pane) {
-    markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
-    pane.getChildren().add(markerColorPicker);
-    markerColorPicker.setOnAction(event -> {
-      markerClickedColor = markerColorPicker.getValue();
-      commandTextArea
-          .setText(
-              commandTextArea.getText() + "\n" + NEW_MARKER_COLOR + markerClickedColor.toString());
-    });
-  }
+
 
   private void createComboBox(Pane box) {
     ComboBox<String> combo_box = new ComboBox<>(FXCollections.observableArrayList(language_names));
@@ -173,7 +161,7 @@ public class SubSceneRight extends SubScene {
 
   private void buttonListeners(ButtonGroup group) {
 
-    ArrayList<Button> buttons = group.getButtons();
+    List<Button> buttons = group.getButtons();
     buttons.get(0).setOnAction(event -> setTurtleImage());
 
     buttons.get(1).setOnAction(event -> displayPopUp());
@@ -280,6 +268,17 @@ public class SubSceneRight extends SubScene {
     });
   }
 
+  private void createMarkerColorPicker(Pane pane) {
+    markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
+    pane.getChildren().add(markerColorPicker);
+    markerColorPicker.setOnAction(event -> {
+      markerClickedColor = markerColorPicker.getValue();
+      commandTextArea
+              .setText(
+                      commandTextArea.getText() + "\n" + NEW_MARKER_COLOR + markerClickedColor.toString());
+    });
+  }
+
   public void setVariableTextArea(Map<String, Double> vars) {
     variableTextArea.setText(VARIABLE_AREA_TEXT);
     for (Map.Entry<String, Double> entry : vars.entrySet()) {
@@ -342,7 +341,7 @@ public class SubSceneRight extends SubScene {
   public Color getMarkerClickedColor() {
     return markerClickedColor;
   }
-  
+
   public String getTheText() {
     if (commandEntered) {
       commandEntered = false;

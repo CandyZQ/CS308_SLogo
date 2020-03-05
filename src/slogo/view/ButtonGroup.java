@@ -4,27 +4,27 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ButtonGroup {
 
     private HBox box;
-    private ArrayList<HBox> hboxes;
+    private List<HBox> hboxes;
     private VBox vbox;
     private final int VBOX_SPACING = 20;
 
-    private ArrayList<Button> buttons;
+    private List<Button> buttons;
 
-    private ArrayList<String> numButtons;
+    private List<String> numButtons;
 
 
     private static ResourceBundle myResources =
             ResourceBundle.getBundle("resources", Locale.getDefault());
 
-    public ButtonGroup(ArrayList<String> number){
+    public ButtonGroup(List<String> number){
         vbox = new VBox(VBOX_SPACING);
         numButtons = number;
         hboxes = new ArrayList<>();
@@ -87,7 +87,7 @@ public class ButtonGroup {
         }
     }
 
-    public ArrayList<Button> getButtons(){
+    public List<Button> getButtons(){
         return buttons;
     }
 
