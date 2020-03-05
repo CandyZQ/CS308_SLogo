@@ -1,7 +1,7 @@
 package slogo.controller.operations;
 
-import static slogo.controller.operations.UserOperations.APPEND_METHOD;
-import static slogo.controller.operations.UserOperations.TRIM;
+import static slogo.controller.Parser.APPEND_METHOD;
+import static slogo.controller.Parser.TRIM;
 
 import java.util.List;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
@@ -56,6 +56,12 @@ public class SystemCommands extends Operations {
       sb.append(INCREMENT_METHOD + " ").append(variable).append(" ").append(increment).append(" ");
       sb.append(APPEND_METHOD).append(" ").append(variable).append(" ").append(end).append(" ").append(increment).append(" ").append(commands);
       userDefinedFields.setExtraCommands(sb.toString());
+    }
+  }
+
+  public void condition(Integer expr, String commands) {
+    if (expr != 0) {
+      userDefinedFields.setExtraCommands(commands.substring(TRIM, commands.length() - TRIM));
     }
   }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
+import slogo.controller.Parser;
 import slogo.controller.TurtleManager;
 import slogo.controller.UserDefinedFields;
 import slogo.controller.listings.BasicSyntax;
@@ -12,13 +13,11 @@ import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
 
 public class UserOperations extends Operations{
-  public static final int TRIM = 2;
+
   public static final String LOOP_EXPR = ":repcount";
-  public static final String APPEND_METHOD = "append";
 
   public UserOperations(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {
     super(turtle, userDefinedFields, tm);
-
   }
 
   public Double makeVariable(String variable, Double expr) throws InvalidArgumentException {
@@ -42,7 +41,7 @@ public class UserOperations extends Operations{
     }
 
     userDefinedFields.putUserVar(variable, Double.parseDouble(String.valueOf(start)));
-    sb.append(APPEND_METHOD).append(" ").append(variable).append(" ").append(end).append(" ")
+    sb.append(Parser.APPEND_METHOD).append(" ").append(variable).append(" ").append(end).append(" ")
         .append(increment).append(" ").append(commands);
     userDefinedFields.setExtraCommands(sb.toString());
   }
@@ -82,7 +81,7 @@ public class UserOperations extends Operations{
 
   public void IF(Integer expr, String commands) {
     if (expr != 0) {
-      userDefinedFields.setExtraCommands(commands.substring(TRIM, commands.length() - TRIM));
+      userDefinedFields.setExtraCommands(Parser.CONDITION_METHOD + " 1 " + commands);
     } else {
       returnZero();
     }
@@ -90,18 +89,20 @@ public class UserOperations extends Operations{
 
   public void ifElse(Integer expr, String trueCommands, String falsecommands) {
     if (expr != 0) {
-      userDefinedFields.setExtraCommands(trueCommands.substring(TRIM, trueCommands.length() - TRIM));
+      userDefinedFields.setExtraCommands(trueCommands.substring(
+          Parser.TRIM, trueCommands.length() - Parser.TRIM));
     } else {
-      userDefinedFields.setExtraCommands(falsecommands.substring(TRIM, falsecommands.length() - TRIM));
+      userDefinedFields.setExtraCommands(falsecommands.substring(
+          Parser.TRIM, falsecommands.length() - Parser.TRIM));
     }
   }
 
   public Integer makeUserInstruction(String commandName, String variables, String commands)
       throws InvalidArgumentException {
     List<String> current = new ArrayList<>(
-        Collections.singletonList(commands.substring(TRIM, commands.length() - TRIM)));
+        Collections.singletonList(commands.substring(Parser.TRIM, commands.length() - Parser.TRIM)));
     if (isValidInsideBracket(variables)) {
-      String[] vars = variables.substring(TRIM, variables.length() - TRIM).split(" ");
+      String[] vars = variables.substring(Parser.TRIM, variables.length() - Parser.TRIM).split(" ");
       for (String v : vars) {
         if (!SyntaxHelper.isType(v, BasicSyntax.VARIABLE)) {
           returnZero();
@@ -117,6 +118,6 @@ public class UserOperations extends Operations{
   }
 
   private boolean isValidInsideBracket(String command) {
-    return command.length() > TRIM * 2;
+    return command.length() > Parser.TRIM * 2;
   }
 }

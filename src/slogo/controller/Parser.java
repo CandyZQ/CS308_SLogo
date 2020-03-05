@@ -21,7 +21,11 @@ import slogo.model.Turtle;
 
 public class Parser implements BackEndExternalAPI {
 
+  public static final int TRIM = 2;
   public static final String FUNCTION_METHOD = "doFunction";
+  public static final String APPEND_METHOD = "append";
+  public static final String CONDITION_METHOD = "condition";
+
   private CommandsMapHelper commandsMapHelper;
   private UserDefinedFields userDefinedFields;
   private TurtleManager tm;
@@ -71,7 +75,7 @@ public class Parser implements BackEndExternalAPI {
     fillStack(command);
 
     Stack<String> temp = (Stack<String>) commandsLeft.clone();
-    for (Turtle t : tm.getTurtles()) {
+      for (Turtle t : tm.getTurtles()) {
       commandsLeft = (Stack<String>) temp.clone();
       while (!commandsLeft.empty()) {
         executeNextCommand(t);
