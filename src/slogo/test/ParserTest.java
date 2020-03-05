@@ -1,6 +1,6 @@
 package slogo.test;
 
-import java.util.EnumMap;
+import java.util.Map;
 import java.util.Map;
 import java.util.Queue;
 import org.junit.Assert;
@@ -24,7 +24,7 @@ public class ParserTest {
       e.printStackTrace();
     }
 
-    Queue<EnumMap<MovingObjectProperties, Object>> q = null;
+    Queue<Map<MovingObjectProperties, Object>> q = null;
     try {
       q = parser.execute("FORWARD 50");
       Assert.assertEquals(50D, q.peek().get(MovingObjectProperties.Y));
@@ -67,7 +67,7 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("goto 3 4");
+      Queue<Map<MovingObjectProperties, Object>> q = parser.execute("goto 3 4");
       Assert.assertEquals(3D, q.peek().get(MovingObjectProperties.X));
       Assert.assertEquals(4D, q.peek().get(MovingObjectProperties.Y));
       Assert.assertEquals(5D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
@@ -92,7 +92,7 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("forward sum 10 sum 25 50");
+      Queue<Map<MovingObjectProperties, Object>> q = parser.execute("forward sum 10 sum 25 50");
       q.poll();
       q.poll();
       Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
@@ -115,9 +115,9 @@ public class ParserTest {
     }
 
     try {
-//      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("repeat 2 [ fd 50 ]");
-//      Queue<EnumMap<MovingObjectProperties, Object>> q = parser.execute("dotimes [ :a 3 ] [ fd 50 ]");
-      Queue<EnumMap<MovingObjectProperties, Object>> q = parser
+//      Queue<Map<MovingObjectProperties, Object>> q = parser.execute("repeat 2 [ fd 50 ]");
+//      Queue<Map<MovingObjectProperties, Object>> q = parser.execute("dotimes [ :a 3 ] [ fd 50 ]");
+      Queue<Map<MovingObjectProperties, Object>> q = parser
           .execute("for [ :b 2 6 3 ] [ fd 50 ]");
       printQueue(q);
 
@@ -137,7 +137,7 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q;
+      Queue<Map<MovingObjectProperties, Object>> q;
 //      q = parser.execute("if equal? 50 50 [ fd 50 ]");
 //      printQueue(q);
       q = parser.execute("if 1 [ fd 50 ]");
@@ -161,7 +161,7 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q;
+      Queue<Map<MovingObjectProperties, Object>> q;
       q = parser.execute("make :a 1");
       q = parser.execute("fd :a");
 //      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
@@ -184,7 +184,7 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q;
+      Queue<Map<MovingObjectProperties, Object>> q;
       q = parser.execute("to hi [ :a ] [ fd :a ]");
       printQueue(q);
 
@@ -209,7 +209,7 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q;
+      Queue<Map<MovingObjectProperties, Object>> q;
       q = parser.execute("tell [ 0 1 ]");
       printQueue(q);
 //      q = parser.execute("fd 50");
@@ -231,7 +231,7 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q;
+      Queue<Map<MovingObjectProperties, Object>> q;
       q = parser.execute("fd 50");
       printQueue(q);
       q = parser.execute("f 50");
@@ -242,7 +242,7 @@ public class ParserTest {
     }
 
     try {
-      Queue<EnumMap<MovingObjectProperties, Object>> q;
+      Queue<Map<MovingObjectProperties, Object>> q;
       q = parser.execute("fd 50");
       printQueue(q);
       q = parser.execute("fd 50");
@@ -254,7 +254,7 @@ public class ParserTest {
   }
 
 
-  private void printQueue(Queue<EnumMap<MovingObjectProperties, Object>> q) {
+  private void printQueue(Queue<Map<MovingObjectProperties, Object>> q) {
     while (!q.isEmpty()) {
       Map<MovingObjectProperties, Object> map = q.poll();
 

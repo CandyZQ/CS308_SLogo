@@ -2,6 +2,7 @@ package slogo.controller;
 
 import java.io.IOException;
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.Queue;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -56,7 +57,7 @@ public class Main extends Application {
             throws WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException, IOException {
         String inputString = viewScreen.getInputString();
         boolean runScript = viewScreen.getRunScript();
-        Queue<EnumMap<MovingObjectProperties, Object>> commands = null;
+        Queue<Map<MovingObjectProperties, Object>> commands = null;
         if (runScript) {
             commands = parser.runScript(viewScreen.getScript());
         } else if (inputString != null) {
