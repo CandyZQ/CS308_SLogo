@@ -1,6 +1,7 @@
 package slogo.view;
 
 
+import java.io.File;
 import java.util.*;
 import javafx.collections.FXCollections;
 import javafx.scene.Group;
@@ -272,17 +273,6 @@ public class SubSceneRight extends SubScene {
       clickedColor = backgroundColorPicker.getValue();
       commandTextArea.setText(
           commandTextArea.getText() + "\n" + NEW_BACKGROUND_COLOR + clickedColor.toString());
-    });
-  }
-
-  private void createMarkerColorPicker(Pane pane) {
-    markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
-    pane.getChildren().add(markerColorPicker);
-    markerColorPicker.setOnAction(event -> {
-      markerClickedColor = markerColorPicker.getValue();
-      commandTextArea
-              .setText(
-                      commandTextArea.getText() + "\n" + NEW_MARKER_COLOR + markerClickedColor.toString());
     });
   }
 
