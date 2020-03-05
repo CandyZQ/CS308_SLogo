@@ -1,5 +1,8 @@
 package slogo.controller.operations;
 
+import static slogo.controller.operations.UserOperations.APPEND_METHOD;
+import static slogo.controller.operations.UserOperations.TRIM;
+
 import java.util.List;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.TurtleManager;
@@ -10,6 +13,7 @@ import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
 
 public class SystemCommands extends Operations {
+  public static final String INCREMENT_METHOD = "increment";
 
   public SystemCommands(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {
     super(turtle, userDefinedFields, tm);
@@ -36,7 +40,22 @@ public class SystemCommands extends Operations {
       }
       userDefinedFields.putUserVar(variables.get(i), Double.valueOf(info.get(i)));
     }
-
     userDefinedFields.setExtraCommands(commands);
+  }
+
+  public void increment(String var, Double amount) {
+    userDefinedFields.incrementVarBy(var, amount);
+  }
+
+  public void append(String variable, Integer end, Integer increment, String commands) {
+    String as = commands.substring(TRIM, commands.length() - TRIM);
+    StringBuilder sb = new StringBuilder();
+
+    if (userDefinedFields.getUserVar(variable) <= end) {
+      sb.append(as).append(" ");
+      sb.append(INCREMENT_METHOD + " ").append(variable).append(" ").append(increment).append(" ");
+      sb.append(APPEND_METHOD).append(" ").append(variable).append(" ").append(end).append(" ").append(increment).append(" ").append(commands);
+      userDefinedFields.setExtraCommands(sb.toString());
+    }
   }
 }

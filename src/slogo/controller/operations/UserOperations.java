@@ -12,10 +12,9 @@ import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
 
 public class UserOperations extends Operations{
-
   public static final int TRIM = 2;
-
   public static final String LOOP_EXPR = ":repcount";
+  public static final String APPEND_METHOD = "append";
 
   public UserOperations(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {
     super(turtle, userDefinedFields, tm);
@@ -37,17 +36,14 @@ public class UserOperations extends Operations{
   private void loop(Integer start, Integer end, Integer increment, String commands, String variable)
       throws InvalidArgumentException {
     StringBuilder sb = new StringBuilder();
-    userDefinedFields.putUserVar(variable, Double.valueOf(start));
     if (!isValidInsideBracket(commands)) {
       returnZero();
       return;
     }
 
-    String as = commands.substring(TRIM, commands.length() - TRIM);
-    for (; userDefinedFields.getUserVar(variable) <= end; userDefinedFields.incrementVarBy(variable, Double.valueOf(increment))) {
-      sb.append(as);
-      sb.append(" ");
-    }
+    userDefinedFields.putUserVar(variable, Double.parseDouble(String.valueOf(start)));
+    sb.append(APPEND_METHOD).append(" ").append(variable).append(" ").append(end).append(" ")
+        .append(increment).append(" ").append(commands);
     userDefinedFields.setExtraCommands(sb.toString());
   }
 
@@ -86,7 +82,7 @@ public class UserOperations extends Operations{
 
   public void IF(Integer expr, String commands) {
     if (expr != 0) {
-      userDefinedFields.setExtraCommands(commands.substring(2, commands.length() - 2));
+      userDefinedFields.setExtraCommands(commands.substring(TRIM, commands.length() - TRIM));
     } else {
       returnZero();
     }

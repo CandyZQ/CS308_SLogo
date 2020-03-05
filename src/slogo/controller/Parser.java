@@ -173,7 +173,7 @@ public class Parser implements BackEndExternalAPI {
         if (returnVal != null) {
           pausedCommands.peek().addPara(returnVal);
         }
-        while (!commandsLeft.empty()) {
+        while (!commandsLeft.empty() && pausedCommands.peek().needMoreParas()) {
           if (!canAddPara(pausedCommands.peek())) {
             break;
           }

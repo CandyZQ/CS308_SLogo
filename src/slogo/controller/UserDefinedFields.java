@@ -15,13 +15,13 @@ public class UserDefinedFields {
   private Map<String, List<String>> functions;
   private Map<String, Double> userVars;
   private String extraCommands;
-  private String prevExtraCommands;
+  private boolean hasReturned;
 
   public UserDefinedFields() {
     userVars = new HashMap<>();
     functions = new HashMap<>();
     extraCommands = "";
-    prevExtraCommands = "";
+    hasReturned = true;
   }
 
   String getVar(String key) throws InvalidArgumentException {
@@ -65,14 +65,15 @@ public class UserDefinedFields {
 
   public void setExtraCommands(String extraCommands) {
     this.extraCommands = extraCommands;
+    hasReturned = false;
   }
 
   String getExtraCommands() {
     // extra commands should have no [] around
-    if (extraCommands.equals(prevExtraCommands) ) {
+    if (hasReturned) {
       return "";
     }
-    prevExtraCommands = extraCommands;
+    hasReturned = true;
     return extraCommands;
   }
 

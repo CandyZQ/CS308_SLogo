@@ -26,4 +26,9 @@ public class MultiTurtleOperations extends Operations {
   public Integer id () {
     return (Integer) turtle.getState().get(MovingObjectProperties.ID);
   }
+
+  public void ask (String turtles, String commands) throws InvalidArgumentException {
+    tell(turtles);
+    userDefinedFields.setExtraCommands(commands.substring(UserOperations.TRIM, commands.length() - UserOperations.TRIM));
+  }
 }

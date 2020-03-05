@@ -251,7 +251,7 @@ public class ParserTest {
 
     try {
       Queue<Map<MovingObjectProperties, Object>> q;
-      q = parser.execute("for [ :v 0 99 0 ] [ fd 1 set :v xcor ]");
+      q = parser.execute("for [ :v 0 5 0 ] [ fd 1 set :v ycor ]");
       printQueue(q);
 
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {

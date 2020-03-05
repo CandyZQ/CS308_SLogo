@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.function.Function;
 import java.util.regex.Pattern;
 import slogo.controller.listings.BasicSyntax;
 import slogo.controller.listings.CommandType;
 import slogo.controller.listings.Languages;
+import slogo.controller.operations.SystemCommands;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
@@ -20,6 +20,7 @@ public class CommandsMapHelper {
 
   public static final String RESOURCE_DIR = "resources/languages/";
   public static final String SYNTAX_FILE = "Syntax";
+  public static final String OPERATIONS_DIR = "slogo.controller.operations.";
 
   private List<Languages> supportedLanguages;
   private Languages currnetLan;
@@ -63,7 +64,7 @@ public class CommandsMapHelper {
           "Cannot find any commands of the given language " + currnetLan.name() + ".");
     }
 
-    if (command.equals(Parser.FUNCTION_METHOD)) {
+    if (findInSysCommands(command)) {
       return findClass(command.toLowerCase());
     }
 
@@ -72,17 +73,28 @@ public class CommandsMapHelper {
         return findClass(key.toLowerCase());
       }
     }
+
     throw new CommandDoesNotExistException(
         "Cannot recognize command " + command + " for the given language.");
+  }
+
+  private boolean findInSysCommands(String command) {
+    Class<SystemCommands> c = SystemCommands.class;
+    for (Method m: c.getDeclaredMethods()) {
+      if (m.getName().equalsIgnoreCase(command)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private CommandStructure findClass(String commandName) throws CommandDoesNotExistException {
     for (CommandType c : CommandType.values()) {
       try {
-        Class<?> commandsClass = Class.forName("slogo.controller.operations." + c.name());
+        Class<?> commandsClass = Class.forName(OPERATIONS_DIR + c.name());
         Method method = findMethod(commandsClass.getDeclaredMethods(), commandName);
         if (method != null) {
-          return c.equals(CommandType.SystemCommands) ? new FunctionStructure(commandsClass, method)
+          return method.getName().equalsIgnoreCase(Parser.FUNCTION_METHOD) ? new FunctionStructure(commandsClass, method)
               : new CommandStructure(commandsClass, method);
         }
       } catch (ClassNotFoundException e) {
@@ -90,7 +102,6 @@ public class CommandsMapHelper {
             "Internal Error: operation class name defined in CommandType but not implemented.");
       }
     }
-
     throw new CommandDoesNotExistException(
         "User input command \"" + commandName + "\" is not defined!");
   }
@@ -105,7 +116,6 @@ public class CommandsMapHelper {
   }
 
   public static class SyntaxHelper {
-
     public static boolean isType(String input, BasicSyntax type) throws InvalidArgumentException {
       return getInputType(input).equals(type);
     }
