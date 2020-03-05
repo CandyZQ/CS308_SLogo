@@ -1,10 +1,9 @@
 package slogo.view;
 
 
+import java.io.File;
 import java.util.*;
 import javafx.collections.FXCollections;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -12,15 +11,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.geometry.Pos;
-import slogo.controller.listings.MovingObjectProperties;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import java.io.File;
+import slogo.controller.listings.MovingObjectProperties;
 
 public class SubSceneRight extends SubScene {
 
@@ -54,11 +50,8 @@ public class SubSceneRight extends SubScene {
   private final FileChooser fileChooser = new FileChooser();
 
 
-  private ColorPicker cp;
-
   private ColorPicker backgroundColorPicker;
   private ColorPicker markerColorPicker;
-  //private Object language;
   private Color clickedColor = INITIAL_BACKGROUND_COLOR;
   private Color markerClickedColor = INITIAL_MARKER_COLOR;
   private TextField name;
@@ -78,85 +71,99 @@ public class SubSceneRight extends SubScene {
   public SubSceneRight() {
     root = new Group();
     vBox = new VBox();
-    for(String key: Collections.list(myLanguages.getKeys())){
-      language_names.add(myLanguages.getString(key));
-    }
     vBox.getStyleClass().add(myResources.getString("VBox"));
     root.getChildren().add(vBox);
-    createLabel(vBox, BACKGROUND_COLOR_LABEL);
+    for (String key : Collections.list(myLanguages.getKeys())) {
+      language_names.add(myLanguages.getString(key));
+    }
+    makeHBox(createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT),
+        createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA), "thishbox");
+    vBox.getChildren().add(createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT));
+    createTextField();
+    makeHBox(makeVBox(createLabel(CHANGE_LANGUAGE_LABEL), createComboBox()),
+        makeVBox(createLabel(MARKER_COLOR_LABEL), createMarkerColorPicker()), "hbox");
+    vBox.getChildren().add(createLabel(BACKGROUND_COLOR_LABEL));
     createBackgroundColorPicker();
     ButtonGroup group = new ButtonGroup(buttonNames);
     vBox.getChildren().add(group.getBoxes());
     buttonListeners(group);
-    createHBox();
-    createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
-    createTextField();
     scriptRunTextField(); // added for scripting
     listenForCommandSelection();
-    createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
+    //createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
     listenForVariableSelection();
-    createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA);
+    //createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA);
+  }
+
+  private void makeHBox(Region left, Region right, String style) {
+    HBox hBox = new HBox();
+    hBox.getStyleClass().add(style);
+    hBox.getChildren().addAll(left, right);
+    vBox.getChildren().addAll(hBox);
+  }
+
+  private Region makeVBox(Region top, Region bottom) {
+    VBox innerVBox = new VBox();
+    innerVBox.getChildren().addAll(top, bottom);
+    return innerVBox;
   }
 
   private void listenForCommandSelection() {
-    commandTextArea.setOnContextMenuRequested(new EventHandler<Event>()
-    {
-      @Override
-      public void handle(Event arg0)
-      {
-        String selectedText = commandTextArea.getSelectedText();
-        name.setText(selectedText);
-      }
+    commandTextArea.setOnContextMenuRequested(arg0 -> {
+      String selectedText = commandTextArea.getSelectedText();
+      name.setText(selectedText);
     });
   }
 
   private void listenForVariableSelection() {
-    variableTextArea.setOnContextMenuRequested(new EventHandler<Event>()
-    {
-      @Override
-      public void handle(Event arg0)
-      {
-        String selectedText = variableTextArea.getSelectedText();
-        name.setText(selectedText);
-      }
+    variableTextArea.setOnContextMenuRequested(arg0 -> {
+      String selectedText = variableTextArea.getSelectedText();
+      name.setText(selectedText);
     });
   }
 
-  private void createHBox() {
-    HBox hBox = new HBox();
-    hBox.getStyleClass().add(myResources.getString("HBox"));
-    VBox vBoxLeft = new VBox();
-    VBox vBoxRight = new VBox();
-    createLabel(vBoxRight, MARKER_COLOR_LABEL);
-    createMarkerColorPicker(vBoxRight);
-    createLabel(vBoxLeft, CHANGE_LANGUAGE_LABEL);
-    createComboBox(vBoxLeft);
-    hBox.getChildren().addAll(vBoxLeft, vBoxRight);
-    vBox.getChildren().add(hBox);
+//  private void createHBox() {
+//    HBox hBox = new HBox();
+//    hBox.getStyleClass().add(myResources.getString("HBox"));
+//    VBox vBoxLeft = new VBox();
+//    VBox vBoxRight = new VBox();
+//    createLabel(vBoxRight, MARKER_COLOR_LABEL);
+//    createMarkerColorPicker();
+//    createLabel(vBoxLeft, CHANGE_LANGUAGE_LABEL);
+//    createComboBox();
+//    hBox.getChildren().addAll(vBoxLeft, vBoxRight);
+//    vBox.getChildren().add(hBox);
+//  }
+
+  private Region createMarkerColorPicker() {
+    markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
+    markerColorPicker.setOnAction(event -> {
+      markerClickedColor = markerColorPicker.getValue();
+      commandTextArea
+          .setText(
+              commandTextArea.getText() + "\n" + NEW_MARKER_COLOR + markerClickedColor.toString());
+    });
+    return markerColorPicker;
   }
 
-
-
-  private void createComboBox(Pane box) {
+  private Region createComboBox() {
     ComboBox<String> combo_box = new ComboBox<>(FXCollections.observableArrayList(language_names));
-    box.getChildren().add(combo_box);
     combo_box.setValue(language_names.get(3));
     language = combo_box.getValue();
     combo_box.setOnAction(event -> {
       language = combo_box.getValue();
       commandTextArea.setText(commandTextArea.getText() + "\n" + NEW_LANGUAGE + language);
     });
+    return combo_box;
   }
 
-  private void createTextArea(TextArea area, String text) {
+  private Control createTextArea(TextArea area, String text) {
     area.setText(text);
     area.setEditable(false);
-    vBox.getChildren().add(area);
+    return area;
   }
 
-  private void createLabel(Pane pane, String text) {
-    Label label = new Label(text + ':');
-    pane.getChildren().addAll(label);
+  private Region createLabel(String text) {
+    return new Label(text + ':');
   }
 
   private void buttonListeners(ButtonGroup group) {
@@ -170,7 +177,7 @@ public class SubSceneRight extends SubScene {
 
   }
 
-  private void setPenUp(){
+  private void setPenUp() {
     markerClickedColor = null;
     markerColorPicker.setValue(INITIAL_MARKER_COLOR);
   }
@@ -221,7 +228,8 @@ public class SubSceneRight extends SubScene {
 
   private void scriptRunTextField() {
     scriptFile = new TextField();
-    scriptFile.setPromptText("Enter file name of SLogo script"); // @TODO add to resource file so changes with language
+    scriptFile.setPromptText(
+        "Enter file name of SLogo script"); // @TODO add to resource file so changes with language
     scriptFile.getText();
     vBox.getChildren().add(scriptFile);
 
@@ -265,17 +273,6 @@ public class SubSceneRight extends SubScene {
       clickedColor = backgroundColorPicker.getValue();
       commandTextArea.setText(
           commandTextArea.getText() + "\n" + NEW_BACKGROUND_COLOR + clickedColor.toString());
-    });
-  }
-
-  private void createMarkerColorPicker(Pane pane) {
-    markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
-    pane.getChildren().add(markerColorPicker);
-    markerColorPicker.setOnAction(event -> {
-      markerClickedColor = markerColorPicker.getValue();
-      commandTextArea
-              .setText(
-                      commandTextArea.getText() + "\n" + NEW_MARKER_COLOR + markerClickedColor.toString());
     });
   }
 
