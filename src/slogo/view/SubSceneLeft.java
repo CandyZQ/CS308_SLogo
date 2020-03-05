@@ -69,7 +69,10 @@ public class SubSceneLeft extends SubScene {
   private static final int SCRIPT_WIDTH = 400;
   private static final int SCRIPT_HEIGHT = 400;
 
-  public SubSceneLeft() {
+  private ButtonG group;
+  private ArrayList<String> commandsToDo = new ArrayList<>();
+
+  public SubSceneLeft(String[] dispCommands) {
     markerThickness = 2;
     root = new Group();
     vBox = new VBox();
@@ -86,7 +89,16 @@ public class SubSceneLeft extends SubScene {
     vBox.getChildren().add(label2);
     thick = createSlider();
     vBox.getChildren().add(thick);
-    createButtons("FD 50", "BK 50", "LT 50", "RT 50");
+    group = new ButtonG(dispCommands);
+
+    for (int i = 0; i < group.getButtons().size(); i++) {
+      Button button = group.getButtons().get(i);
+      String commando = button.getText();
+      button.setOnAction(e -> setCommand(commando));
+    }
+
+    commandEntered = false;
+    vBox.getChildren().add(group.getBoxes());
     root.getChildren().add(createTurtle());
     initialX = 0;
     initialY = 0;
@@ -176,23 +188,27 @@ public class SubSceneLeft extends SubScene {
     return pathTransition;
   }
 
-  private void createButtons(String firstName, String secondName, String thirdName,
-                             String fourthName) {
-    HBox hbox1 = new HBox(30);
-    HBox hbox2 = new HBox(30);
-    hbox1.getStyleClass().add(myResources.getString("HBox"));
-    hbox2.getStyleClass().add(myResources.getString("HBox"));
-    Button firstButton = new Button(firstName);
-    Button secondButton = new Button(secondName);
-    Button thirdButton = new Button(thirdName);
-    Button fourthButton = new Button(fourthName);
-    hbox1.getChildren().addAll(firstButton, secondButton);
-    hbox2.getChildren().addAll(thirdButton, fourthButton);
-    hbox1.setAlignment(Pos.CENTER);
-    hbox2.setAlignment(Pos.CENTER);
+  public void updateButtons(String[] displayCo) {
+    vBox.getChildren().remove(group.getBoxes());
+    group = new ButtonG(displayCo);
+    for (int i = 0; i < group.getButtons().size(); i++) {
+      Button button = group.getButtons().get(i);
+      String commando = button.getText();
+      button.setOnAction(e -> setCommand(commando));
+    }
+    vBox.getChildren().add(group.getBoxes());
+  }
 
-    this.buttonListeners(firstButton, secondButton, thirdButton, fourthButton);
-    vBox.getChildren().addAll(hbox1, hbox2);
+  private void setCommand(String command) {
+    theText = command;
+    commandEntered = true;
+    System.out.println("Command Set");
+  }
+
+  public String getCommand(){
+    String temp = theText;
+    theText = null;
+    return temp;
   }
 
   private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton,

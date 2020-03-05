@@ -50,8 +50,8 @@ public class Parser implements BackEndExternalAPI {
    * @throws LanguageIsNotSupportedException
    */
   @Override
-  public void setLanguage(String language) throws LanguageIsNotSupportedException {
-    commandsMapHelper.setLanguage(language);
+  public String[] setLanguage(String language) throws LanguageIsNotSupportedException {
+    return commandsMapHelper.setLanguage(language);
   }
 
   /**

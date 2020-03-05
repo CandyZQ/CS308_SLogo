@@ -1,6 +1,7 @@
 package slogo.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Queue;
@@ -24,6 +25,7 @@ public class Main extends Application {
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private ViewScreen viewScreen;
     private Parser parser;
+    private String[] displayCommands;
 
     /**
      * Start the program.
@@ -36,7 +38,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws LanguageIsNotSupportedException {
         viewScreen = new ViewScreen(primaryStage);
         parser = new Parser(2);
-        parser.setLanguage(viewScreen.getLanguage());
+        displayCommands = parser.setLanguage(viewScreen.getLanguage());
         setTiming();
     }
 
@@ -65,8 +67,8 @@ public class Main extends Application {
             commands = parser.execute(inputString);
         }
         //viewScreen.getColor(String);
-        parser.setLanguage(viewScreen.getLanguage());
-        viewScreen.update(commands, parser.gerUserVars(), parser.getFunctions());
+        displayCommands = parser.setLanguage(viewScreen.getLanguage());
+        viewScreen.update(commands, parser.gerUserVars(), parser.getFunctions(), displayCommands);
     }
 
     private void newWindow(){

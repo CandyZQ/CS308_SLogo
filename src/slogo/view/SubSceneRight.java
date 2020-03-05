@@ -56,7 +56,7 @@ public class SubSceneRight extends SubScene {
   private static String USER_TEXT_AREA = myResources.getString("UserTextArea");
   private final FileChooser fileChooser = new FileChooser();
 
-
+  //private String theText;
   private ColorPicker cp;
 
   private ColorPicker backgroundColorPicker;
@@ -71,8 +71,8 @@ public class SubSceneRight extends SubScene {
   private TextArea commandTextArea;
   private TextArea variableTextArea;
   private TextArea userDefinedCommandsTextArea;
-  private String theText;
-  private Boolean commandEntered = false;
+  //private String theText;
+  //private Boolean commandEntered = false;
   private Stage stage;
   private final ArrayList<String> buttonNames = new ArrayList<String>(Arrays.asList(myResources.getString("LoadButton"),
           myResources.getString("HelpButton"), myResources.getString("ResetButton"), myResources.getString("UndoButton"),
@@ -182,40 +182,6 @@ public class SubSceneRight extends SubScene {
     buttons.get(4).setOnAction(event -> setPenUp());
   }
 
-  private void createButtons(String firstName, String secondName, String thirdName,
-      String fourthName, String fifthName) {
-    HBox hbox1 = new HBox(SPACING);
-    HBox hbox2 = new HBox(SPACING);
-    HBox hbox3 = new HBox(SPACING);
-    hbox1.getStyleClass().add(myResources.getString("HBox"));
-    hbox2.getStyleClass().add(myResources.getString("HBox"));
-    hbox3.getStyleClass().add(myResources.getString("HBox"));
-    Button firstButton = new Button(firstName);
-    Button secondButton = new Button(secondName);
-    Button thirdButton = new Button(thirdName);
-    Button fourthButton = new Button(fourthName);
-    Button fifthButton = new Button(fifthName);
-    firstButton.setWrapText(true);
-    secondButton.setWrapText(true);
-    thirdButton.setWrapText(true);
-    fourthButton.setWrapText(true);
-    fifthButton.setWrapText(true);
-    hbox1.getChildren().addAll(firstButton, secondButton);
-    hbox2.getChildren().addAll(thirdButton, fourthButton);
-    hbox3.getChildren().addAll(fifthButton);
-    hbox1.setAlignment(Pos.CENTER);
-    hbox2.setAlignment(Pos.CENTER);
-    hbox3.setAlignment(Pos.CENTER);
-
-    this.buttonListeners(firstButton, secondButton, thirdButton, fourthButton, fifthButton);
-    vBox.getChildren().addAll(hbox1, hbox2, hbox3);
-  }
-
-  private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton,
-      Button fourthButton, Button fifthButton) {
-
-  }
-
   private void setPenUp(){
     markerClickedColor = null;
     markerColorPicker.setValue(INITIAL_MARKER_COLOR);
@@ -283,6 +249,12 @@ public class SubSceneRight extends SubScene {
     return scriptName;
   }
 
+  public void execute(String command) {
+    //name.setText(command);
+    //textFieldListener(KeyCode.ENTER);
+    theText = command;
+    commandEntered = true;
+  }
 
   private void textFieldListener(KeyCode code) {
     if (code == KeyCode.ENTER) {
