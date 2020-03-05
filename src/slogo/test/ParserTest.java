@@ -253,6 +253,26 @@ public class ParserTest {
 
   }
 
+  @Test
+  public void complicatedCommand() {
+    Parser parser = new Parser(1);
+
+    try {
+      parser.setLanguage("English");
+    } catch (LanguageIsNotSupportedException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      Queue<Map<MovingObjectProperties, Object>> q;
+      q = parser.execute("for [ :v 0 99 0 ] [ set :v sum ycor fd 1 ]");
+      printQueue(q);
+
+    } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
+      System.out.println(".");
+    }
+  }
+
 
   private void printQueue(Queue<Map<MovingObjectProperties, Object>> q) {
     while (!q.isEmpty()) {
@@ -263,6 +283,8 @@ public class ParserTest {
       System.out.println("Y: " + map.get(MovingObjectProperties.Y));
     }
   }
+
+
 
 }
 
