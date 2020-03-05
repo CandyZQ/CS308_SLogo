@@ -33,7 +33,7 @@ public class SubSceneLeft extends SubScene {
   private static final int SCRIPT_HEIGHT = 400;
   private final Circle pen = new Circle(0, 0, 2);
 
-  private static ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
+  private ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
   private Turtle turtle = new Turtle(res.getString("Turtle"), 0);
 
   private Rectangle rect;

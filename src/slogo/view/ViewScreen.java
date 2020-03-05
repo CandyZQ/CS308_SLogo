@@ -55,11 +55,6 @@ public class ViewScreen implements ExternalAPIViewable {
   }
 
   @Override
-  public Queue<Map<String, Integer>> getFinalInformation() {
-    return null;
-  }
-
-  @Override
   public String getInputString() {
     return scRight.getTheText();
   }
