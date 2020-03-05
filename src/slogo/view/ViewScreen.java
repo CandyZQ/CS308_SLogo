@@ -1,11 +1,12 @@
 package slogo.view;
 
-import java.util.EnumMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.controller.listings.MovingObjectProperties;
 
@@ -88,9 +89,9 @@ public class ViewScreen implements ExternalAPIViewable {
     scRight.setVariableTextArea(variables);
     scRight.setUserTextArea(functions);
     if (commands != null && commands.peek() != null) {
-      if (commands.peek().get(MovingObjectProperties.CLEAR).toString().contentEquals("true")) {
-        scLeft.setMarkerColor(null);
-      }
+//      if (commands.peek().get(MovingObjectProperties.CLEAR).toString().contentEquals("true")) {
+//        scLeft.setMarkerColor(null);
+//      }
       scRight.setCommandText(SubSceneRight.SUCCESSFUL_COMMAND);
       scLeft.update(commands);
       scRight.update(commands);
@@ -100,5 +101,10 @@ public class ViewScreen implements ExternalAPIViewable {
   @Override
   public String getLanguage() {
     return scRight.getLanguage().toString();
+  }
+
+  @Override
+  public void getColor(String hexColor) {
+    scLeft.setMarkerColor(Color.web(hexColor));
   }
 }

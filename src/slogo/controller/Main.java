@@ -64,6 +64,7 @@ public class Main extends Application {
         } else if (inputString != null) {
             commands = parser.execute(inputString);
         }
+        //viewScreen.getColor(String);
         parser.setLanguage(viewScreen.getLanguage());
         viewScreen.update(commands, parser.gerUserVars(), parser.getFunctions());
     }

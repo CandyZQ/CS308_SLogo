@@ -300,9 +300,10 @@ public class SubSceneRight extends SubScene {
 
   @Override
   public void update(Queue<Map<MovingObjectProperties, Object>> movements) {
-    if (!(boolean) movements.remove().get(MovingObjectProperties.PEN)) {
+    if (!(boolean) movements.peek().get(MovingObjectProperties.PEN) || (boolean) movements.peek()
+        .get(MovingObjectProperties.CLEAR)) {
       markerClickedColor = null;
-      markerColorPicker.setValue(markerClickedColor);
+      markerColorPicker.setValue(null);
     }
   }
 
