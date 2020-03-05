@@ -2,8 +2,10 @@ package slogo.controller.operations;
 
 import java.util.ArrayList;
 import java.util.List;
+import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.TurtleManager;
 import slogo.controller.UserDefinedFields;
+import slogo.controller.listings.BasicSyntax;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
@@ -29,7 +31,11 @@ public class SystemCommands extends Operations {
     }
 
     for (int i = 1; i < info.size(); i++) {
-      userDefinedFields.setUserVars(info.get(i), Double.parseDouble(variables.get(i)));
+      if (!SyntaxHelper.isType(info.get(i), BasicSyntax.CONSTANT)) {
+        throw new InvalidArgumentException(
+            "The " + i + "th argument passed in of " + funcName + " is not a constant!");
+      }
+      userDefinedFields.setUserVars(variables.get(i), Double.valueOf(info.get(i)));
     }
 
     userDefinedFields.setExtraCommands(commands);

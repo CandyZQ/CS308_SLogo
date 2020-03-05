@@ -185,10 +185,10 @@ public class ParserTest {
 
     try {
       Queue<EnumMap<MovingObjectProperties, Object>> q;
-      q = parser.execute("to hi [ ] [ fd 50 ]");
+      q = parser.execute("to hi [ :a ] [ fd :a ]");
       printQueue(q);
 
-      q = parser.execute("hi");
+      q = parser.execute("hi 1");
 //      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.Y));
 //      Assert.assertEquals(85D, q.peek().get(MovingObjectProperties.RETURN_VALUE));
       printQueue(q);

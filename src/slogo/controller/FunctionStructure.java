@@ -17,10 +17,7 @@ public class FunctionStructure extends CommandStructure {
       return null;
     }
 
-    if (paras.size() == 0) {
-      return String.class;
-    }
-    return Double.class;
+    return String.class;
   }
 
   @Override

@@ -76,7 +76,7 @@ class CommandStructure {
     } catch (IllegalAccessException e) {
       System.out.println("The method " + m.getName() + " called is not accessible");
     } catch (InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-      // TODO: do something?
+      System.out.println(e.getClass() + " occurred while running the command.");
     }
 
     storeTurtleStates(res, tm, t);
