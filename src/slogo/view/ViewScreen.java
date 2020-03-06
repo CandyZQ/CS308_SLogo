@@ -12,8 +12,8 @@ import slogo.controller.listings.MovingObjectProperties;
 
 public class ViewScreen implements ExternalAPIViewable {
 
-  public static final double STAGE_HEIGHT = 600;
-  public static final double STAGE_WIDTH = 800;
+  public static final double STAGE_HEIGHT = 800;
+  public static final double STAGE_WIDTH = 1000;
   public static final String STAGE_TITLE = "SLOGO";
   public static final String STYLE_SHEET = "style.css";
 
