@@ -9,11 +9,13 @@ import java.util.Arrays;
 import java.util.List;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.listings.MovingObjectProperties;
+import slogo.exceptions.CompilerException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.WrongCommandFormatException;
 import slogo.model.Turtle;
 
 class CommandStructure {
+
   Class<?> c;
   Method m;
   List<Object> paras;
@@ -60,23 +62,23 @@ class CommandStructure {
     return paras.toArray(new Object[0]);
   }
 
-  Object singleExecute(TurtleManager tm, UserDefinedFields userDefinedFields, Turtle t)
+  Object execute(TurtleManager tm, UserDefinedFields userDefinedFields, Turtle t)
       throws InvalidArgumentException, WrongCommandFormatException {
     if (needMoreParas()) {
       throw new WrongCommandFormatException(
           "Internal Error: Still need more parameters before executing");
     }
 
-    Object res = null;
+    Object res;
     try {
       res = m.invoke(c.getConstructor(Turtle.class, UserDefinedFields.class, TurtleManager.class)
           .newInstance(t, userDefinedFields, tm), getMethodInvokePara());
     } catch (IllegalArgumentException e) {
       throw new InvalidArgumentException(e);
     } catch (IllegalAccessException e) {
-      System.out.println("The method " + m.getName() + " called is not accessible");
+      throw new CompilerException("The method " + m.getName() + " called is not accessible");
     } catch (InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-      System.out.println(e.getClass() + " occurred while running the command.");
+      throw new CompilerException(e.getClass() + " occurred while running the command.");
     }
 
     storeTurtleStates(res, tm, t);
@@ -88,14 +90,8 @@ class CommandStructure {
       if (SyntaxHelper.isType(returnVal.toString(), CONSTANT)) {
         tm.putReturnValue(returnVal, t);
       }
-//    } catch (InvalidArgumentException e) {
-//      String[] ss = returnVal.split(" ");
-//      for (int i = ss.length - 1; i >= 0; i--) {
-//        commandsLeft.push(ss[i]);
-//      }
-//    }
-    } catch (Exception e) {
-
+    } catch (InvalidArgumentException e) {
+      e.printStackTrace();
     }
     tm.addStates(t);
   }

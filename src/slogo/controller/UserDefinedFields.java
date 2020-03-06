@@ -76,11 +76,11 @@ public class UserDefinedFields {
     return extraCommands;
   }
 
-  public boolean isFunction(String name) {
+  boolean isFunction(String name) {
     return functions.containsKey(name);
   }
 
-  public int getFuncParaNum(String name) {
+  int getFuncParaNum(String name) {
     return functions.get(name).size() - 1;
   }
 }

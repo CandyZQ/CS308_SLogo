@@ -1,6 +1,5 @@
 package slogo.controller;
 
-import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
@@ -11,7 +10,8 @@ import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
 
 public class TurtleManager {
-  public static final int TURTLE_NUM_MAX = 50;
+
+  public static final int TURTLE_NUM_MAX = 500;
   private Turtle[] turtles;
   private Set<Turtle> activeTurtles;
   private Set<Integer> turtlesExisted;
@@ -26,11 +26,10 @@ public class TurtleManager {
       turtlesExisted.add(i);
       activeTurtles.add(turtles[i]);
     }
-
     turtleStates = new LinkedList<>();
   }
 
-  public Queue<Map<MovingObjectProperties, Object>> getTurtleStates() {
+  Queue<Map<MovingObjectProperties, Object>> getTurtleStates() {
     return turtleStates;
   }
 
@@ -68,9 +67,5 @@ public class TurtleManager {
   void putReturnValue(Object returnVal, Turtle t) {
     Integer id = (Integer) t.getState().get(MovingObjectProperties.ID);
     turtles[id].getState().put(MovingObjectProperties.RETURN_VALUE, returnVal);
-  }
-
-  int getActiveTurtleNum() {
-    return activeTurtles.size();
   }
 }

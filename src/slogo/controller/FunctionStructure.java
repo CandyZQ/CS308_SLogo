@@ -3,6 +3,7 @@ package slogo.controller;
 import java.lang.reflect.Method;
 
 public class FunctionStructure extends CommandStructure {
+
   public FunctionStructure(Class<?> c, Method m) {
     super(c, m);
   }

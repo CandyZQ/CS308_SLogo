@@ -76,7 +76,7 @@ public class Parser implements BackEndExternalAPI {
 
     Stack<String> temp = cloneStack(commandsLeft);
       for (Turtle t : tm.getTurtles()) {
-      commandsLeft = (Stack<String>) temp.clone();
+      commandsLeft = cloneStack(temp);
       while (!commandsLeft.empty()) {
         executeNextCommand(t);
       }
@@ -137,12 +137,7 @@ public class Parser implements BackEndExternalAPI {
     if (userDefinedFields.isFunction(commandName)) {
       current = processFunction(commandName);
     } else {
-      if (!SyntaxHelper.isType(commandName, COMMAND)) {
-        throw new InvalidArgumentException(
-            "The command " + commandName + " is not a valid SLogo command!");
-      }
-      current = commandsMapHelper.convertUserInput(commandName);
-
+      current = processDefinedCommands(commandName);
       while (current.needMoreParas()) {
         if (!canAddPara(current)) {
           pausedCommands.add(current);
@@ -152,6 +147,15 @@ public class Parser implements BackEndExternalAPI {
     }
     pausedCommands.add(current);
     checkPausedCommands(tm, t);
+  }
+
+  private CommandStructure processDefinedCommands(String commandName)
+      throws InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException, WrongCommandFormatException {
+    if (!SyntaxHelper.isType(commandName, COMMAND)) {
+      throw new InvalidArgumentException(
+          "The command " + commandName + " is not a valid SLogo command!");
+    }
+    return commandsMapHelper.convertUserInput(commandName);
   }
 
   private FunctionStructure processFunction(String function)
@@ -169,7 +173,7 @@ public class Parser implements BackEndExternalAPI {
     boolean hasExtra = false;
     while (!pausedCommands.isEmpty()) {
       if (!pausedCommands.peek().needMoreParas()) {
-        returnVal = pausedCommands.pop().singleExecute(tm, userDefinedFields, t).toString();
+        returnVal = pausedCommands.pop().execute(tm, userDefinedFields, t).toString();
         String extra = userDefinedFields.getExtraCommands();
         if (!extra.equals("")) {
           fillStack(extra);
@@ -196,7 +200,6 @@ public class Parser implements BackEndExternalAPI {
     String next = popNext();
     Class<?> nextType = structure.getNextParaType();
 
-    // TODO: potentially add more types if necessary
     if (nextType.equals(Double.class) || nextType.equals(Integer.class) || nextType
         .equals(double.class) || nextType.equals(int.class)) {
       if (SyntaxHelper.isType(next, CONSTANT)) {
@@ -215,7 +218,6 @@ public class Parser implements BackEndExternalAPI {
       structure.addPara(next);
       return true;
     }
-
     throw new WrongCommandFormatException(
         "Command " + structure.getName() + " is not in the correct format!");
   }
@@ -234,7 +236,6 @@ public class Parser implements BackEndExternalAPI {
         next.append(s);
       }
     }
-
     return next.toString();
   }
 }
