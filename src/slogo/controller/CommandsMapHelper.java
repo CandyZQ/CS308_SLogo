@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
+import javax.print.attribute.standard.MediaSize.Other;
 import slogo.controller.listings.BasicSyntax;
 import slogo.controller.listings.CommandType;
 import slogo.controller.listings.Languages;
 import slogo.controller.operations.SystemCommands;
 import slogo.exceptions.CommandDoesNotExistException;
+import slogo.exceptions.CompilerException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 
@@ -112,16 +114,17 @@ public class CommandsMapHelper {
         Class<?> commandsClass = Class.forName(OPERATIONS_DIR + c.name());
         Method method = findMethod(commandsClass.getDeclaredMethods(), commandName);
         if (method != null) {
-          return method.getName().equalsIgnoreCase(Parser.FUNCTION_METHOD) ? new FunctionStructure(commandsClass, method)
+          return method.getName().equalsIgnoreCase(Parser.FUNCTION_METHOD) ? new FunctionStructure(
+              commandsClass, method)
               : new CommandStructure(commandsClass, method);
         }
       } catch (ClassNotFoundException e) {
-        System.out.println(
+        throw new CompilerException(
             "Internal Error: operation class name defined in CommandType but not implemented.");
       }
     }
-    throw new CommandDoesNotExistException(
-        "User input command \"" + commandName + "\" is not defined!");
+      throw new CommandDoesNotExistException(
+          "User input command \"" + commandName + "\" is not defined!");
   }
 
   private Method findMethod(Method[] commands, String commandName) {
