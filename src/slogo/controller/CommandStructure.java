@@ -71,6 +71,7 @@ class CommandStructure {
 
     Object res;
     try {
+      m.setAccessible(true);
       res = m.invoke(c.getConstructor(Turtle.class, UserDefinedFields.class, TurtleManager.class)
           .newInstance(t, userDefinedFields, tm), getMethodInvokePara());
     } catch (IllegalArgumentException e) {

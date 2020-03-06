@@ -1,7 +1,5 @@
 package slogo.controller.operations;
 
-import java.util.List;
-import java.util.Map;
 import slogo.controller.TurtleManager;
 import slogo.controller.UserDefinedFields;
 import slogo.model.Turtle;
@@ -16,7 +14,7 @@ public class BooleanOperations extends Operations{
    * @param b = expr2
    * @return returns 1 if the value of expr1 is strictly less than the value of expr2, otherwise 0
    */
-  public Integer lessThan(Double a, Double b) {
+  private Integer lessThan(Double a, Double b) {
     if (a < b) {
       return 1;
     } else {
@@ -30,7 +28,7 @@ public class BooleanOperations extends Operations{
    * @param b = expr2
    * @return returns 1 if the value of expr1 is strictly greater than the value of expr2, otherwise 0
    */
-  public Integer greaterThan(Double a, Double b) {
+  private Integer greaterThan(Double a, Double b) {
     if (a > b) {
       return 1;
     } else {
@@ -44,7 +42,7 @@ public class BooleanOperations extends Operations{
    * @param b = expr2
    * @return returns 1 if the value of expr1 and the value of expr2 are equal, otherwise 0
    */
-  public Integer equal(Double a, Double b) {
+  private Integer equal(Double a, Double b) {
     if (a.equals(b)) {
       return 1;
     } else {
@@ -58,7 +56,7 @@ public class BooleanOperations extends Operations{
    * @param b = expr2
    * @return returns 1 if the value of expr1 and the value of expr2 are not equal, otherwise 0
    */
-  public Integer notEqual(Double a, Double b) {
+  private Integer notEqual(Double a, Double b) {
     if (!a.equals(b)) {
       return 1;
     } else {
@@ -72,7 +70,7 @@ public class BooleanOperations extends Operations{
    * @param b = test2
    * @return returns 1 if test1 and test2 are non-zero, otherwise 0
    */
-  public Integer and(Double a, Double b) {
+  private Integer and(Double a, Double b) {
     if (a.equals(0d) || b.equals(0d)) {
       return 0;
     } else {
@@ -86,7 +84,7 @@ public class BooleanOperations extends Operations{
    * @param b = test2
    * @return returns 1 if test1 or test2 are non-zero, otherwise 0
    */
-  public Integer or(Double a, Double b) {
+  private Integer or(Double a, Double b) {
     if (!a.equals(0d)|| !b.equals(0d)) {
       return 1;
     } else {
@@ -99,7 +97,7 @@ public class BooleanOperations extends Operations{
    * @param a = test
    * @return returns 1 if test is 0 and 0 if test is non-zero
    */
-  public Integer not(Double a) {
+  private Integer not(Double a) {
     if (a.equals(0d)) {
       return 1;
     } else {

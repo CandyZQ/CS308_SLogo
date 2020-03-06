@@ -1,7 +1,5 @@
 package slogo.controller.operations;
 
-import java.util.List;
-import java.util.Map;
 import slogo.controller.TurtleManager;
 import slogo.controller.UserDefinedFields;
 import slogo.controller.listings.MovingObjectProperties;
@@ -14,60 +12,60 @@ public class TurtleCommands extends Operations{
 
   }
 
-  public void forward(Double pixels) {
+  private void forward(Double pixels) {
     turtle.moveDistance(pixels);
   }
 
-  public void backward(Double pixels) {
+  private void backward(Double pixels) {
     turtle.moveDistance(-pixels);
   }
 
-  public void left(Double degrees) {
+  private void left(Double degrees) {
     turtle.rotate(degrees);
   }
 
-  public void right(Double degrees) {
+  private void right(Double degrees) {
     turtle.rotate(-degrees);
   }
 
-  public void setHeading(Double degrees) {
+  private void setHeading(Double degrees) {
     turtle.setHeading(degrees);
   }
 
-  public void setTowards(Double x, Double y) {
+  private void setTowards(Double x, Double y) {
     turtle.setHeading(x, y);
   }
 
-  public void setPosition(Double x, Double y) {
+  private void setPosition(Double x, Double y) {
     turtle.setHeading(x, y);
     turtle.setCoordinates(x, y);
   }
 
-  public void penDown() {
+  private void penDown() {
     turtle.getState().put(MovingObjectProperties.PEN, true);
     turtle.getState().put(MovingObjectProperties.RETURN_VALUE, 1);
   }
 
-  public void penUp() {
+  private void penUp() {
     turtle.getState().put(MovingObjectProperties.PEN, false);
     turtle.getState().put(MovingObjectProperties.RETURN_VALUE, 0);
   }
 
-  public void showTurtle() {
+  private void showTurtle() {
     turtle.getState().put(MovingObjectProperties.VISIBILITY, true);
     turtle.getState().put(MovingObjectProperties.RETURN_VALUE, 1);
   }
 
-  public void hideTurtle() {
+  private void hideTurtle() {
     turtle.getState().put(MovingObjectProperties.VISIBILITY, false);
     turtle.getState().put(MovingObjectProperties.RETURN_VALUE, 0);
   }
 
-  public void home() {
+  private void home() {
     turtle.reset();
   }
 
-  public void clearScreen() {
+  private void clearScreen() {
     // TODO: remove screen trails
    turtle.reset();
    turtle.clear();

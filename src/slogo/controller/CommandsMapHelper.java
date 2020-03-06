@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
-import javax.print.attribute.standard.MediaSize.Other;
 import slogo.controller.listings.BasicSyntax;
 import slogo.controller.listings.CommandType;
 import slogo.controller.listings.Languages;
