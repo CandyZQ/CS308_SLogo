@@ -9,8 +9,10 @@
   -fx-border-radius: 20;
   -fx-background-radius: 20;
   -fx-padding: 10;
-  -fx-pref-width: 100;
+  -fx-pref-width: 120;
+  -fx-pref-height: 10;
   -fx-font-weight: bold;
+  -fx-font-size: 10px;
 }
 
 .label {
@@ -25,8 +27,7 @@
 
 .vbox {
   -fx-alignment: center;
-  -fx-spacing: 20;
-  -fx-padding: 20;
+  -fx-spacing: 10;
 }
 
 .hbox {
@@ -55,6 +56,11 @@
 
 .leftvbox {
   -fx-alignment: center;
-  -fx-padding: 80;
-  -fx-spacing: 20;
+  -fx-padding: 30;
+  -fx-spacing: 5;
+}
+
+.thishbox {
+  -fx-alignment: center;
+  -fx-background-color: BLACK;
 }

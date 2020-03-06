@@ -1,218 +1,247 @@
 package slogo.view;
 
 
-import java.util.EnumMap;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Queue;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.geometry.Orientation;
+import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.geometry.Pos;
-import slogo.controller.MovingObjectProperties;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
-import java.io.File;
+import slogo.controller.listings.MovingObjectProperties;
 
 public class SubSceneRight extends SubScene {
 
+  private final ImageView helpImage0 = new ImageView(new Image(myResources.getString("HelpTitle")));
+  private final ImageView helpImage1 = new ImageView(
+      new Image(myResources.getString("BasicSyntax")));
+  private final ImageView helpImage2 = new ImageView(
+      new Image(myResources.getString("TurtleCommands")));
+  private final ImageView helpImage3 = new ImageView(
+      new Image(myResources.getString("TurtleQueries")));
+  private final ImageView helpImage4 = new ImageView(
+      new Image(myResources.getString("MathOperations")));
+  private final ImageView helpImage5 = new ImageView(
+      new Image(myResources.getString("BooleanOperations")));
+  private final ImageView helpImage6 = new ImageView(
+      new Image(myResources.getString("UserDefined")));
 
-  private final ImageView helpImage0 = new ImageView(new Image("file:resources/help_title.png"));
-  private final ImageView helpImage1 = new ImageView(new Image("file:resources/basic_syntax.png"));
-  private final ImageView helpImage2 = new ImageView(new Image("file:resources/turtle_commands.png"));
-  private final ImageView helpImage3 = new ImageView(new Image("file:resources/turtle_queries.png"));
-  private final ImageView helpImage4 = new ImageView(new Image("file:resources/math_operations.png"));
-  private final ImageView helpImage5 = new ImageView(new Image("file:resources/boolean_operations.png"));
-  private final ImageView helpImage6 = new ImageView(new Image("file:resources/user_defined.png"));
 
-
-  private Image turtle = new Image("file:resources/defaultTurtle.png");
+  private Turtle turtle = new Turtle(myResources.getString("Turtle"), 0);
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
-  public static final Color INITIAL_MARKER_COLOR = Color.PINK;
-  private static final String SUCCESSFUL_COMMAND = "Command successfully processed!";
-  private static final String EMPTY_COMMAND = "No command entered.";
-  private static final String NEW_MARKER_COLOR = "New Marker Color Chosen: ";
-  private static final String NEW_LANGUAGE = "New Chosen Language: ";
-  private static final String NEW_BACKGROUND_COLOR = "New Background Color Chosen: ";
-  private static final String COMMAND_AREA_TEXT = "Command Display";
-  private final String[] language_names = {"Chinese", "English", "French", "German",
-      "Italian", "Portuguese", "Russian", "Spanish", "Urdu"};
-  private static final String BACKGROUND_COLOR_LABEL = "Change Background Color";
-  private static final String MARKER_COLOR_LABEL = "Change Marker Color";
-  private static final String CHANGE_LANGUAGE_LABEL = "Change Language";
-  private static final String TEXTFIELD_PROMPT_TEXT = "Enter an SLogo Command.";
-  private static final String VARIABLE_AREA_TEXT = "Variable Display";
+  public static final Color INITIAL_MARKER_COLOR = null; // the code for having the pen up
+  public static String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
+  private String EMPTY_COMMAND = myResources.getString("EmptyCommand");
+  private String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
+  private String NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
+  private String NEW_BACKGROUND_COLOR =
+      myResources.getString("NewBackgroundColor") + " ";
+  private String COMMAND_AREA_TEXT = myResources.getString("CommandArea");
+  private List<String> language_names = new ArrayList<>();
+  private String BACKGROUND_COLOR_LABEL = myResources
+      .getString("BackgroundColorLabel");
+  private String MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
+  private String CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
+  private String TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
+  private String VARIABLE_AREA_TEXT = myResources.getString("VariableAreaText");
+  private String USER_TEXT_AREA = myResources.getString("UserTextArea");
   private final FileChooser fileChooser = new FileChooser();
 
 
-  private ColorPicker cp;
-  private Object language;
+  private ColorPicker backgroundColorPicker;
+  private ColorPicker markerColorPicker;
   private Color clickedColor = INITIAL_BACKGROUND_COLOR;
   private Color markerClickedColor = INITIAL_MARKER_COLOR;
   private TextField name;
+  private TextField scriptFile;
+  private String scriptName;
+  private boolean runScript = false;
   private TextArea commandTextArea;
   private TextArea variableTextArea;
-  private String theText;
-  private Boolean commandEntered = false;
+  private TextArea userDefinedCommandsTextArea;
   private Stage stage;
+  private final List<String> buttonNames = new ArrayList<>(
+      Arrays.asList(myResources.getString("LoadButton"),
+          myResources.getString("HelpButton"), myResources.getString("ResetButton"),
+          myResources.getString("UndoButton"),
+          myResources.getString("PenUp")));
+
+  private static final int SPACING = 30;
 
   public SubSceneRight() {
     root = new Group();
     vBox = new VBox();
-    vBox.getStyleClass().add("vbox");
+    vBox.getStyleClass().add(myResources.getString("VBox"));
     root.getChildren().add(vBox);
-    createLabel(vBox, BACKGROUND_COLOR_LABEL);
-    createBackgroundColorPicker();
-    createButtons("Load Turtle", "Get Help", "Reset", "Undo");
-    createHBox();
-    createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT);
+    for (String key : Collections.list(myLanguages.getKeys())) {
+      language_names.add(myLanguages.getString(key));
+    }
+    vBox.getChildren().add(createTable(new TableView<>()));
+    makeHBox(createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT),
+        createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA), "thishbox");
+    vBox.getChildren().add(createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT));
     createTextField();
-    createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
+    makeHBox(makeVBox(createLabel(CHANGE_LANGUAGE_LABEL), createComboBox()),
+        makeVBox(createLabel(MARKER_COLOR_LABEL), createMarkerColorPicker()), "hbox");
+    vBox.getChildren().add(createLabel(BACKGROUND_COLOR_LABEL));
+    createBackgroundColorPicker();
+    ButtonGroup group = new ButtonGroup(buttonNames);
+    vBox.getChildren().add(group.getBoxes());
+    buttonListeners(group);
+    scriptRunTextField(); // added for scripting
+    listenForCommandSelection();
+    listenForVariableSelection();
   }
 
-  private void createHBox() {
+  private void makeHBox(Region left, Region right, String style) {
     HBox hBox = new HBox();
-    hBox.getStyleClass().add("hbox");
-    VBox vBoxLeft = new VBox();
-    VBox vBoxRight = new VBox();
-    createLabel(vBoxRight, MARKER_COLOR_LABEL);
-    createMarkerColorPicker(vBoxRight);
-    createLabel(vBoxLeft, CHANGE_LANGUAGE_LABEL);
-    createComboBox(vBoxLeft);
-    hBox.getChildren().addAll(vBoxLeft, vBoxRight);
-    vBox.getChildren().add(hBox);
+    hBox.getStyleClass().add(style);
+    hBox.getChildren().addAll(left, right);
+    vBox.getChildren().addAll(hBox);
   }
 
-  private void createMarkerColorPicker(Pane pane) {
-    ColorPicker markerCP = new ColorPicker(INITIAL_MARKER_COLOR);
-    pane.getChildren().add(markerCP);
-    markerCP.setOnAction(event -> {
-      markerClickedColor = markerCP.getValue();
+  private Region makeVBox(Region top, Region bottom) {
+    VBox innerVBox = new VBox();
+    innerVBox.getChildren().addAll(top, bottom);
+    return innerVBox;
+  }
+
+  private void listenForCommandSelection() {
+    commandTextArea.setOnContextMenuRequested(arg0 -> {
+      String selectedText = commandTextArea.getSelectedText();
+      name.setText(selectedText);
+    });
+  }
+
+  private void listenForVariableSelection() {
+    variableTextArea.setOnContextMenuRequested(arg0 -> {
+      String selectedText = variableTextArea.getSelectedText();
+      name.setText(selectedText);
+    });
+  }
+
+  private Region createMarkerColorPicker() {
+    markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
+    markerColorPicker.setOnAction(event -> {
+      markerClickedColor = markerColorPicker.getValue();
       commandTextArea
           .setText(
               commandTextArea.getText() + "\n" + NEW_MARKER_COLOR + markerClickedColor.toString());
     });
+    return markerColorPicker;
   }
 
-  private void createComboBox(Pane box) {
+  private Region createComboBox() {
     ComboBox<String> combo_box = new ComboBox<>(FXCollections.observableArrayList(language_names));
-    box.getChildren().add(combo_box);
-    combo_box.setValue(language_names[1]);
+    combo_box.setValue(language_names.get(3));
     language = combo_box.getValue();
     combo_box.setOnAction(event -> {
       language = combo_box.getValue();
       commandTextArea.setText(commandTextArea.getText() + "\n" + NEW_LANGUAGE + language);
     });
+    return combo_box;
   }
 
-  private void createTextArea(TextArea area, String text) {
+  private Control createTextArea(TextArea area, String text) {
     area.setText(text);
     area.setEditable(false);
-    vBox.getChildren().add(area);
+    return area;
   }
 
-  private void createLabel(Pane pane, String text) {
-    Label label = new Label(text + ':');
-    pane.getChildren().addAll(label);
+  private Control createTable(TableView<VariableItems> table) {
+    TableColumn<VariableItems, String> column1 = new TableColumn<>("First Name");
+    column1.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+
+    TableColumn<VariableItems, String> column2 = new TableColumn<>("Last Name");
+    column2.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+
+    table.getColumns().add(column1);
+    table.getColumns().add(column2);
+    //ObservableList<String> bleh = new SortedList<String>();
+    ObservableList<VariableItems> data =
+        FXCollections.observableArrayList(
+            new VariableItems("Jacob", "Smith"),
+            new VariableItems("Isabella", "Johnson"),
+            new VariableItems("Ethan", "Williams"),
+            new VariableItems("Emma", "Jones"),
+            new VariableItems("Michael", "Brown")
+        );
+    data.add(new VariableItems("One", "Two"));
+    table.setItems(data);
+    return table;
   }
 
-
-  private void createButtons(String firstName, String secondName, String thirdName, String fourthName) {
-    HBox hbox1 = new HBox(30);
-    HBox hbox2 = new HBox(30);
-    hbox1.getStyleClass().add("hbox");
-    hbox2.getStyleClass().add("hbox");
-    Button firstButton = new Button(firstName);
-    Button secondButton = new Button(secondName);
-    Button thirdButton = new Button(thirdName);
-    Button fourthButton = new Button(fourthName);
-    hbox1.getChildren().addAll(firstButton, secondButton);
-    hbox2.getChildren().addAll(thirdButton, fourthButton);
-    hbox1.setAlignment(Pos.CENTER);
-    hbox2.setAlignment(Pos.CENTER);
-
-    this.buttonListeners(firstButton, secondButton, thirdButton, fourthButton);
-    vBox.getChildren().addAll(hbox1, hbox2);
+  private Region createLabel(String text) {
+    return new Label(text + ':');
   }
 
-  private void buttonListeners(Button firstButton, Button secondButton, Button thirdButton, Button fourthButton){
-
-    firstButton.setOnAction(event -> {
-      setTurtleImage();
-    });
-
-    secondButton.setOnAction(event ->{
-      displayPopUp();
-    });
-
-    /*
-    thirdButton.setOnAction(event ->{
-      moveTurtle(fourthButton);
-    });*/
-
+  private void buttonListeners(ButtonGroup group) {
+    List<Button> buttons = group.getButtons();
+    buttons.get(0).setOnAction(event -> setTurtleImage());
+    buttons.get(1).setOnAction(event -> displayPopUp());
+    buttons.get(4).setOnAction(event -> setPenUp());
   }
 
+  private void setPenUp() {
+    markerClickedColor = null;
+    markerColorPicker.setValue(INITIAL_MARKER_COLOR);
+  }
 
-  public void setTurtleImage(){
+  public void setTurtleImage() {
     File file = fileChooser.showOpenDialog(stage);
-    if(file != null){
-      turtle = new Image(file.toURI().toString(), 60, 60, false, true);
+    if (file != null) {
+      turtle = new Turtle(file.toURI().toString(), 0);
       //turtle.setX(150);
       //turtle.setY(150);
     }
   }
 
 
-  public void assignStage(Stage incoming){
+  public void assignStage(Stage incoming) {
     stage = incoming;
   }
 
-  private void displayPopUp(){
-    BorderPane helpRoot = new BorderPane();
+  private void displayPopUp() {
+    ScrollPane helpRoot = new ScrollPane();
     Stage helpStage = new Stage();
-    helpStage.setTitle("Help Screen");
+    helpStage.setTitle(myResources.getString("HelpStageTitle"));
     VBox vb = new VBox();
 
-    vb.getChildren().addAll(helpImage0, helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6);
-    ScrollBar s1 = new ScrollBar();
-    s1.setMin(0);
-    s1.setMax(1400);
-    s1.setOrientation(Orientation.VERTICAL);
-    helpRoot.getChildren().add(vb);
-    helpRoot.setRight(s1);
-    this.listenVBoxScroll(s1, vb);
+    vb.getChildren()
+        .addAll(helpImage0, helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6);
+    helpRoot.setContent(vb);
     Scene errorScene = setUpPopUp(helpRoot);
     helpStage.setScene(errorScene);
     helpStage.show();
   }
 
 
-  private Scene setUpPopUp(BorderPane helpRoot){
-
-    return new Scene(helpRoot, 600, 800,  Color.LIGHTBLUE);
-  }
-
-  private void listenVBoxScroll(ScrollBar sb, VBox vb){
-    sb.valueProperty().addListener(new ChangeListener<Number>() {
-      public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-        vb.setLayoutY(-new_val.doubleValue());
-      }
-    });
-
+  private Scene setUpPopUp(ScrollPane helpRoot) {
+    return new Scene(helpRoot, 600, 800, Color.LIGHTBLUE);
   }
 
   private void createTextField() {
@@ -225,6 +254,32 @@ public class SubSceneRight extends SubScene {
     root.setOnKeyPressed(ke -> textFieldListener(ke.getCode()));
   }
 
+  private void scriptRunTextField() {
+    scriptFile = new TextField();
+    scriptFile.setPromptText(
+        "Enter file name of SLogo script"); // @TODO add to resource file so changes with language
+    scriptFile.getText();
+    vBox.getChildren().add(scriptFile);
+
+    //Setting an action for the Submit button
+    //root.setOnKeyPressed(ke -> scriptEnterListener(ke.getCode()));
+  }
+
+  public boolean getRunScript() {
+    return runScript;
+  }
+
+  public String getScript() {
+    runScript = false;
+    return scriptName;
+  }
+
+  public void execute(String command) {
+    //name.setText(command);
+    //textFieldListener(KeyCode.ENTER);
+    theText = command;
+    commandEntered = true;
+  }
 
   private void textFieldListener(KeyCode code) {
     if (code == KeyCode.ENTER) {
@@ -232,47 +287,95 @@ public class SubSceneRight extends SubScene {
         theText = name.getText().toLowerCase();
         commandEntered = true;
         commandTextArea.setText(commandTextArea.getText() + "\n" + theText);
-        commandTextArea.setText(commandTextArea.getText() + "\n" + SUCCESSFUL_COMMAND);
       } else {
         commandTextArea.setText(commandTextArea.getText() + "\n" + EMPTY_COMMAND);
       }
       name.clear();
+      if ((scriptFile.getText() != null && !scriptFile.getText().isEmpty())) {
+        scriptName = scriptFile.getText().toLowerCase();
+        runScript = true;
+        scriptFile.clear();
+      }
     }
   }
 
-//  private void createRectangle() {
-//    rect = new Rectangle(50, 50, Color.BLUE);
-//    vBox.getChildren().add(rect);
-//  }
-
   private void createBackgroundColorPicker() {
-    cp = new ColorPicker(INITIAL_BACKGROUND_COLOR);
-    vBox.getChildren().add(cp);
+    backgroundColorPicker = new ColorPicker(INITIAL_BACKGROUND_COLOR);
+    vBox.getChildren().add(backgroundColorPicker);
 
-    cp.setOnAction(event -> {
-      clickedColor = cp.getValue();
+    backgroundColorPicker.setOnAction(event -> {
+      clickedColor = backgroundColorPicker.getValue();
       commandTextArea.setText(
           commandTextArea.getText() + "\n" + NEW_BACKGROUND_COLOR + clickedColor.toString());
     });
   }
 
-  @Override
-  public void update(Queue<EnumMap<MovingObjectProperties, Object>> commands) {
-
+  public void setVariableTextArea(Map<String, Double> vars) {
+    variableTextArea.setText(VARIABLE_AREA_TEXT);
+    for (Map.Entry<String, Double> entry : vars.entrySet()) {
+      variableTextArea.setText(
+          variableTextArea.getText() + "\n" + entry.getKey().substring(1) + " = " + entry
+              .getValue());
+    }
   }
 
-  public Image getTurtle(){return turtle;}
+  public void setUserTextArea(Map<String, List<String>> functions) {
+    userDefinedCommandsTextArea.setText(USER_TEXT_AREA);
+    for (Map.Entry<String, List<String>> entry : functions.entrySet()) {
+      userDefinedCommandsTextArea.setText(
+          userDefinedCommandsTextArea.getText() + "\n" + entry.getKey() + " : " + entry
+              .getValue());
+    }
+  }
+
+  @Override
+  public void update(Queue<Map<MovingObjectProperties, Object>> movements) {
+    if (!(boolean) movements.peek().get(MovingObjectProperties.PEN) || (boolean) movements.peek()
+        .get(MovingObjectProperties.CLEAR)) {
+      markerClickedColor = null;
+      markerColorPicker.setValue(null);
+    }
+  }
+
+  @Override
+  public void updateDisplayWords() {
+    SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
+    VARIABLE_AREA_TEXT = myResources.getString("VariableAreaText");
+    EMPTY_COMMAND = myResources.getString("EmptyCommand");
+    NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
+    NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
+    NEW_BACKGROUND_COLOR = myResources.getString("NewBackgroundColor") + " ";
+    MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
+    CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
+    TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
+    USER_TEXT_AREA = myResources.getString("UserTextArea");
+    for (String key : Collections.list(myLanguages.getKeys())) {
+      language_names.add(myLanguages.getString(key));
+    }
+  }
+
+  public void setCommandText(String response) {
+    commandTextArea.setText(commandTextArea.getText() + "\n" + response);
+  }
+
+  public Image getTurtle() {
+    return turtle.getTurtleImage();
+  }
+
+  public TextField getTextField() {
+    return name;
+  }
 
   public Color getClickedColor() {
     return clickedColor;
   }
 
-  public Color getMarkerClickedColor() {
-    return markerClickedColor;
-  }
-
   public Object getLanguage() {
     return language;
+  }
+
+  public Color getMarkerClickedColor() {
+    return markerClickedColor;
   }
 
   public String getTheText() {

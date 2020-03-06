@@ -1,8 +1,11 @@
 package slogo.controller;
 
+import java.io.IOException;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import slogo.controller.listings.MovingObjectProperties;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
@@ -26,13 +29,16 @@ import slogo.exceptions.WrongCommandFormatException;
  */
 public interface BackEndExternalAPI {
 
+  Queue<Map<MovingObjectProperties, Object>> runScript(String command)
+      throws IOException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException;
+
   /**
    * Sets the desired language commands the user passed will be interpreted in. This method can be
    * called multiple times for the user to change language.
    *
    * @param language the language user inputs will be in
    */
-  void setLanguage(String language) throws LanguageIsNotSupportedException;
+  String[] setLanguage(String language) throws LanguageIsNotSupportedException;
 
   /**
    * Accepts one command from user input and updates the backend states accordingly
@@ -40,6 +46,21 @@ public interface BackEndExternalAPI {
    * @param command the command that the user inputs
    * @return a {@code Queue} of {@code Map} that represents states of the backend
    */
-  Queue<EnumMap<MovingObjectProperties, Object>> execute(String command)
+  Queue<Map<MovingObjectProperties, Object>> execute(String command)
       throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException;
+
+  /**
+   * Gets all variables users have created.
+   *
+   * @return a Map whose key is the variable names and value is the value
+   */
+  Map<String, Double> gerUserVars();
+
+  /**
+   * Gets all user-created commands
+   *
+   * @return a Map whose key is the function names, value is a list of string. The 0 index is a long
+   * string of commands in this function, and the rest are variables defined with this function.
+   */
+  Map<String, List<String>> getFunctions();
 }

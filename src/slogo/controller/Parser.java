@@ -1,14 +1,21 @@
 package slogo.controller;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
+import static slogo.controller.listings.BasicSyntax.COMMAND;
+import static slogo.controller.listings.BasicSyntax.COMMENT;
+import static slogo.controller.listings.BasicSyntax.CONSTANT;
+import static slogo.controller.listings.BasicSyntax.LISTEND;
+import static slogo.controller.listings.BasicSyntax.LISTSTART;
+import static slogo.controller.listings.BasicSyntax.VARIABLE;
+
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
-import javafx.util.Pair;
+import slogo.controller.CommandsMapHelper.SyntaxHelper;
+import slogo.controller.listings.MovingObjectProperties;
+import slogo.controller.scripting.FileReader;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
@@ -17,21 +24,29 @@ import slogo.model.Turtle;
 
 public class Parser implements BackEndExternalAPI {
 
-  private List<Turtle> animals;
-  private int turtleOperating = 0;
+  public static final int TRIM = 2;
+  public static final String FUNCTION_METHOD = "doFunction";
+  public static final String APPEND_METHOD = "append";
+  public static final String CONDITION_METHOD = "condition";
+
   private CommandsMapHelper commandsMapHelper;
+  private UserDefinedFields userDefinedFields;
+  private TurtleManager tm;
 
   private Stack<String> commandsLeft;
-  private Queue<EnumMap<MovingObjectProperties, Object>> turtleStates;
+  private Stack<CommandStructure> pausedCommands;
 
-  public Parser(int animalNum) {
-    animals = new ArrayList<>();
-    for (int i = 0; i < animalNum; i ++) {
-      animals.add(new Turtle(i));
-    }
+  public Parser(int turtleNumber) {
     commandsMapHelper = new CommandsMapHelper();
+    userDefinedFields = new UserDefinedFields();
+    tm = new TurtleManager(turtleNumber);
+    initialize();
+  }
+
+  private void initialize() {
     commandsLeft = new Stack<>();
-    turtleStates = new LinkedList<>();
+    pausedCommands = new Stack<>();
+    tm.cleanState();
   }
 
   /**
@@ -42,8 +57,8 @@ public class Parser implements BackEndExternalAPI {
    * @throws LanguageIsNotSupportedException
    */
   @Override
-  public void setLanguage(String language) throws LanguageIsNotSupportedException {
-    commandsMapHelper.setLanguage(language);
+  public String[] setLanguage(String language) throws LanguageIsNotSupportedException {
+    return commandsMapHelper.setLanguage(language);
   }
 
   /**
@@ -57,107 +72,179 @@ public class Parser implements BackEndExternalAPI {
    * @throws InvalidArgumentException
    */
   @Override
-  public Queue<EnumMap<MovingObjectProperties, Object>> execute(String command)
-      throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException {    turtleStates = new LinkedList<>();
-    turtleStates = new LinkedList<>();
+  public Queue<Map<MovingObjectProperties, Object>> execute(String command)
+      throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException {
+    initialize();
     fillStack(command);
 
-    while (!commandsLeft.empty()) {
-      getNextCommand();
+    Stack<String> temp = (Stack<String>) commandsLeft.clone();
+    for (Turtle t : tm.getTurtles()) {
+      commandsLeft = (Stack<String>) temp.clone();
+      while (!commandsLeft.empty()) {
+        executeNextCommand(t);
+      }
     }
+    return tm.getTurtleStates();
+  }
 
-    return turtleStates;
+  @Override
+  public Queue<Map<MovingObjectProperties, Object>> runScript(String filename)
+      throws IOException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException {
+    Queue<Map<MovingObjectProperties, Object>> commandResults = new LinkedList<>();
+    Queue<Map<MovingObjectProperties, Object>> commandResult;
+    Map<MovingObjectProperties, Object> turtleState;
+    FileReader file = new FileReader(filename);
+    List<String> commands = file.processScript();
+    for (int i = 0; i < commands.size(); i++) {
+      commandResult = execute(commands.get(i));
+      while (!commandResult.isEmpty()) {
+        turtleState = commandResult.remove();
+        commandResults.add(turtleState);
+      }
+    }
+    return commandResults;
   }
 
   private void fillStack(String command) {
     String[] c = command.split(" ");
     for (int i = c.length - 1; i >= 0; i--) {
-      commandsLeft.push(c[i]);
+      if (!c[i].equals("")) {
+        commandsLeft.push(c[i]);
+      }
     }
   }
 
-  private String getNextCommand()
+  /**
+   * Gets the user defined variables
+   *
+   * @return
+   */
+  @Override
+  public Map<String, Double> gerUserVars() {
+    return userDefinedFields.getUserVars();
+  }
+
+  @Override
+  public Map<String, List<String>> getFunctions() {
+    return userDefinedFields.getFunctions();
+  }
+
+  private void executeNextCommand(Turtle t)
       throws CommandDoesNotExistException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException {
+    String commandName = popNext();
+    CommandStructure current;
+    if (userDefinedFields.isFunction(commandName)) {
+      current = processFunction(commandName);
+    } else {
+      if (!SyntaxHelper.isType(commandName, COMMAND)) {
+        throw new InvalidArgumentException(
+            "The command " + commandName + " is not a valid SLogo command!");
+      }
+      current = commandsMapHelper.convertUserInput(commandName);
 
-    String commandName = commandsLeft.pop();
-    commandName = commandsMapHelper.convertUserInput(commandName);
-    System.out.println(commandName);
-    Pair<Class<?>, Method> pair = findClass(commandName);
-    Class<?> c = pair.getKey();
-    Method m = pair.getValue();
-    CommandStructure current = new CommandStructure(c, m, getNumOfPara(m));
-
-    while (current.needMoreParas()) {
-      String nextPara = getNextPara(current);
-      current.addPara(nextPara);
+      while (current.needMoreParas()) {
+        // execute if other commands need to be executed for return values
+        if (!canAddPara(current)) {
+          pausedCommands.add(current);
+          return;
+        }
+      }
     }
 
-    String returnVal = current.execute(animals.get(turtleOperating)).toString();
-    turtleStates.add(animals.get(turtleOperating).getState());
-    return returnVal;
+    pausedCommands.add(current);
+    checkPausedCommands(tm, t);
   }
 
-  private String getNextPara(CommandStructure structure)
-      throws WrongCommandFormatException, CommandDoesNotExistException, InvalidArgumentException, LanguageIsNotSupportedException {
-    String next = commandsLeft.pop();
+  private FunctionStructure processFunction(String function)
+      throws LanguageIsNotSupportedException, CommandDoesNotExistException, InvalidArgumentException {
+    FunctionStructure current = (FunctionStructure) commandsMapHelper
+        .convertUserInput(FUNCTION_METHOD);
+    current.setParaNum(userDefinedFields.getFuncParaNum(function) + 1);
+    current.addPara(function);
+    return current;
+  }
+
+  private void checkPausedCommands(TurtleManager tm, Turtle t)
+      throws InvalidArgumentException, WrongCommandFormatException {
+    String returnVal = null;
+    boolean hasExtra = false;
+    while (!pausedCommands.isEmpty()) {
+      if (!pausedCommands.peek().needMoreParas()) {
+        returnVal = pausedCommands.pop().singleExecute(tm, userDefinedFields, t).toString();
+        String extra = userDefinedFields.getExtraCommands();
+        if (!extra.equals("")) {
+          fillStack(extra);
+          hasExtra = true;
+        } else {
+          hasExtra = false;
+        }
+      } else if (!pausedCommands.isEmpty() && !hasExtra) {
+        if (returnVal != null) {
+          pausedCommands.peek().addPara(returnVal);
+        }
+        while (!commandsLeft.empty() && pausedCommands.peek().needMoreParas()) {
+          if (!canAddPara(pausedCommands.peek())) {
+            break;
+          }
+        }
+        returnVal = null;
+      }
+    }
+  }
+
+  private boolean canAddPara(CommandStructure structure)
+      throws WrongCommandFormatException, InvalidArgumentException {
+    String next = popNext();
     Class<?> nextType = structure.getNextParaType();
 
     // TODO: potentially add more types if necessary
-    if (nextType.equals(Double.class) || nextType.equals(Integer.class) || nextType.equals(double.class) || nextType.equals(int.class)) {
-      if (isNumeric(next)) {
-        return next;
+    if (nextType.equals(Double.class) || nextType.equals(Integer.class) || nextType
+        .equals(double.class) || nextType.equals(int.class)) {
+      if (SyntaxHelper.isType(next, CONSTANT)) {
+        structure.addPara(next);
+        return true;
+      }
+      if (SyntaxHelper.isType(next, VARIABLE)) {
+        structure.addPara(userDefinedFields.getVar(next));
+        return true;
       }
       commandsLeft.push(next);
-      return getNextCommand();
-    } else if (nextType.equals(String.class)) {
-      return next;
-    } else {
-      throw new WrongCommandFormatException("Command " + structure.getName() + " is not in the correct format!");
-    }
-  }
-
-  private boolean isNumeric(String str) {
-    try {
-      Double.parseDouble(str);
-      return true;
-    } catch (NumberFormatException e) {
       return false;
     }
+
+    if (nextType.equals(String.class)) {
+      structure.addPara(next);
+      return true;
+    }
+
+    throw new WrongCommandFormatException(
+        "Command " + structure.getName() + " is not in the correct format!");
   }
 
-  private Pair<Class<?>, Method> findClass(String commandName) throws CommandDoesNotExistException {
-    Class<?> commandsClass;
-    for (CommandType c : CommandType.values()) {
-      try {
-        commandsClass = Class.forName("slogo.controller.operations." + c.name());
-        Method method = findMethod(commandsClass.getDeclaredMethods(), commandName);
-        if (method != null) {
-          return new Pair<>(commandsClass, method);
-        }
-      } catch (ClassNotFoundException e) {
-        System.out.println(
-            "Internal Error: operation class name defined in CommandType but not implemented.");
+  private String popNext() throws InvalidArgumentException {
+    StringBuilder next = new StringBuilder(commandsLeft.pop());
+    while (!commandsLeft.isEmpty() && SyntaxHelper.isType(next.toString(), COMMENT)) {
+      next = new StringBuilder(commandsLeft.pop());
+    }
+
+    if (SyntaxHelper.isType(next.toString(), LISTSTART)) {
+      String s = next.toString();
+      while (!SyntaxHelper.isType(s, LISTEND)) {
+        s = commandsLeft.pop();
+        next.append(" ");
+        next.append(s);
       }
     }
 
-    throw new CommandDoesNotExistException(
-        "User input command \"" + commandName + "\" is not defined!");
-  }
+//    if (functions.containsKey(next.toString())) {
+//      List<String> com = functions.get(next.toString());
+//      String[] ss = com.get(1).split(" ");
+//      for (int i = ss.length - 1; i >= 0; i--) {
+//        commandsLeft.push(ss[i]);
+//      }
+//      next = new StringBuilder(popNext());
+//    }
 
-  private Method findMethod(Method[] commands, String commandName) {
-    for (Method method : commands) {
-      if (method.getName().toLowerCase().equals(commandName)) {
-        return method;
-      }
-    }
-    return null;
-  }
-
-  private int getNumOfPara(Method method) {
-    return method.getParameterCount();
-  }
-
-  public void setTurtleOperating(int id) {
-    turtleOperating = id;
+    return next.toString();
   }
 }

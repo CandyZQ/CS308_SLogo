@@ -1,15 +1,24 @@
 package slogo.controller.operations;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import slogo.controller.TurtleManager;
+import slogo.controller.UserDefinedFields;
 import slogo.exceptions.InvalidArgumentException;
+import slogo.model.Turtle;
 
 /**
  * This class contains exclusively of static method that perform basic math and boolean operations.
  * The methods of this class throws any exceptions that can happen during a math operation.
  */
-public class MathOperations {
+public class MathOperations extends Operations{
 
   public static final String NONNEGATIVE_ARG = "The argument should be non-negative!";
+
+  public MathOperations(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {
+    super(turtle, userDefinedFields, tm);
+  }
 
   /**
    * Adds two numbers together
