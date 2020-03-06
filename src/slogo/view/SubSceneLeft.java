@@ -42,8 +42,7 @@ public class SubSceneLeft extends SubScene {
   private static final int SLIDER_STARTING_VALUE = 2;
   private final Circle pen = new Circle(0, 0, 2);
 
-  private ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
-  private Turtle turtle = new Turtle(res.getString("Turtle"), 1);
+  private Turtle turtle = new Turtle(myResources.getString("Turtle"), 1);
 
   private Rectangle rect;
   private Slider turtleSpeed;
@@ -54,7 +53,6 @@ public class SubSceneLeft extends SubScene {
   private Color markerColor;
   private double markerThickness;
 
-  private ArrayList<Path> pathList;
   private Queue<Map<MovingObjectProperties, Object>> queue;
 
   private int statID;
@@ -75,17 +73,17 @@ public class SubSceneLeft extends SubScene {
     initialY = 0;
     root = new Group();
     vBox = new VBox();
-    vBox.getStyleClass().add(res.getString("VBoxStyle"));
+    vBox.getStyleClass().add(myResources.getString("VBoxStyle"));
     root.getChildren().add(vBox);
     createRectangle();
     INITIAL_TURTLE_X = (int) Math
         .round(rect.getX() + rect.getWidth() / 2 - Turtle.size / 2);
     INITIAL_TURTLE_Y = (int) Math
         .round(rect.getY() + rect.getHeight() / 2 - Turtle.size / 2);
-    vBox.getChildren().add(createLabel(res.getString("TurtleSpeedLabel")));
+    vBox.getChildren().add(createLabel(myResources.getString("TurtleSpeedLabel")));
     turtleSpeed = createSlider();
     vBox.getChildren().add(turtleSpeed);
-    vBox.getChildren().add(createLabel(res.getString("MarkerThicknessLabel")));
+    vBox.getChildren().add(createLabel(myResources.getString("MarkerThicknessLabel")));
     thick = createSlider();
     vBox.getChildren().add(thick);
     groupOfButtons = new ButtonG(dispCommands);
@@ -110,17 +108,17 @@ public class SubSceneLeft extends SubScene {
     VBox vb = new VBox();
 
     theLabel = new Label(
-        res.getString("TurtleID") + ' ' + statID + res.getString("TurtleX") + ' ' + (int) statX
-            + res.getString("TurtleY") + ' ' + (int) statY + res.getString("TurtleHead") + ' '
+            myResources.getString("TurtleID") + ' ' + statID + myResources.getString("TurtleX") + ' ' + (int) statX
+            + myResources.getString("TurtleY") + ' ' + (int) statY + myResources.getString("TurtleHead") + ' '
             + statHeading
-            + res.getString("TurtlePen") + ' ' + statPen + res.getString("TurtleThick") + ' '
+            + myResources.getString("TurtlePen") + ' ' + statPen + myResources.getString("TurtleThick") + ' '
             + statThickness);
 
     vb.getChildren().addAll(theLabel);
     statsRoot.setContent(vb);
 
     Scene statsScene = new Scene(statsRoot);
-    statsScene.getStylesheets().add("stats.css");
+    statsScene.getStylesheets().add(myResources.getString("StatsStyle"));
     statsStage.setScene(statsScene);
     statsStage.show();
   }
@@ -128,12 +126,12 @@ public class SubSceneLeft extends SubScene {
   private void makeOtherWindow(String title) {
     Stage sideStage = new Stage();
     ScrollPane scrollRoot = new ScrollPane();
-    sideStage.setTitle(res.getString(title));
+    sideStage.setTitle(myResources.getString(title));
     VBox vb = new VBox();
     vb.getChildren().addAll();
     scrollRoot.setContent(vb);
     Scene statsScene = new Scene(scrollRoot);
-    statsScene.getStylesheets().add("stats.css");
+    statsScene.getStylesheets().add(myResources.getString("StatsStyle"));
     sideStage.setScene(statsScene);
     sideStage.show();
   }
@@ -142,21 +140,21 @@ public class SubSceneLeft extends SubScene {
     ScrollPane scriptRoot = new ScrollPane();
     Stage scriptStage = new Stage();
     // scriptStage.setTitle(myResources.getString("ScriptStageTitle")); @TODO attach to resource file so language changes
-    scriptStage.setTitle("New Script");
+    scriptStage.setTitle(myResources.getString("NewScript"));
     VBox vb = new VBox();
 
     scriptName = new TextField();
     scriptTextArea = new TextArea();
-    scriptTextArea.getStyleClass().add("text-area");
+    scriptTextArea.getStyleClass().add(myResources.getString("TextArea"));
     Button scriptSave = new Button();
-    scriptSave.setText("Save"); // @TODO attach to resource file so language changes
+    scriptSave.setText(myResources.getString("Save")); // @TODO attach to resource file so language changes
     scriptSave.setOnAction(event -> saveNewScript());
 
     vb.getChildren().addAll(scriptSave, scriptName, scriptTextArea);
     scriptRoot.setContent(vb);
 
     Scene scriptScene = new Scene(scriptRoot);
-    scriptScene.getStylesheets().add("script.css");
+    scriptScene.getStylesheets().add(myResources.getString("ScriptStyle"));
     scriptStage.setScene(scriptScene);
     scriptStage.show();
   }
@@ -168,10 +166,10 @@ public class SubSceneLeft extends SubScene {
 
   private void updateStatsPopUp() {
     theLabel.setText(
-        res.getString("TurtleID") + ' ' + statID + res.getString("TurtleX") + ' ' + (int) statX
-            + res.getString("TurtleY") + ' ' + (int) statY + res.getString("TurtleHead") + ' '
+            myResources.getString("TurtleID") + ' ' + statID + myResources.getString("TurtleX") + ' ' + (int) statX
+            + myResources.getString("TurtleY") + ' ' + (int) statY + myResources.getString("TurtleHead") + ' '
             + statHeading
-            + res.getString("TurtlePen") + ' ' + statPen + res.getString("TurtleThick") + ' '
+            + myResources.getString("TurtlePen") + ' ' + statPen + myResources.getString("TurtleThick") + ' '
             + statThickness);
   }
 
@@ -273,7 +271,7 @@ public class SubSceneLeft extends SubScene {
   private void createRectangle() {
     rect = new Rectangle(ViewScreen.STAGE_WIDTH / 2, ViewScreen.STAGE_HEIGHT / 2,
         SubSceneRight.INITIAL_BACKGROUND_COLOR);
-    rect.getStyleClass().add(res.getString("StyleClass"));
+    rect.getStyleClass().add(myResources.getString("StyleClass"));
     vBox.getChildren().add(rect);
   }
 
@@ -290,9 +288,9 @@ public class SubSceneLeft extends SubScene {
 
   private String penUpDown() {
     if (markerColor == null) {
-      return "Pen Up";
+      return myResources.getString("PenUp");
     }
-    return "Pen Down";
+    return myResources.getString("PenDown");
   }
 
   public String getCommand() {
@@ -313,7 +311,7 @@ public class SubSceneLeft extends SubScene {
   }
 
   public void updateDisplayWords() {
-    rect.getStyleClass().add(res.getString("StyleClass"));
+    rect.getStyleClass().add(myResources.getString("StyleClass"));
   }
 
   public void setTurtle(Image newTurtle) {
@@ -326,10 +324,6 @@ public class SubSceneLeft extends SubScene {
 
   public void setMarkerColor(Color color) {
     markerColor = color;
-  }
-
-  public void setMarkerThickness(Double size) {
-    markerThickness = size;
   }
 
   public void listenToDisableTextField(TextField tf) {

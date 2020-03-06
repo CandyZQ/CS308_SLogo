@@ -79,7 +79,7 @@ public class Main extends Application {
             try {
                 newSimul.start(newStage);
             } catch (LanguageIsNotSupportedException e) {
-                System.out.println("Excet");
+                System.out.println("Exception");
             }
         }));
         thread.start();
