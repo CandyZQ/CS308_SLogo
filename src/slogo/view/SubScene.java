@@ -11,9 +11,6 @@ import slogo.controller.listings.MovingObjectProperties;
 
 public abstract class SubScene {
 
-  //new Locale("fr", "FR")
-  //new Locale("zh", "CN")
-  //
   protected Group root;
   protected VBox vBox;
   protected static Object language;

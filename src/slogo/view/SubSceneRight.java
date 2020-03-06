@@ -36,6 +36,7 @@ import slogo.controller.listings.MovingObjectProperties;
 
 public class SubSceneRight extends SubScene {
 
+  private static final int ENGLISH_IN_LIST = 3;
   private final ImageView helpImage0 = new ImageView(new Image(myResources.getString("HelpTitle")));
   private final ImageView helpImage1 = new ImageView(
       new Image(myResources.getString("BasicSyntax")));
@@ -53,17 +54,13 @@ public class SubSceneRight extends SubScene {
 
   private Turtle turtle = new Turtle(myResources.getString("Turtle"), 0);
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
-  public static final Color INITIAL_MARKER_COLOR = null; // the code for having the pen up
+  public static final Color INITIAL_MARKER_COLOR = null;
   public static String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
-  private String EMPTY_COMMAND = myResources.getString("EmptyCommand");
   private String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
   private String NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
   private String NEW_BACKGROUND_COLOR =
       myResources.getString("NewBackgroundColor") + " ";
-  private String COMMAND_AREA_TEXT = myResources.getString("CommandArea");
   private List<String> language_names = new ArrayList<>();
-  private String BACKGROUND_COLOR_LABEL = myResources
-      .getString("BackgroundColorLabel");
   private String MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
   private String CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
   private String TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
@@ -90,7 +87,6 @@ public class SubSceneRight extends SubScene {
           myResources.getString("UndoButton"),
           myResources.getString("PenUp")));
 
-  private static final int SPACING = 30;
 
   public SubSceneRight() {
     root = new Group();
@@ -100,13 +96,16 @@ public class SubSceneRight extends SubScene {
     for (String key : Collections.list(myLanguages.getKeys())) {
       language_names.add(myLanguages.getString(key));
     }
-    vBox.getChildren().add(createTable(new TableView<>()));
+    // vBox.getChildren().add(createTable(new TableView<>()));
     makeHBox(createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT),
         createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA), "thishbox");
-    vBox.getChildren().add(createTextArea(commandTextArea = new TextArea(), COMMAND_AREA_TEXT));
-    createTextField();
+    String COMMAND_AREA_TEXT = myResources.getString("CommandArea");
+    vBox.getChildren().add(makeVBox(createTextArea(commandTextArea = new TextArea(),
+        COMMAND_AREA_TEXT), createTextField()));
     makeHBox(makeVBox(createLabel(CHANGE_LANGUAGE_LABEL), createComboBox()),
         makeVBox(createLabel(MARKER_COLOR_LABEL), createMarkerColorPicker()), "hbox");
+    String BACKGROUND_COLOR_LABEL = myResources
+        .getString("BackgroundColorLabel");
     vBox.getChildren().add(createLabel(BACKGROUND_COLOR_LABEL));
     createBackgroundColorPicker();
     ButtonGroup group = new ButtonGroup(buttonNames);
@@ -144,26 +143,19 @@ public class SubSceneRight extends SubScene {
     });
   }
 
-  private Region createMarkerColorPicker() {
-    markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
-    markerColorPicker.setOnAction(event -> {
-      markerClickedColor = markerColorPicker.getValue();
-      commandTextArea
-          .setText(
-              commandTextArea.getText() + "\n" + NEW_MARKER_COLOR + markerClickedColor.toString());
-    });
-    return markerColorPicker;
-  }
-
   private Region createComboBox() {
     ComboBox<String> combo_box = new ComboBox<>(FXCollections.observableArrayList(language_names));
-    combo_box.setValue(language_names.get(3));
+    combo_box.setValue(language_names.get(ENGLISH_IN_LIST));
     language = combo_box.getValue();
     combo_box.setOnAction(event -> {
-      language = combo_box.getValue();
-      commandTextArea.setText(commandTextArea.getText() + "\n" + NEW_LANGUAGE + language);
+      comboBoxListener(combo_box);
     });
     return combo_box;
+  }
+
+  private void comboBoxListener(ComboBox<String> combo_box) {
+    language = combo_box.getValue();
+    commandTextArea.setText(commandTextArea.getText() + "\n" + NEW_LANGUAGE + language);
   }
 
   private Control createTextArea(TextArea area, String text) {
@@ -172,28 +164,27 @@ public class SubSceneRight extends SubScene {
     return area;
   }
 
-  private Control createTable(TableView<VariableItems> table) {
-    TableColumn<VariableItems, String> column1 = new TableColumn<>("First Name");
-    column1.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-
-    TableColumn<VariableItems, String> column2 = new TableColumn<>("Last Name");
-    column2.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-
-    table.getColumns().add(column1);
-    table.getColumns().add(column2);
-    //ObservableList<String> bleh = new SortedList<String>();
-    ObservableList<VariableItems> data =
-        FXCollections.observableArrayList(
-            new VariableItems("Jacob", "Smith"),
-            new VariableItems("Isabella", "Johnson"),
-            new VariableItems("Ethan", "Williams"),
-            new VariableItems("Emma", "Jones"),
-            new VariableItems("Michael", "Brown")
-        );
-    data.add(new VariableItems("One", "Two"));
-    table.setItems(data);
-    return table;
-  }
+//  private Control createTable(TableView<VariableItems> table) {
+//    TableColumn<VariableItems, String> column1 = new TableColumn<>("First Name");
+//    column1.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+//
+//    TableColumn<VariableItems, String> column2 = new TableColumn<>("Last Name");
+//    column2.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+//
+//    table.getColumns().add(column1);
+//    table.getColumns().add(column2);
+//    ObservableList<VariableItems> data =
+//        FXCollections.observableArrayList(
+//            new VariableItems("Jacob", "Smith"),
+//            new VariableItems("Isabella", "Johnson"),
+//            new VariableItems("Ethan", "Williams"),
+//            new VariableItems("Emma", "Jones"),
+//            new VariableItems("Michael", "Brown")
+//        );
+//    data.add(new VariableItems("One", "Two"));
+//    table.setItems(data);
+//    return table;
+//  }
 
   private Region createLabel(String text) {
     return new Label(text + ':');
@@ -214,9 +205,7 @@ public class SubSceneRight extends SubScene {
   public void setTurtleImage() {
     File file = fileChooser.showOpenDialog(stage);
     if (file != null) {
-      turtle = new Turtle(file.toURI().toString(), 0);
-      //turtle.setX(150);
-      //turtle.setY(150);
+      turtle = new Turtle(file.toURI().toString(), 1);
     }
   }
 
@@ -230,28 +219,25 @@ public class SubSceneRight extends SubScene {
     Stage helpStage = new Stage();
     helpStage.setTitle(myResources.getString("HelpStageTitle"));
     VBox vb = new VBox();
-
     vb.getChildren()
         .addAll(helpImage0, helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6);
     helpRoot.setContent(vb);
     Scene errorScene = setUpPopUp(helpRoot);
+    errorScene.getStylesheets().add("HelpScene.css");
     helpStage.setScene(errorScene);
     helpStage.show();
   }
 
 
   private Scene setUpPopUp(ScrollPane helpRoot) {
-    return new Scene(helpRoot, 600, 800, Color.LIGHTBLUE);
+    return new Scene(helpRoot);
   }
 
-  private void createTextField() {
+  private Region createTextField() {
     name = new TextField();
     name.setPromptText(TEXTFIELD_PROMPT_TEXT);
-    name.getText();
-    vBox.getChildren().add(name);
-
-    //Setting an action for the Submit button
-    root.setOnKeyPressed(ke -> textFieldListener(ke.getCode()));
+    vBox.setOnKeyPressed(ke -> textFieldListener(ke.getCode()));
+    return name;
   }
 
   private void scriptRunTextField() {
@@ -260,9 +246,6 @@ public class SubSceneRight extends SubScene {
         "Enter file name of SLogo script"); // @TODO add to resource file so changes with language
     scriptFile.getText();
     vBox.getChildren().add(scriptFile);
-
-    //Setting an action for the Submit button
-    //root.setOnKeyPressed(ke -> scriptEnterListener(ke.getCode()));
   }
 
   public boolean getRunScript() {
@@ -275,8 +258,6 @@ public class SubSceneRight extends SubScene {
   }
 
   public void execute(String command) {
-    //name.setText(command);
-    //textFieldListener(KeyCode.ENTER);
     theText = command;
     commandEntered = true;
   }
@@ -287,8 +268,6 @@ public class SubSceneRight extends SubScene {
         theText = name.getText().toLowerCase();
         commandEntered = true;
         commandTextArea.setText(commandTextArea.getText() + "\n" + theText);
-      } else {
-        commandTextArea.setText(commandTextArea.getText() + "\n" + EMPTY_COMMAND);
       }
       name.clear();
       if ((scriptFile.getText() != null && !scriptFile.getText().isEmpty())) {
@@ -302,12 +281,26 @@ public class SubSceneRight extends SubScene {
   private void createBackgroundColorPicker() {
     backgroundColorPicker = new ColorPicker(INITIAL_BACKGROUND_COLOR);
     vBox.getChildren().add(backgroundColorPicker);
+    backgroundColorPicker.setOnAction(event -> activeColorBackgroundListener());
+  }
 
-    backgroundColorPicker.setOnAction(event -> {
-      clickedColor = backgroundColorPicker.getValue();
-      commandTextArea.setText(
-          commandTextArea.getText() + "\n" + NEW_BACKGROUND_COLOR + clickedColor.toString());
-    });
+  private void activeColorBackgroundListener() {
+    clickedColor = backgroundColorPicker.getValue();
+    commandTextArea.setText(
+        commandTextArea.getText() + "\n" + NEW_BACKGROUND_COLOR + clickedColor.toString());
+  }
+
+  private Region createMarkerColorPicker() {
+    markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
+    markerColorPicker.setOnAction(event -> activeColorMarkerListener());
+    return markerColorPicker;
+  }
+
+  // refactor into method 2 above this bc repeated code
+  private void activeColorMarkerListener() {
+    markerClickedColor = markerColorPicker.getValue();
+    commandTextArea.setText(
+        commandTextArea.getText() + "\n" + NEW_MARKER_COLOR + clickedColor.toString());
   }
 
   public void setVariableTextArea(Map<String, Double> vars) {
@@ -341,7 +334,6 @@ public class SubSceneRight extends SubScene {
   public void updateDisplayWords() {
     SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
     VARIABLE_AREA_TEXT = myResources.getString("VariableAreaText");
-    EMPTY_COMMAND = myResources.getString("EmptyCommand");
     NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
     NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
     NEW_BACKGROUND_COLOR = myResources.getString("NewBackgroundColor") + " ";
