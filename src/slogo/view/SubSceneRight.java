@@ -2,13 +2,26 @@ package slogo.view;
 
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,32 +37,38 @@ import slogo.controller.listings.MovingObjectProperties;
 public class SubSceneRight extends SubScene {
 
   private final ImageView helpImage0 = new ImageView(new Image(myResources.getString("HelpTitle")));
-  private final ImageView helpImage1 = new ImageView(new Image(myResources.getString("BasicSyntax")));
-  private final ImageView helpImage2 = new ImageView(new Image(myResources.getString("TurtleCommands")));
-  private final ImageView helpImage3 = new ImageView(new Image(myResources.getString("TurtleQueries")));
-  private final ImageView helpImage4 = new ImageView(new Image(myResources.getString("MathOperations")));
-  private final ImageView helpImage5 = new ImageView(new Image(myResources.getString("BooleanOperations")));
-  private final ImageView helpImage6 = new ImageView(new Image(myResources.getString("UserDefined")));
+  private final ImageView helpImage1 = new ImageView(
+      new Image(myResources.getString("BasicSyntax")));
+  private final ImageView helpImage2 = new ImageView(
+      new Image(myResources.getString("TurtleCommands")));
+  private final ImageView helpImage3 = new ImageView(
+      new Image(myResources.getString("TurtleQueries")));
+  private final ImageView helpImage4 = new ImageView(
+      new Image(myResources.getString("MathOperations")));
+  private final ImageView helpImage5 = new ImageView(
+      new Image(myResources.getString("BooleanOperations")));
+  private final ImageView helpImage6 = new ImageView(
+      new Image(myResources.getString("UserDefined")));
 
 
   private Turtle turtle = new Turtle(myResources.getString("Turtle"), 0);
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
   public static final Color INITIAL_MARKER_COLOR = null; // the code for having the pen up
   public static String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
-  private static String EMPTY_COMMAND = myResources.getString("EmptyCommand");
-  private static String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
-  private static String NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
-  private static String NEW_BACKGROUND_COLOR =
+  private String EMPTY_COMMAND = myResources.getString("EmptyCommand");
+  private String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
+  private String NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
+  private String NEW_BACKGROUND_COLOR =
       myResources.getString("NewBackgroundColor") + " ";
-  private static String COMMAND_AREA_TEXT = myResources.getString("CommandArea");
-  private static List<String> language_names = new ArrayList<>();
-  private static String BACKGROUND_COLOR_LABEL = myResources
+  private String COMMAND_AREA_TEXT = myResources.getString("CommandArea");
+  private List<String> language_names = new ArrayList<>();
+  private String BACKGROUND_COLOR_LABEL = myResources
       .getString("BackgroundColorLabel");
-  private static String MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
-  private static String CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
-  private static String TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
-  private static String VARIABLE_AREA_TEXT = myResources.getString("VariableAreaText");
-  private static String USER_TEXT_AREA = myResources.getString("UserTextArea");
+  private String MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
+  private String CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
+  private String TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
+  private String VARIABLE_AREA_TEXT = myResources.getString("VariableAreaText");
+  private String USER_TEXT_AREA = myResources.getString("UserTextArea");
   private final FileChooser fileChooser = new FileChooser();
 
 
@@ -64,8 +83,6 @@ public class SubSceneRight extends SubScene {
   private TextArea commandTextArea;
   private TextArea variableTextArea;
   private TextArea userDefinedCommandsTextArea;
-  //private String theText;
-  //private Boolean commandEntered = false;
   private Stage stage;
   private final List<String> buttonNames = new ArrayList<>(
       Arrays.asList(myResources.getString("LoadButton"),
@@ -97,9 +114,7 @@ public class SubSceneRight extends SubScene {
     buttonListeners(group);
     scriptRunTextField(); // added for scripting
     listenForCommandSelection();
-    //createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT);
     listenForVariableSelection();
-    //createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA);
   }
 
   private void makeHBox(Region left, Region right, String style) {
@@ -128,19 +143,6 @@ public class SubSceneRight extends SubScene {
       name.setText(selectedText);
     });
   }
-
-//  private void createHBox() {
-//    HBox hBox = new HBox();
-//    hBox.getStyleClass().add(myResources.getString("HBox"));
-//    VBox vBoxLeft = new VBox();
-//    VBox vBoxRight = new VBox();
-//    createLabel(vBoxRight, MARKER_COLOR_LABEL);
-//    createMarkerColorPicker();
-//    createLabel(vBoxLeft, CHANGE_LANGUAGE_LABEL);
-//    createComboBox();
-//    hBox.getChildren().addAll(vBoxLeft, vBoxRight);
-//    vBox.getChildren().add(hBox);
-//  }
 
   private Region createMarkerColorPicker() {
     markerColorPicker = new ColorPicker(INITIAL_MARKER_COLOR);
@@ -198,12 +200,9 @@ public class SubSceneRight extends SubScene {
   }
 
   private void buttonListeners(ButtonGroup group) {
-
     List<Button> buttons = group.getButtons();
     buttons.get(0).setOnAction(event -> setTurtleImage());
-
     buttons.get(1).setOnAction(event -> displayPopUp());
-
     buttons.get(4).setOnAction(event -> setPenUp());
   }
 

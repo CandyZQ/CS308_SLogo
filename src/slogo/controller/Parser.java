@@ -8,8 +8,11 @@ import static slogo.controller.listings.BasicSyntax.LISTSTART;
 import static slogo.controller.listings.BasicSyntax.VARIABLE;
 
 import java.io.IOException;
-import java.util.*;
-
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Stack;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.listings.MovingObjectProperties;
 import slogo.controller.scripting.FileReader;
@@ -75,7 +78,7 @@ public class Parser implements BackEndExternalAPI {
     fillStack(command);
 
     Stack<String> temp = (Stack<String>) commandsLeft.clone();
-      for (Turtle t : tm.getTurtles()) {
+    for (Turtle t : tm.getTurtles()) {
       commandsLeft = (Stack<String>) temp.clone();
       while (!commandsLeft.empty()) {
         executeNextCommand(t);
@@ -116,10 +119,12 @@ public class Parser implements BackEndExternalAPI {
    *
    * @return
    */
+  @Override
   public Map<String, Double> gerUserVars() {
     return userDefinedFields.getUserVars();
   }
 
+  @Override
   public Map<String, List<String>> getFunctions() {
     return userDefinedFields.getFunctions();
   }

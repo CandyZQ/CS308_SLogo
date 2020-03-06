@@ -22,7 +22,6 @@ import slogo.controller.scripting.Script;
 
 public class SubSceneLeft extends SubScene {
 
-
   private static int INITIAL_TURTLE_X; // = 300
   private static int INITIAL_TURTLE_Y; //  = 250
   private final double TURTLE_SIZE = 60; // turtle is 60 px x 60 px
@@ -33,7 +32,7 @@ public class SubSceneLeft extends SubScene {
   private static final int SCRIPT_HEIGHT = 400;
   private final Circle pen = new Circle(0, 0, 2);
 
-  private static ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
+  private ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
   private Turtle turtle = new Turtle(res.getString("Turtle"), 0);
 
   private Rectangle rect;
@@ -58,6 +57,7 @@ public class SubSceneLeft extends SubScene {
   private TextArea scriptTextArea;
   private TextField scriptName;
   private Button scriptSave;
+  private static final int SPACING = 30;
 
   private ButtonG group;
 
@@ -70,8 +70,10 @@ public class SubSceneLeft extends SubScene {
     vBox.getStyleClass().add(res.getString("VBoxStyle"));
     root.getChildren().add(vBox);
     createRectangle();
-    INITIAL_TURTLE_X = (int) Math.round(rect.getX() + rect.getWidth()/2 + TURTLE_SIZE/2 - 30);
-    INITIAL_TURTLE_Y = (int) Math.round(rect.getY() + rect.getHeight()/2 + TURTLE_SIZE/2 - 30);
+    INITIAL_TURTLE_X = (int) Math
+        .round(rect.getX() + rect.getWidth() / 2 + TURTLE_SIZE / 2 - SPACING);
+    INITIAL_TURTLE_Y = (int) Math
+        .round(rect.getY() + rect.getHeight() / 2 + TURTLE_SIZE / 2 - SPACING);
 
     createAddLabel(res.getString("TurtleSpeedLabel"));
     turtleSpeed = createSlider();
@@ -259,8 +261,6 @@ public class SubSceneLeft extends SubScene {
   private ImageView createTurtle() {
     turtle.setX(INITIAL_TURTLE_X);
     turtle.setY(INITIAL_TURTLE_Y);
-    //turtle.setX(rect.getBoundsInParent().getCenterX() + SPACING_CONSTANT + TURTLE_SIZE / 2);
-    //turtle.setY(rect.getBoundsInParent().getCenterY() + SPACING_CONSTANT + TURTLE_SIZE / 2);
     return turtle;
   }
 
@@ -278,8 +278,6 @@ public class SubSceneLeft extends SubScene {
   @Override
   public void update(Queue<Map<MovingObjectProperties, Object>> queue) {
     this.queue = queue;
-//    while(!queue.isEmpty()) {
-//      System.out.println(queue.remove().get(MovingObjectProperties.Y));} //to show issue with queue
     recurse();
     updateStatsPopUp();
   }
@@ -288,7 +286,6 @@ public class SubSceneLeft extends SubScene {
     rect.getStyleClass().add(res.getString("StyleClass"));
   }
 
-  // if Pen is Up, return true, else return false
   private String penUpDown(){
     if (markerColor == null){
       return "Pen Up";

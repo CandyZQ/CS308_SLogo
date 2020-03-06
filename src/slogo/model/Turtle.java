@@ -20,18 +20,16 @@ public class Turtle implements MovingObject {
           MovingObjectProperties.RETURN_VALUE, 0.0D);
   private double myDistanceTravelled;
 
-  private static final double UP_ANGLE = 90;
-  private static final double LEFT_ANGLE = 180;
-  private static final double DOWN_ANGLE = 270;
-  private static final double RIGHT_ANGLE = 360;
-
-  private static final boolean RESTRICT_HEADING = true;
-  private static final double MIN_ANGLE = -360;
-  private static final double MAX_ANGLE = 360;
-  private static final double POS_ANGLE = 0;
-
-  private static final double INF_ANGLE = 1000000;
-  private static final String HEADING_TOO_LARGE = "New heading is too large";
+  public static final double UP_ANGLE = 90;
+  public static final double LEFT_ANGLE = 180;
+  public static final double DOWN_ANGLE = 270;
+  public static final double RIGHT_ANGLE = 360;
+  public static final double MIN_ANGLE = -360;
+  public static final double MAX_ANGLE = 360;
+  public static final double POS_ANGLE = 0;
+  public static final double INF_ANGLE = 1000000;
+  public static final boolean RESTRICT_HEADING = true;
+  public static final String HEADING_TOO_LARGE = "New heading is too large";
   // Default for calculating rotation is difference moving counterclockwise
 
   /**
@@ -140,10 +138,6 @@ public class Turtle implements MovingObject {
    */
   @Override
   public double moveDistance(double distance) {
-    //System.out.println("Called move distance to:");
-    //System.out.println(this.stateMap.get(MovingObjectProperties.HEADING));
-    //System.out.println(getCoterminal(
-           // (double) this.stateMap.get(MovingObjectProperties.HEADING), POS_ANGLE));
     double currentHeading = getCoterminal(
         (double) this.stateMap.get(MovingObjectProperties.HEADING), POS_ANGLE);
     double hypotenuse = Math.abs(distance);
@@ -154,10 +148,6 @@ public class Turtle implements MovingObject {
     double currentX = (double) this.stateMap.get(MovingObjectProperties.X);
     double currentY = (double) this.stateMap.get(MovingObjectProperties.Y);
     double[] delta = getDeltas(distance, currentHeading, opposite, adjacent);
-    //System.out.println("Current Pos: "+currentX+", "+currentY);
-    //double newpos = currentX+delta[0];
-    //double newposy = currentY+delta[1];
-    //System.out.println("New Pos: "+newpos+", "+newposy);
     this.stateMap.put(MovingObjectProperties.X, currentX + delta[0]);
     this.stateMap.put(MovingObjectProperties.Y, currentY + delta[1]);
     updateDistanceTravelled(distance);
@@ -174,7 +164,6 @@ public class Turtle implements MovingObject {
     this.stateMap.put(MovingObjectProperties.Y, defaultStateMap.get(MovingObjectProperties.Y));
     this.stateMap
         .put(MovingObjectProperties.HEADING, defaultStateMap.get(MovingObjectProperties.HEADING));
-    // Returns distance turtle moved TODO: do they mean to get home? Or total distance for all time?
     this.stateMap.put(MovingObjectProperties.RETURN_VALUE, myDistanceTravelled);
     return myDistanceTravelled;
   }
@@ -192,18 +181,6 @@ public class Turtle implements MovingObject {
   @Override
   public EnumMap<MovingObjectProperties, Object> getState() {
     return this.stateMap;
-  }
-
-  private Double isZero(Double val) {
-    double input = val;
-    double expd = 0.0D;
-    if (val < expd) {
-      val = -val;
-    }
-    if (val > (expd*.99D) && val < (expd*1.01D)) {
-      return expd;
-    }
-    return input;
   }
 
 

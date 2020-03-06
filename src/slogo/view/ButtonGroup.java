@@ -15,11 +15,8 @@ public class ButtonGroup {
     private List<HBox> hboxes;
     private VBox vbox;
     private final int VBOX_SPACING = 20;
-
     private List<Button> buttons;
-
     private List<String> numButtons;
-
 
     private static ResourceBundle myResources =
             ResourceBundle.getBundle("resources", Locale.getDefault());
