@@ -11,23 +11,23 @@ public class TurtleQueries extends Operations{
     super(turtle, userDefinedFields, tm);
   }
 
-  public Double xCoordinate() {
+  private Double xCoordinate() {
     return (Double) turtle.getState().get(MovingObjectProperties.X);
   }
 
-  public Double yCoordinate() {
+  private Double yCoordinate() {
     return (Double) turtle.getState().get(MovingObjectProperties.Y);
   }
 
-  public Double heading() {
+  private Double heading() {
     return (Double) turtle.getState().get(MovingObjectProperties.HEADING);
   }
 
-  public Boolean isPenDown() {
+  private Boolean isPenDown() {
     return (Boolean) (turtle.getState().get(MovingObjectProperties.PEN));
   }
 
-  public Boolean isShowing() {
+  private Boolean isShowing() {
     return (Boolean) turtle.getState().get(MovingObjectProperties.VISIBILITY);
   }
 }

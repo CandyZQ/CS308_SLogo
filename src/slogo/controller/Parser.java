@@ -41,7 +41,7 @@ public class Parser implements BackEndExternalAPI {
   }
 
   private void initialize() {
-    commandsLeft = new Stack<String>();
+    commandsLeft = new Stack<>();
     pausedCommands = new Stack<>();
     tm.cleanState();
   }
@@ -133,16 +133,16 @@ public class Parser implements BackEndExternalAPI {
   private void executeNextCommand(Turtle t)
       throws CommandDoesNotExistException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException {
     String commandName = popNext();
-    CommandStructure current;
-    if (userDefinedFields.isFunction(commandName)) {
-      current = processFunction(commandName);
-    } else {
-      current = processDefinedCommands(commandName);
-      while (current.needMoreParas()) {
-        if (!canAddPara(current)) {
-          pausedCommands.add(current);
-          return;
-        }
+        CommandStructure current;
+        if (userDefinedFields.isFunction(commandName)) {
+          current = processFunction(commandName);
+        } else {
+          current = processDefinedCommands(commandName);
+          while (current.needMoreParas()) {
+            if (!canAddPara(current)) {
+              pausedCommands.add(current);
+              return;
+            }
       }
     }
     pausedCommands.add(current);
@@ -175,13 +175,8 @@ public class Parser implements BackEndExternalAPI {
       if (!pausedCommands.peek().needMoreParas()) {
         returnVal = pausedCommands.pop().execute(tm, userDefinedFields, t).toString();
         String extra = userDefinedFields.getExtraCommands();
-        if (!extra.equals("")) {
-          fillStack(extra);
-          hasExtra = true;
-        } else {
-          hasExtra = false;
-        }
-      } else if (!pausedCommands.isEmpty() && !hasExtra) {
+        hasExtra = addExtra(extra);
+      } else if (!hasExtra) {
         if (returnVal != null) {
           pausedCommands.peek().addPara(returnVal);
         }
@@ -193,6 +188,14 @@ public class Parser implements BackEndExternalAPI {
         returnVal = null;
       }
     }
+  }
+
+  private boolean addExtra(String extra) {
+    if (!extra.equals("")) {
+      fillStack(extra);
+      return true;
+    }
+    return false;
   }
 
   private boolean canAddPara(CommandStructure structure)

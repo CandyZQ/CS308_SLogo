@@ -9,7 +9,6 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javax.swing.plaf.IconUIResource;
 import slogo.controller.listings.MovingObjectProperties;
 
 public abstract class SubScene {
@@ -17,7 +16,7 @@ public abstract class SubScene {
   protected Group root;
   protected VBox vBox;
   protected static String language;
-  private static String currentLan;
+  private String previousLan = "";
   protected static Map<String, List<String>> languageLocation = Map
       .of("French", List.of("fr", "FR"), "Spanish", List.of("es", "ES"), "English",
           List.of("en", "EN"), "Russian", List.of("ru", "RU"), "German", List.of("de", "DE"),
@@ -48,4 +47,12 @@ public abstract class SubScene {
   protected Label createLabel(String text) {
     return new Label(text + ": ");
   }
+  protected boolean languageUpdated() {
+    if (!previousLan.equals(language)) {
+      previousLan = language;
+      return true;
+    }
+    return false;
+  }
+
 }

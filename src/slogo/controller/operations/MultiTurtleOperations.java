@@ -20,7 +20,7 @@ public class MultiTurtleOperations extends Operations {
     super(turtle, userDefinedFields, tm);
   }
 
-  public void tell(String turtles) throws InvalidArgumentException {
+  private void tell(String turtles) throws InvalidArgumentException {
     String[] as = turtles.substring(Parser.TRIM, turtles.length() - Parser.TRIM).split(" ");
     tm.resetActiveTurtles();
     for (String s: as) {
@@ -28,16 +28,16 @@ public class MultiTurtleOperations extends Operations {
     }
   }
 
-  public Integer id () {
+  private Integer id () {
     return (Integer) turtle.getState().get(MovingObjectProperties.ID);
   }
 
-  public void ask (String turtles, String commands) throws InvalidArgumentException {
+  private void ask (String turtles, String commands) throws InvalidArgumentException {
     tell(turtles);
     userDefinedFields.setExtraCommands(commands.substring(Parser.TRIM, commands.length() - Parser.TRIM));
   }
 
-  public void askWith(String condition, String commands) throws InvalidArgumentException {
+  private void askWith(String condition, String commands) throws InvalidArgumentException {
     StringBuilder allTurtles = new StringBuilder(LEFT_SQUARE_BRACKET + " ");
     for (Turtle t: tm.getTurtles()) {
       allTurtles.append(t.getState().get(MovingObjectProperties.ID)).append(" ");

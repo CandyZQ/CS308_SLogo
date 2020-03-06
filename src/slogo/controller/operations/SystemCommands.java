@@ -19,12 +19,10 @@ public class SystemCommands extends Operations {
     super(turtle, userDefinedFields, tm);
   }
 
-  public void doFunction(List<String> info)
+  private void doFunction(List<String> info)
       throws CommandDoesNotExistException, InvalidArgumentException {
     // info: the first String is function name, and then follows all parameters
     String funcName = info.get(0);
-
-    String commands = userDefinedFields.getFunctionContent(funcName).get(0);
     List<String> variables = userDefinedFields.getFunctionContent(funcName);
 
     if (info.size() != variables.size()) {
@@ -40,14 +38,16 @@ public class SystemCommands extends Operations {
       }
       userDefinedFields.putUserVar(variables.get(i), Double.valueOf(info.get(i)));
     }
+
+    String commands = userDefinedFields.getFunctionContent(funcName).get(0);
     userDefinedFields.setExtraCommands(commands);
   }
 
-  public void increment(String var, Double amount) {
+  private void increment(String var, Double amount) {
     userDefinedFields.incrementVarBy(var, amount);
   }
 
-  public void append(String variable, Integer end, Integer increment, String commands) {
+  private void append(String variable, Integer end, Integer increment, String commands) {
     String as = commands.substring(TRIM, commands.length() - TRIM);
     StringBuilder sb = new StringBuilder();
 
@@ -59,7 +59,7 @@ public class SystemCommands extends Operations {
     }
   }
 
-  public void condition(Integer expr, String commands) {
+  private void condition(Integer expr, String commands) {
     if (expr != 0) {
       userDefinedFields.setExtraCommands(commands.substring(TRIM, commands.length() - TRIM));
     }

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import slogo.controller.listings.BasicSyntax;
@@ -13,6 +14,7 @@ import slogo.controller.listings.CommandType;
 import slogo.controller.listings.Languages;
 import slogo.controller.operations.SystemCommands;
 import slogo.exceptions.CommandDoesNotExistException;
+import slogo.exceptions.CompilerException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 
@@ -21,6 +23,8 @@ public class CommandsMapHelper {
   public static final String RESOURCE_DIR = "resources/languages/";
   public static final String SYNTAX_FILE = "Syntax";
   public static final String OPERATIONS_DIR = "slogo.controller.operations.";
+  public static final int FIRST_NUM = 50;
+  public static final int SECOND_NUM = 90;
 
   private List<Languages> supportedLanguages;
   private Languages currnetLan;
@@ -37,7 +41,7 @@ public class CommandsMapHelper {
 
   String[] setLanguage(String language) throws LanguageIsNotSupportedException {
     for (Languages l : supportedLanguages) {
-      if (l.name().toUpperCase().equals(language.toUpperCase())) {
+      if (l.name().equalsIgnoreCase(language)) {
         currnetLan = l;
         commandsMap = setUpCommandMap(currnetLan.name());
         return getDisplayCommands(currnetLan.name());
@@ -49,20 +53,30 @@ public class CommandsMapHelper {
 
   String[] getDisplayCommands(String filename) {
     var resources = ResourceBundle.getBundle(RESOURCE_DIR + filename);
-    String[] displayCommands = {"fd 50", "bk 50", "left 50", "right 50"};
+    String[] displayCommands = new String[4];
+
     for (var key : Collections.list(resources.getKeys())) {
       String regex = resources.getString(key);
-      if (key.equals("Forward")) {
-        displayCommands[0] = String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
-      } else if (key.equals("Backward")) {
-        displayCommands[1] = String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
-      } else if (key.equals("Left")) {
-        displayCommands[2] = String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
-      } else if (key.equals("Right")) {
-        displayCommands[3] = String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
+      switch (key) {
+        case "Forward":
+          displayCommands[0] = getText(regex, FIRST_NUM);
+          break;
+        case "Backward":
+          displayCommands[1] = getText(regex, FIRST_NUM);
+          break;
+        case "Left":
+          displayCommands[2] = getText(regex, SECOND_NUM);
+          break;
+        case "Right":
+          displayCommands[3] = getText(regex, SECOND_NUM);
+          break;
       }
     }
     return displayCommands;
+  }
+
+  private String getText(String regex, int num) {
+    return String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE)).split("\\|")[0] + " " + num;
   }
 
   private Map<String, Pattern> setUpCommandMap(String filename) {
@@ -86,9 +100,9 @@ public class CommandsMapHelper {
       return findClass(command.toLowerCase());
     }
 
-    for (String key : commandsMap.keySet()) {
-      if (SyntaxHelper.isMatch(command, commandsMap.get(key))) {
-        return findClass(key.toLowerCase());
+    for (Entry<String, Pattern> entry : commandsMap.entrySet()) {
+      if (SyntaxHelper.isMatch(command, entry.getValue())) {
+        return findClass(entry.getKey().toLowerCase());
       }
     }
 
@@ -112,16 +126,17 @@ public class CommandsMapHelper {
         Class<?> commandsClass = Class.forName(OPERATIONS_DIR + c.name());
         Method method = findMethod(commandsClass.getDeclaredMethods(), commandName);
         if (method != null) {
-          return method.getName().equalsIgnoreCase(Parser.FUNCTION_METHOD) ? new FunctionStructure(commandsClass, method)
+          return method.getName().equalsIgnoreCase(Parser.FUNCTION_METHOD) ? new FunctionStructure(
+              commandsClass, method)
               : new CommandStructure(commandsClass, method);
         }
       } catch (ClassNotFoundException e) {
-        System.out.println(
+        throw new CompilerException(
             "Internal Error: operation class name defined in CommandType but not implemented.");
       }
     }
-    throw new CommandDoesNotExistException(
-        "User input command \"" + commandName + "\" is not defined!");
+      throw new CommandDoesNotExistException(
+          "User input command \"" + commandName + "\" is not defined!");
   }
 
   private Method findMethod(Method[] commands, String commandName) {
@@ -134,6 +149,7 @@ public class CommandsMapHelper {
   }
 
   public static class SyntaxHelper {
+    private SyntaxHelper() {}
     public static boolean isType(String input, BasicSyntax type) throws InvalidArgumentException {
       return getInputType(input).equals(type);
     }

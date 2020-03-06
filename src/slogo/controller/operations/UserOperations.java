@@ -20,7 +20,7 @@ public class UserOperations extends Operations{
     super(turtle, userDefinedFields, tm);
   }
 
-  public Double makeVariable(String variable, Double expr) throws InvalidArgumentException {
+  private Double makeVariable(String variable, Double expr) throws InvalidArgumentException {
     if (!SyntaxHelper.isType(variable, BasicSyntax.VARIABLE)) {
       throw new InvalidArgumentException("The first argument is not in the form of a variable.");
     }
@@ -28,19 +28,19 @@ public class UserOperations extends Operations{
     return expr;
   }
 
-  public void repeat(Integer expr, String commands) throws InvalidArgumentException {
+  private void repeat(Integer expr, String commands) throws InvalidArgumentException {
     loop(1, expr, 1, commands, LOOP_EXPR);
   }
 
   private void loop(Integer start, Integer end, Integer increment, String commands, String variable)
       throws InvalidArgumentException {
-    StringBuilder sb = new StringBuilder();
     if (!isValidInsideBracket(commands)) {
       returnZero();
       return;
     }
 
     userDefinedFields.putUserVar(variable, Double.parseDouble(String.valueOf(start)));
+    StringBuilder sb = new StringBuilder();
     sb.append(Parser.APPEND_METHOD).append(" ").append(variable).append(" ").append(end).append(" ")
         .append(increment).append(" ").append(commands);
     userDefinedFields.setExtraCommands(sb.toString());
@@ -50,7 +50,7 @@ public class UserOperations extends Operations{
     turtle.getState().put(MovingObjectProperties.RETURN_VALUE, 0);
   }
 
-  public void doTimes(String vl, String commands) throws InvalidArgumentException {
+  private void doTimes(String vl, String commands) throws InvalidArgumentException {
     String variable = vl.split(" ")[1];
     checkType(variable, BasicSyntax.VARIABLE, 1);
     String l = vl.split(" ")[2];
@@ -60,7 +60,7 @@ public class UserOperations extends Operations{
     loop(1, limit, 1, commands, variable);
    }
 
-   public void FOR(String loopCondition, String commands) throws InvalidArgumentException {
+   private void FOR(String loopCondition, String commands) throws InvalidArgumentException {
     String variable = loopCondition.split(" ")[1];
     checkType(variable, BasicSyntax.VARIABLE, 1);
     String start = loopCondition.split(" ")[2];
@@ -79,7 +79,7 @@ public class UserOperations extends Operations{
      }
    }
 
-  public void IF(Integer expr, String commands) {
+  private void IF(Integer expr, String commands) {
     if (expr != 0) {
       userDefinedFields.setExtraCommands(Parser.CONDITION_METHOD + " 1 " + commands);
     } else {
@@ -87,7 +87,7 @@ public class UserOperations extends Operations{
     }
   }
 
-  public void ifElse(Integer expr, String trueCommands, String falsecommands) {
+  private void ifElse(Integer expr, String trueCommands, String falsecommands) {
     if (expr != 0) {
       userDefinedFields.setExtraCommands(trueCommands.substring(
           Parser.TRIM, trueCommands.length() - Parser.TRIM));
@@ -97,7 +97,7 @@ public class UserOperations extends Operations{
     }
   }
 
-  public Integer makeUserInstruction(String commandName, String variables, String commands)
+  private Integer makeUserInstruction(String commandName, String variables, String commands)
       throws InvalidArgumentException {
     List<String> current = new ArrayList<>(
         Collections.singletonList(commands.substring(Parser.TRIM, commands.length() - Parser.TRIM)));

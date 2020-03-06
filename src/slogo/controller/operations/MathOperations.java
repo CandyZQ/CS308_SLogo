@@ -1,7 +1,5 @@
 package slogo.controller.operations;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import slogo.controller.TurtleManager;
 import slogo.controller.UserDefinedFields;
@@ -27,7 +25,7 @@ public class MathOperations extends Operations{
    * @param b the second value
    * @return the result
    */
-  public static Double sum(Double a, Double b) {
+  private static Double sum(Double a, Double b) {
     return a + b;
   }
 
@@ -38,7 +36,7 @@ public class MathOperations extends Operations{
    * @param b the second value
    * @return the result
    */
-  public static Double difference(Double a, Double b) {
+  private static Double difference(Double a, Double b) {
     return a - b;
   }
 
@@ -49,7 +47,7 @@ public class MathOperations extends Operations{
    * @param b the second value
    * @return the result
    */
-  public static Double product(Double a, Double b) {
+  private static Double product(Double a, Double b) {
     return a * b;
   }
 
@@ -60,7 +58,7 @@ public class MathOperations extends Operations{
    * @param b the second Double
    * @return the result
    */
-  public static Double quotient(Double a, Double b) {
+  private static Double quotient(Double a, Double b) {
     return a / b;
   }
 
@@ -71,7 +69,7 @@ public class MathOperations extends Operations{
    * @param b the second int
    * @return the result
    */
-  public static Integer remainder(Integer a, Integer b) {
+  private static Integer remainder(Integer a, Integer b) {
     return a % b;
   }
 
@@ -82,7 +80,7 @@ public class MathOperations extends Operations{
    * @param a the value
    * @return the negative of the value
    */
-  public static Double minus(Double a) {
+  private static Double minus(Double a) {
     return 0 - a;
   }
 
@@ -92,7 +90,7 @@ public class MathOperations extends Operations{
    * @param max the upper bound of return value
    * @return a non-negative random value smaller than max
    */
-  public static Double random(Double max) throws InvalidArgumentException {
+  private static Double random(Double max) throws InvalidArgumentException {
     if (max < 0) {
       throw new InvalidArgumentException(NONNEGATIVE_ARG);
     }
@@ -106,7 +104,7 @@ public class MathOperations extends Operations{
    * @param degrees the angle in degree
    * @return the result
    */
-  public static Double sin(Double degrees) {
+  private static Double sin(Double degrees) {
     return Math.sin(Math.toRadians(degrees));
   }
 
@@ -116,7 +114,7 @@ public class MathOperations extends Operations{
    * @param degrees the angle in degree
    * @return the result
    */
-  public static Double cos(Double degrees) {
+  private static Double cos(Double degrees) {
     return Math.cos(Math.toRadians(degrees));
   }
 
@@ -126,7 +124,7 @@ public class MathOperations extends Operations{
    * @param degrees the angle in degree
    * @return the result
    */
-  public static Double tan(Double degrees) {
+  private static Double tan(Double degrees) {
     return Math.tan(Math.toRadians(degrees));
   }
 
@@ -136,7 +134,7 @@ public class MathOperations extends Operations{
    * @param degrees the angle in degree
    * @return the result
    */
-  public static Double atan(Double degrees) {
+  private static Double atan(Double degrees) {
     return Math.atan(Math.toRadians(degrees));
   }
 
@@ -146,7 +144,7 @@ public class MathOperations extends Operations{
    * @param degrees the angle in degree
    * @return the result
    */
-  public static Double log(Double degrees) {
+  private static Double log(Double degrees) {
     return Math.log(degrees);
   }
 
@@ -157,7 +155,7 @@ public class MathOperations extends Operations{
    * @param exponent the exponent that will be raised to
    * @return the result
    */
-  public static Double pow(Double base, Double exponent) {
+  private static Double pow(Double base, Double exponent) {
     return Math.pow(base, exponent);
   }
 
@@ -166,7 +164,7 @@ public class MathOperations extends Operations{
    *
    * @return the PI value
    */
-  public static Double pi() {
+  private static Double pi() {
     return Math.PI;
   }
 }

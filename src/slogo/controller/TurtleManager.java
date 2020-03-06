@@ -1,5 +1,6 @@
 package slogo.controller;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class TurtleManager {
   }
 
   Queue<Map<MovingObjectProperties, Object>> getTurtleStates() {
-    return turtleStates;
+    return new LinkedList<>(turtleStates);
   }
 
   void addStates(Turtle turtle) {
@@ -57,7 +58,7 @@ public class TurtleManager {
   }
 
   public Set<Turtle> getTurtles() {
-    return activeTurtles;
+    return Collections.unmodifiableSet(activeTurtles);
   }
 
   public void resetActiveTurtles() {

@@ -37,7 +37,7 @@ public class ButtonG {
     private void createButtons(){
         commands = new ArrayList<>();
         for(int i =0; i<numButtons.length; i++){
-            commands.add(numButtons[i].split("\\|")[0]+" 50");
+            commands.add(numButtons[i]);
             buttons.add(new Button(commands.get(i)));
             buttons.get(i).setWrapText(true);
         }
