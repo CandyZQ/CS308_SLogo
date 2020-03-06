@@ -36,7 +36,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws LanguageIsNotSupportedException {
         viewScreen = new ViewScreen(primaryStage);
         parser = new Parser(1);
-        parser.setLanguage(viewScreen.getLanguage());
         displayCommands = parser.setLanguage(viewScreen.getLanguage());
         setTiming();
     }

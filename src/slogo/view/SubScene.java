@@ -7,13 +7,15 @@ import java.util.Queue;
 import java.util.ResourceBundle;
 import javafx.scene.Group;
 import javafx.scene.layout.VBox;
+import javax.swing.plaf.IconUIResource;
 import slogo.controller.listings.MovingObjectProperties;
 
 public abstract class SubScene {
 
   protected Group root;
   protected VBox vBox;
-  protected static Object language;
+  protected static String language;
+  private static String currentLan;
   protected static Map<String, List<String>> languageLocation = Map
       .of("French", List.of("fr", "FR"), "Spanish", List.of("es", "ES"), "English",
           List.of("en", "EN"), "Russian", List.of("ru", "RU"), "German", List.of("de", "DE"),
@@ -35,9 +37,8 @@ public abstract class SubScene {
   public abstract void update(Queue<Map<MovingObjectProperties, Object>> movements);
 
   public static void updateResourceBundle() {
-    myResources = ResourceBundle.getBundle("resources",
-        new Locale(languageLocation.get(language).get(0), languageLocation.get(language).get(1)));
-
+      myResources = ResourceBundle.getBundle("resources",
+          new Locale(languageLocation.get(language).get(0), languageLocation.get(language).get(1)));
   }
 
   public abstract void updateDisplayWords();

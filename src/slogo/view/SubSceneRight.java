@@ -81,12 +81,9 @@ public class SubSceneRight extends SubScene {
   private TextArea variableTextArea;
   private TextArea userDefinedCommandsTextArea;
   private Stage stage;
-  private final List<String> buttonNames = new ArrayList<>(
-      Arrays.asList(myResources.getString("LoadButton"),
-          myResources.getString("HelpButton"), myResources.getString("ResetButton"),
-          myResources.getString("UndoButton"),
-          myResources.getString("PenUp")));
 
+  private List<String> buttonNames;
+  private ButtonGroup group;
 
   public SubSceneRight() {
     root = new Group();
@@ -108,9 +105,16 @@ public class SubSceneRight extends SubScene {
         .getString("BackgroundColorLabel");
     vBox.getChildren().add(createLabel(BACKGROUND_COLOR_LABEL));
     createBackgroundColorPicker();
-    ButtonGroup group = new ButtonGroup(buttonNames);
+
+    buttonNames =  new ArrayList<>(
+        Arrays.asList(myResources.getString("LoadButton"),
+            myResources.getString("HelpButton"), myResources.getString("ResetButton"),
+            myResources.getString("UndoButton"),
+            myResources.getString("PenUp")));
+    group = new ButtonGroup(buttonNames);
     vBox.getChildren().add(group.getBoxes());
     buttonListeners(group);
+
     scriptRunTextField(); // added for scripting
     listenForCommandSelection();
     listenForVariableSelection();
@@ -162,6 +166,17 @@ public class SubSceneRight extends SubScene {
     area.setText(text);
     area.setEditable(false);
     return area;
+  }
+
+  void updateButtonLan() {
+    buttonNames =  new ArrayList<>(
+        Arrays.asList(myResources.getString("LoadButton"),
+            myResources.getString("HelpButton"), myResources.getString("ResetButton"),
+            myResources.getString("UndoButton"),
+            myResources.getString("PenUp")));
+    vBox.getChildren().remove(group.getBoxes());
+    group.updateLang(buttonNames);
+    vBox.getChildren().addAll(group.getBoxes());
   }
 
 //  private Control createTable(TableView<VariableItems> table) {

@@ -21,11 +21,11 @@ public class ButtonGroup {
     private static ResourceBundle myResources =
             ResourceBundle.getBundle("resources", Locale.getDefault());
 
-    public ButtonGroup(List<String> number){
+    public ButtonGroup(List<String> buttonNames){
         vbox = new VBox(VBOX_SPACING);
-        numButtons = number;
         hboxes = new ArrayList<>();
         buttons = new ArrayList<>();
+        numButtons = buttonNames;
         createButtons();
         formatHBoxes();
         addElementsToVBox();
@@ -34,7 +34,12 @@ public class ButtonGroup {
     private void createButtons(){
         for(int i =0; i<numButtons.size(); i++){
             buttons.add(new Button(numButtons.get(i)));
-            buttons.get(i).setWrapText(true);
+        }
+    }
+
+    private void setButtonLanguage() {
+        for (int i = 0; i < numButtons.size(); i++) {
+            buttons.get(i).setText(numButtons.get(i));
         }
     }
 
@@ -82,4 +87,14 @@ public class ButtonGroup {
         return buttons;
     }
 
+    public void updateLang(List<String> buttonNames) {
+        numButtons = buttonNames;
+        setButtonLanguage();
+    }
+
+    private void removeElementsFromVBox() {
+        for (int i = 0; i < hboxes.size(); i++) {
+            vbox.getChildren().remove(hboxes.get(i));
+        }
+    }
 }
