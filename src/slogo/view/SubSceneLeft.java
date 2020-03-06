@@ -71,9 +71,9 @@ public class SubSceneLeft extends SubScene {
     root.getChildren().add(vBox);
     createRectangle();
     INITIAL_TURTLE_X = (int) Math
-        .round(rect.getX() + rect.getWidth() / 2 + TURTLE_SIZE / 2 - SPACING);
+        .round(rect.getX() + rect.getWidth() / 2 - SPACING);
     INITIAL_TURTLE_Y = (int) Math
-        .round(rect.getY() + rect.getHeight() / 2 + TURTLE_SIZE / 2 - SPACING);
+        .round(rect.getY() + rect.getHeight() / 2 - SPACING);
 
     createAddLabel(res.getString("TurtleSpeedLabel"));
     turtleSpeed = createSlider();

@@ -18,8 +18,8 @@ public class ViewScreen implements ExternalAPIViewable {
   public static final String STYLE_SHEET = "style.css";
 
 
-  private static SubSceneLeft scLeft;
-  private static SubSceneRight scRight;
+  private SubSceneLeft scLeft;
+  private SubSceneRight scRight;
   private Stage stage;
   private Scene scene;
   private boolean windowBoolean;
