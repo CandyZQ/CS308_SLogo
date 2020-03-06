@@ -9,7 +9,6 @@ public class TurtleCommands extends Operations{
 
   public TurtleCommands(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {
     super(turtle, userDefinedFields, tm);
-
   }
 
   private void forward(Double pixels) {

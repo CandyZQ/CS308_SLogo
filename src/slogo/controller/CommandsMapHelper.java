@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import slogo.controller.listings.BasicSyntax;
@@ -40,7 +41,7 @@ public class CommandsMapHelper {
 
   String[] setLanguage(String language) throws LanguageIsNotSupportedException {
     for (Languages l : supportedLanguages) {
-      if (l.name().toUpperCase().equals(language.toUpperCase())) {
+      if (l.name().equalsIgnoreCase(language)) {
         currnetLan = l;
         commandsMap = setUpCommandMap(currnetLan.name());
         return getDisplayCommands(currnetLan.name());
@@ -99,9 +100,9 @@ public class CommandsMapHelper {
       return findClass(command.toLowerCase());
     }
 
-    for (String key : commandsMap.keySet()) {
-      if (SyntaxHelper.isMatch(command, commandsMap.get(key))) {
-        return findClass(key.toLowerCase());
+    for (Entry<String, Pattern> entry : commandsMap.entrySet()) {
+      if (SyntaxHelper.isMatch(command, entry.getValue())) {
+        return findClass(entry.getKey().toLowerCase());
       }
     }
 
@@ -148,6 +149,7 @@ public class CommandsMapHelper {
   }
 
   public static class SyntaxHelper {
+    private SyntaxHelper() {}
     public static boolean isType(String input, BasicSyntax type) throws InvalidArgumentException {
       return getInputType(input).equals(type);
     }

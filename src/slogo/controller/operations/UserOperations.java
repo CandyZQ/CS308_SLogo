@@ -34,13 +34,13 @@ public class UserOperations extends Operations{
 
   private void loop(Integer start, Integer end, Integer increment, String commands, String variable)
       throws InvalidArgumentException {
-    StringBuilder sb = new StringBuilder();
     if (!isValidInsideBracket(commands)) {
       returnZero();
       return;
     }
 
     userDefinedFields.putUserVar(variable, Double.parseDouble(String.valueOf(start)));
+    StringBuilder sb = new StringBuilder();
     sb.append(Parser.APPEND_METHOD).append(" ").append(variable).append(" ").append(end).append(" ")
         .append(increment).append(" ").append(commands);
     userDefinedFields.setExtraCommands(sb.toString());

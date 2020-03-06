@@ -41,7 +41,7 @@ public class Parser implements BackEndExternalAPI {
   }
 
   private void initialize() {
-    commandsLeft = new Stack<String>();
+    commandsLeft = new Stack<>();
     pausedCommands = new Stack<>();
     tm.cleanState();
   }

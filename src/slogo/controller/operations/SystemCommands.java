@@ -23,8 +23,6 @@ public class SystemCommands extends Operations {
       throws CommandDoesNotExistException, InvalidArgumentException {
     // info: the first String is function name, and then follows all parameters
     String funcName = info.get(0);
-
-    String commands = userDefinedFields.getFunctionContent(funcName).get(0);
     List<String> variables = userDefinedFields.getFunctionContent(funcName);
 
     if (info.size() != variables.size()) {
@@ -40,6 +38,8 @@ public class SystemCommands extends Operations {
       }
       userDefinedFields.putUserVar(variables.get(i), Double.valueOf(info.get(i)));
     }
+
+    String commands = userDefinedFields.getFunctionContent(funcName).get(0);
     userDefinedFields.setExtraCommands(commands);
   }
 

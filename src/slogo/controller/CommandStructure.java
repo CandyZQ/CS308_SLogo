@@ -50,7 +50,7 @@ class CommandStructure {
       paras.add(getNextParaType().getConstructor(String.class).newInstance(s));
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
       throw new InvalidArgumentException("Exception occurred when converting argument " + s
-          + " to the correct type of method call. Check whether arguments are of the correct type!");
+          + " to the correct type of method call. Check whether arguments are of the correct type!", e);
     }
   }
 
@@ -77,22 +77,19 @@ class CommandStructure {
     } catch (IllegalArgumentException e) {
       throw new InvalidArgumentException(e);
     } catch (IllegalAccessException e) {
-      throw new CompilerException("The method " + m.getName() + " called is not accessible");
+      throw new CompilerException("The method " + m.getName() + " called is not accessible", e);
     } catch (InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-      throw new CompilerException(e.getClass() + " occurred while running the command.");
+      throw new CompilerException(e.getClass() + " occurred while running the command.", e);
     }
 
     storeTurtleStates(res, tm, t);
     return res != null ? res : t.getState().get(MovingObjectProperties.RETURN_VALUE);
   }
 
-  private void storeTurtleStates(Object returnVal, TurtleManager tm, Turtle t) {
-    try {
-      if (returnVal != null && SyntaxHelper.isType(returnVal.toString(), CONSTANT)) {
-        tm.putReturnValue(returnVal, t);
-      }
-    } catch (InvalidArgumentException e) {
-      e.printStackTrace();
+  private void storeTurtleStates(Object returnVal, TurtleManager tm, Turtle t)
+      throws InvalidArgumentException {
+    if (returnVal != null && SyntaxHelper.isType(returnVal.toString(), CONSTANT)) {
+      tm.putReturnValue(returnVal, t);
     }
     tm.addStates(t);
   }
