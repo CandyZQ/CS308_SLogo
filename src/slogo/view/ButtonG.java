@@ -15,7 +15,6 @@ public class ButtonG {
     private HBox box;
     private List<HBox> hboxes;
     private VBox vbox;
-    private static final int VBOX_SPACING = 20;
     private List<Button> buttons;
     private List<String> commands;
     private static final int SPACING = 30;
@@ -25,7 +24,8 @@ public class ButtonG {
             ResourceBundle.getBundle("resources", Locale.getDefault());
 
     public ButtonG(String[] number){
-        vbox = new VBox(VBOX_SPACING);
+        vbox = new VBox();
+        vbox.getStyleClass().add("buttonvbox");
         numButtons = number;
         hboxes = new ArrayList<>();
         buttons = new ArrayList<>();
@@ -76,9 +76,9 @@ public class ButtonG {
         hboxes.add(box);
     }
 
-    private void addElementsToVBox(){
-        for(int i = 0; i < hboxes.size(); i++){
-            vbox.getChildren().add(hboxes.get(i));
+    private void addElementsToVBox() {
+        for (HBox hbox : hboxes) {
+            vbox.getChildren().add(hbox);
         }
     }
 

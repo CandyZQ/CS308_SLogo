@@ -37,7 +37,7 @@ public class ViewScreen implements ExternalAPIViewable {
   }
 
   private void startView() {
-    BorderPane root = new BorderPane(); // might need to make this an instance variable for refactoring, got rid of warning for now with local variable
+    BorderPane root = new BorderPane();
     scRight = new SubSceneRight();
     scRight.assignStage(stage);
     root.setRight(scRight.getRoot());
@@ -69,11 +69,9 @@ public class ViewScreen implements ExternalAPIViewable {
     return null;
   }
 
-
   public boolean getRunScript() { return scRight.getRunScript();}
 
   public String getScript() { return scRight.getScript();}
-
 
   public void update(
       Queue<Map<MovingObjectProperties, Object>> commands,
@@ -92,9 +90,6 @@ public class ViewScreen implements ExternalAPIViewable {
     //windowBoolean = scRight.getWindowBoolean();
     scRight.execute(scLeft.getCommand());
     if (commands != null && commands.peek() != null) {
-//      if (commands.peek().get(MovingObjectProperties.CLEAR).toString().contentEquals("true")) {
-//        scLeft.setMarkerColor(null);
-//      }
       scRight.setCommandText(SubSceneRight.SUCCESSFUL_COMMAND);
       scLeft.update(commands);
       scRight.update(commands);

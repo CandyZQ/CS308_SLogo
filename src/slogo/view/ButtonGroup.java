@@ -14,7 +14,6 @@ public class ButtonGroup {
     private HBox box;
     private List<HBox> hboxes;
     private VBox vbox;
-    private final int VBOX_SPACING = 20;
     private List<Button> buttons;
     private List<String> numButtons;
 
@@ -22,7 +21,8 @@ public class ButtonGroup {
             ResourceBundle.getBundle("resources", Locale.getDefault());
 
     public ButtonGroup(List<String> buttonNames){
-        vbox = new VBox(VBOX_SPACING);
+        vbox = new VBox();
+        vbox.getStyleClass().add("buttonvbox");
         hboxes = new ArrayList<>();
         buttons = new ArrayList<>();
         numButtons = buttonNames;
@@ -31,9 +31,9 @@ public class ButtonGroup {
         addElementsToVBox();
     }
 
-    private void createButtons(){
-        for(int i =0; i<numButtons.size(); i++){
-            buttons.add(new Button(numButtons.get(i)));
+    private void createButtons() {
+        for (String numButton : numButtons) {
+            buttons.add(new Button(numButton));
         }
     }
 
@@ -77,9 +77,9 @@ public class ButtonGroup {
         hboxes.add(box);
     }
 
-    private void addElementsToVBox(){
-        for(int i = 0; i < hboxes.size(); i++){
-            vbox.getChildren().add(hboxes.get(i));
+    private void addElementsToVBox() {
+        for (HBox hbox : hboxes) {
+            vbox.getChildren().add(hbox);
         }
     }
 
@@ -93,8 +93,8 @@ public class ButtonGroup {
     }
 
     private void removeElementsFromVBox() {
-        for (int i = 0; i < hboxes.size(); i++) {
-            vbox.getChildren().remove(hboxes.get(i));
+        for (HBox hbox : hboxes) {
+            vbox.getChildren().remove(hbox);
         }
     }
 }

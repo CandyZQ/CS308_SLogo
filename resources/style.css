@@ -55,7 +55,6 @@
 
 .rectangle {
   -fx-alignment: center;
-
 }
 
 .leftvbox {
@@ -66,4 +65,8 @@
 
 .thishbox {
   -fx-alignment: center;
+}
+
+.buttonvbox {
+  -fx-spacing: 10;
 }
