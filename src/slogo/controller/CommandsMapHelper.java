@@ -23,6 +23,8 @@ public class CommandsMapHelper {
   public static final String RESOURCE_DIR = "resources/languages/";
   public static final String SYNTAX_FILE = "Syntax";
   public static final String OPERATIONS_DIR = "slogo.controller.operations.";
+  public static final int FIRST_NUM = 50;
+  public static final int SECOND_NUM = 90;
 
   private List<Languages> supportedLanguages;
   private Languages currnetLan;
@@ -51,20 +53,30 @@ public class CommandsMapHelper {
 
   String[] getDisplayCommands(String filename) {
     var resources = ResourceBundle.getBundle(RESOURCE_DIR + filename);
-    String[] displayCommands = {"fd 50", "bk 50", "left 50", "right 50"};
+    String[] displayCommands = new String[4];
+
     for (var key : Collections.list(resources.getKeys())) {
       String regex = resources.getString(key);
-      if (key.equals("Forward")) {
-        displayCommands[0] = String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
-      } else if (key.equals("Backward")) {
-        displayCommands[1] = String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
-      } else if (key.equals("Left")) {
-        displayCommands[2] = String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
-      } else if (key.equals("Right")) {
-        displayCommands[3] = String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
+      switch (key) {
+        case "Forward":
+          displayCommands[0] = getText(regex, FIRST_NUM);
+          break;
+        case "Backward":
+          displayCommands[1] = getText(regex, FIRST_NUM);
+          break;
+        case "Left":
+          displayCommands[2] = getText(regex, SECOND_NUM);
+          break;
+        case "Right":
+          displayCommands[3] = getText(regex, SECOND_NUM);
+          break;
       }
     }
     return displayCommands;
+  }
+
+  private String getText(String regex, int num) {
+    return String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE)).split("\\|")[0] + " " + num;
   }
 
   private Map<String, Pattern> setUpCommandMap(String filename) {
