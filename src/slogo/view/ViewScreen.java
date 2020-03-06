@@ -61,7 +61,10 @@ public class ViewScreen implements ExternalAPIViewable {
 
   @Override
   public void exceptionHandling(String errorMessage) {
-    scRight.setCommandText(errorMessage);
+    if (errorMessage != null){
+      scRight.setCommandText(errorMessage);
+    }
+
   }
 
   @Override
