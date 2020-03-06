@@ -61,7 +61,7 @@ public class ViewScreen implements ExternalAPIViewable {
 
   @Override
   public void exceptionHandling(String errorMessage) {
-    if (errorMessage != null){
+    if (errorMessage != null) {
       scRight.setCommandText(errorMessage);
     }
 
@@ -72,9 +72,13 @@ public class ViewScreen implements ExternalAPIViewable {
     return null;
   }
 
-  public boolean getRunScript() { return scRight.getRunScript();}
+  public boolean getRunScript() {
+    return scRight.getRunScript();
+  }
 
-  public String getScript() { return scRight.getScript();}
+  public String getScript() {
+    return scRight.getScript();
+  }
 
   public void update(
       Queue<Map<MovingObjectProperties, Object>> commands,
@@ -113,7 +117,7 @@ public class ViewScreen implements ExternalAPIViewable {
     scLeft.setMarkerColor(Color.web(hexColor));
   }
 
-  public boolean getWindowBoolean(){
+  public boolean getWindowBoolean() {
     return windowBoolean;
   }
 }

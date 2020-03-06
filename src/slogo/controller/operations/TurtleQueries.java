@@ -5,7 +5,7 @@ import slogo.controller.UserDefinedFields;
 import slogo.controller.listings.MovingObjectProperties;
 import slogo.model.Turtle;
 
-public class TurtleQueries extends Operations{
+public class TurtleQueries extends Operations {
 
   public TurtleQueries(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {
     super(turtle, userDefinedFields, tm);

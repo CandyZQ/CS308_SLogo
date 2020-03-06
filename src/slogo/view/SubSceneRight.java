@@ -15,7 +15,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -32,7 +31,10 @@ import slogo.controller.listings.MovingObjectProperties;
 
 public class SubSceneRight extends SubScene {
 
+  public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
+  public static final Color INITIAL_MARKER_COLOR = null;
   private static final int ENGLISH_IN_LIST = 3;
+  public static String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
   private final ImageView helpImage0 = new ImageView(new Image(myResources.getString("HelpTitle")));
   private final ImageView helpImage1 = new ImageView(
       new Image(myResources.getString("BasicSyntax")));
@@ -46,12 +48,8 @@ public class SubSceneRight extends SubScene {
       new Image(myResources.getString("BooleanOperations")));
   private final ImageView helpImage6 = new ImageView(
       new Image(myResources.getString("UserDefined")));
-
-
+  private final FileChooser fileChooser = new FileChooser();
   private Turtle turtle = new Turtle(myResources.getString("Turtle"), 0);
-  public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
-  public static final Color INITIAL_MARKER_COLOR = null;
-  public static String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
   private String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
   private String NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
   private String NEW_BACKGROUND_COLOR =
@@ -62,9 +60,6 @@ public class SubSceneRight extends SubScene {
   private String TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
   private String VARIABLE_AREA_TEXT = myResources.getString("VariableAreaText");
   private String USER_TEXT_AREA = myResources.getString("UserTextArea");
-  private final FileChooser fileChooser = new FileChooser();
-
-
   private ColorPicker backgroundColorPicker;
   private ColorPicker markerColorPicker;
   private Color clickedColor = INITIAL_BACKGROUND_COLOR;
@@ -103,7 +98,7 @@ public class SubSceneRight extends SubScene {
     vBox.getChildren().add(createLabel(BACKGROUND_COLOR_LABEL));
     createBackgroundColorPicker();
 
-    buttonNames =  new ArrayList<>(
+    buttonNames = new ArrayList<>(
         Arrays.asList(myResources.getString("LoadButton"),
             myResources.getString("HelpButton"), myResources.getString("ResetButton"),
             myResources.getString("UndoButton"),
@@ -187,11 +182,11 @@ public class SubSceneRight extends SubScene {
     buttons.get(5).setOnAction(event -> setWindowBoolean());
   }
 
-  private void setWindowBoolean(){
+  private void setWindowBoolean() {
     this.window = true;
   }
 
-  public boolean getWindowBoolean(){
+  public boolean getWindowBoolean() {
     boolean temp = window;
     window = false;
     return temp;

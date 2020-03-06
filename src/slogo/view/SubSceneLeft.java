@@ -34,11 +34,11 @@ import slogo.controller.scripting.Script;
 public class SubSceneLeft extends SubScene {
 
   private static final double ANGLE_CORRECTION = 90;
-  private static int INITIAL_TURTLE_X;
-  private static int INITIAL_TURTLE_Y;
   private static final double SLIDER_LOW_VALUE = 0.01;
   private static final double SLIDER_HIGH_VALUE = 10;
   private static final int SLIDER_STARTING_VALUE = 2;
+  private static int INITIAL_TURTLE_X;
+  private static int INITIAL_TURTLE_Y;
   private final Circle pen = new Circle(0, 0, 2);
 
   private Turtle turtle = new Turtle(myResources.getString("Turtle"), 1);
@@ -97,19 +97,18 @@ public class SubSceneLeft extends SubScene {
     vBox.getChildren().add(groupOfButtons.getBoxes());
     root.getChildren().add(createTurtle());
 
-    makeOtherWindow(myResources.getString("StatsStageTitle"), true);
-    makeOtherWindow(myResources.getString("NewScript"), false);
+    makeOtherWindow(myResources.getString("StatsStageTitle"));
+    makeOtherWindow(myResources.getString("NewScript"));
   }
 
-  private void makeOtherWindow(String title,
-      boolean whichToCreate) { //Bad code, get rid of boolean. Not extendable
+  private void makeOtherWindow(String title) {
     Stage sideStage = new Stage();
     sideStage.setTitle(title);
     VBox vb = new VBox();
-    if (whichToCreate) {
+    if (title.contentEquals(myResources.getString("StatsStageTitle"))) {
       theLabel = createLabel(statsString());
       vb.getChildren().add(theLabel);
-    } else {
+    } else if (title.contentEquals(myResources.getString("NewScript"))) {
       vb.getChildren().addAll(scriptPopUp());
     }
     vb.getChildren().addAll();
@@ -200,11 +199,6 @@ public class SubSceneLeft extends SubScene {
     return transition;
   }
 
-  private void setCommand(String command) {
-    theText = command;
-    commandEntered = true;
-  }
-
   private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading) {
     turtle.changeHeading(heading);
     TranslateTransition trans = new TranslateTransition(Duration.seconds(turtleSpeed.getValue()),
@@ -271,6 +265,11 @@ public class SubSceneLeft extends SubScene {
     String temp = theText;
     theText = null;
     return temp;
+  }
+
+  private void setCommand(String command) {
+    theText = command;
+    commandEntered = true;
   }
 
   public void updateButtons(String[] displayCo) {

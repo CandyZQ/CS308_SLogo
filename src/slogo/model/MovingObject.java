@@ -20,6 +20,7 @@ public interface MovingObject {
 
   /**
    * Rotates turtle by changing heading
+   *
    * @param offset Positive offset is clockwise, negative offset is counterclockwise
    * @return offset
    */
@@ -44,8 +45,8 @@ public interface MovingObject {
   /**
    * Sets the new heading of this object
    *
-   * @param angle the new heading, which assumes EAST of (0,0) is 0 degree and turning counterclockwise
-   *              from EAST increases angle
+   * @param angle the new heading, which assumes EAST of (0,0) is 0 degree and turning
+   *              counterclockwise from EAST increases angle
    * @return the number of degree moved
    */
   double setHeading(double angle);
@@ -53,26 +54,29 @@ public interface MovingObject {
   void clear();
 
   /**
-   * Updates Turtle heading to face (x,y)
-   * Does this by calculating angle then called public double setheading(double angle)
+   * Updates Turtle heading to face (x,y) Does this by calculating angle then called public double
+   * setheading(double angle)
+   *
    * @param (x,y) is point turtle has rotated to face.
    * @return absolute value of number of degrees moved
    */
   double setHeading(double x, double y);
 
-    /**
-     * Sets the position of this object
-     *
-     * @param x the x position
-     * @param y the y position
-     * @return the distance moved
-     */
+  /**
+   * Sets the position of this object
+   *
+   * @param x the x position
+   * @param y the y position
+   * @return the distance moved
+   */
   double setCoordinates(double x, double y);
 
 
   /**
    * Moves this object to the center of the screen and sets heading ot 0
-   * @Return total distance travelled by object since instantiated TODO: did they mean distance to get back home??
+   *
+   * @Return total distance travelled by object since instantiated TODO: did they mean distance to
+   * get back home??
    */
   double reset();
 
