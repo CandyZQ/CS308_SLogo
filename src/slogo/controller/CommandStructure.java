@@ -87,7 +87,7 @@ class CommandStructure {
 
   private void storeTurtleStates(Object returnVal, TurtleManager tm, Turtle t) {
     try {
-      if (SyntaxHelper.isType(returnVal.toString(), CONSTANT)) {
+      if (returnVal != null && SyntaxHelper.isType(returnVal.toString(), CONSTANT)) {
         tm.putReturnValue(returnVal, t);
       }
     } catch (InvalidArgumentException e) {
