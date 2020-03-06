@@ -78,8 +78,8 @@ public class ButtonGroup {
     }
 
     private void addElementsToVBox(){
-        for(int i = 0; i < hboxes.size(); i++){
-            vbox.getChildren().add(hboxes.get(i));
+        for (HBox hbox : hboxes) {
+            vbox.getChildren().add(hbox);
         }
     }
 
@@ -90,11 +90,5 @@ public class ButtonGroup {
     public void updateLang(List<String> buttonNames) {
         numButtons = buttonNames;
         setButtonLanguage();
-    }
-
-    private void removeElementsFromVBox() {
-        for (int i = 0; i < hboxes.size(); i++) {
-            vbox.getChildren().remove(hboxes.get(i));
-        }
     }
 }

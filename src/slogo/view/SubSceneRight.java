@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,11 +17,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -169,14 +165,17 @@ public class SubSceneRight extends SubScene {
   }
 
   void updateButtonLan() {
-    buttonNames =  new ArrayList<>(
-        Arrays.asList(myResources.getString("LoadButton"),
-            myResources.getString("HelpButton"), myResources.getString("ResetButton"),
-            myResources.getString("UndoButton"),
-            myResources.getString("PenUp")));
-    vBox.getChildren().remove(group.getBoxes());
-    group.updateLang(buttonNames);
-    vBox.getChildren().addAll(group.getBoxes());
+    if (languageUpdated()) {
+      buttonNames = new ArrayList<>(
+          Arrays.asList(myResources.getString("LoadButton"),
+              myResources.getString("HelpButton"), myResources.getString("ResetButton"),
+              myResources.getString("UndoButton"),
+              myResources.getString("PenUp")));
+      vBox.getChildren().remove(group.getBoxes());
+      group.updateLang(buttonNames);
+      vBox.getChildren().addAll(group.getBoxes());
+      buttonListeners(group);
+    }
   }
 
 //  private Control createTable(TableView<VariableItems> table) {
