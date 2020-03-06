@@ -87,7 +87,7 @@ public class ViewScreen implements ExternalAPIViewable {
     scRight.setVariableTextArea(variables);
     scRight.setUserTextArea(functions);
     scRight.updateButtonLan();
-    //windowBoolean = scRight.getWindowBoolean();
+    windowBoolean = scRight.getWindowBoolean();
     scRight.execute(scLeft.getCommand());
     if (commands != null && commands.peek() != null) {
       scRight.setCommandText(SubSceneRight.SUCCESSFUL_COMMAND);
