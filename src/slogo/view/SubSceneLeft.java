@@ -2,19 +2,17 @@ package slogo.view;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Queue;
-import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.TranslateTransition;
+import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -100,31 +98,24 @@ public class SubSceneLeft extends SubScene {
     vBox.getChildren().add(groupOfButtons.getBoxes());
     root.getChildren().add(createTurtle());
 
-    makeOtherWindow("Turtle Stats", true);
-    makeOtherWindow("New Script", false);
+    makeOtherWindow(myResources.getString("StatsStageTitle"), true);
+    makeOtherWindow(myResources.getString("NewScript"), false);
   }
 
   private void makeOtherWindow(String title,
       boolean whichToCreate) { //Bad code, get rid of boolean. Not extendable
     Stage sideStage = new Stage();
-    ScrollPane scrollRoot = new ScrollPane();
-    sideStage.setTitle(title);     //res.getString(title)
+    sideStage.setTitle(title);
     VBox vb = new VBox();
     if (whichToCreate) {
-      theLabel = createLabel(
-          myResources.getString("TurtleID") + ' ' + statID + myResources.getString("TurtleX") + ' ' + (int) statX
-              + myResources.getString("TurtleY") + ' ' + (int) statY + myResources.getString("TurtleHead") + ' '
-              + statHeading
-              + myResources.getString("TurtlePen") + ' ' + statPen + myResources.getString("TurtleThick") + ' '
-              + statThickness);
+      theLabel = createLabel(statsString());
       vb.getChildren().add(theLabel);
     } else {
       vb.getChildren().addAll(scriptPopUp());
     }
     vb.getChildren().addAll();
-    scrollRoot.setContent(vb);
-    Scene statsScene = new Scene(scrollRoot);
-    statsScene.getStylesheets().add(myResources.getString("ScriptStyle"));
+    Scene statsScene = new Scene(vb);
+    statsScene.getStylesheets().add(myResources.getString("WindowStyle"));
     sideStage.setScene(statsScene);
     sideStage.show();
   }
@@ -149,10 +140,13 @@ public class SubSceneLeft extends SubScene {
   }
 
   private String statsString() {
-    return myResources.getString("TurtleID") + ' ' + statID + myResources.getString("TurtleX") + ' ' + (int) statX
-        + myResources.getString("TurtleY") + ' ' + (int) statY + myResources.getString("TurtleHead") + ' '
+    return myResources.getString("TurtleID") + ' ' + statID + myResources.getString("TurtleX") + ' '
+        + (int) statX
+        + myResources.getString("TurtleY") + ' ' + (int) statY + myResources.getString("TurtleHead")
+        + ' '
         + statHeading
-        + myResources.getString("TurtlePen") + ' ' + statPen + myResources.getString("TurtleThick") + ' '
+        + myResources.getString("TurtlePen") + ' ' + statPen + myResources.getString("TurtleThick")
+        + ' '
         + statThickness;
   }
 
@@ -160,7 +154,7 @@ public class SubSceneLeft extends SubScene {
     Pane clip = new Pane();
     path.clipProperty().set(clip);
 
-    ChangeListener pen_Listener = (o1, o2, o3) -> {
+    InvalidationListener pen_Listener = o1 -> {
       Circle clip_eraser = new Circle(pen.getTranslateX(), pen.getTranslateY(), pen.getRadius());
       clip.getChildren().add(clip_eraser);
     };
@@ -179,14 +173,12 @@ public class SubSceneLeft extends SubScene {
 
   private void recurse() {
     if (!queue.isEmpty()) {
-      tf.setEditable(false); // .setVisible() will alternatively make it go away
-      TranslateTransition t1 = move();
-
-      t1.setOnFinished(event -> {
-
+      tf.setEditable(false);
+      TranslateTransition firstTransition = move();
+      firstTransition.setOnFinished(event -> {
         if (!queue.isEmpty()) {
-          TranslateTransition t2 = move();
-          t2.setOnFinished(event1 -> recurse());
+          TranslateTransition secondTransition = move();
+          secondTransition.setOnFinished(event1 -> recurse());
         } else {
           tf.setEditable(true);
         }
@@ -204,9 +196,9 @@ public class SubSceneLeft extends SubScene {
     statHeading = (Double) movements.get(MovingObjectProperties.HEADING);
     statThickness = markerThickness;
     statPen = penUpDown();
-    TranslateTransition t1 = moveTurtle(statX, -statY, -statHeading + ANGLE_CORRECTION);
-    t1.play();
-    return t1;
+    TranslateTransition transition = moveTurtle(statX, -statY, -statHeading + ANGLE_CORRECTION);
+    transition.play();
+    return transition;
   }
 
   private void setCommand(String command) {
@@ -262,18 +254,18 @@ public class SubSceneLeft extends SubScene {
     return new Slider(SLIDER_LOW_VALUE, SLIDER_HIGH_VALUE, SLIDER_STARTING_VALUE);
   }
 
-  @Override
-  public void update(Queue<Map<MovingObjectProperties, Object>> queue) {
-    this.queue = queue;
-    recurse();
-    theLabel.setText(statsString());
-  }
-
   private String penUpDown() {
     if (markerColor == null) {
       return myResources.getString("PenUp");
     }
     return myResources.getString("PenDown");
+  }
+
+  @Override
+  public void update(Queue<Map<MovingObjectProperties, Object>> queue) {
+    this.queue = queue;
+    recurse();
+    theLabel.setText(statsString());
   }
 
   public String getCommand() {
