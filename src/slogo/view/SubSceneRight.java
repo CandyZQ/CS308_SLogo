@@ -77,6 +77,7 @@ public class SubSceneRight extends SubScene {
   private TextField scriptFile;
   private String scriptName;
   private boolean runScript = false;
+  private boolean window = false;
   private TextArea commandTextArea;
   private TextArea variableTextArea;
   private TextArea userDefinedCommandsTextArea;
@@ -110,7 +111,7 @@ public class SubSceneRight extends SubScene {
         Arrays.asList(myResources.getString("LoadButton"),
             myResources.getString("HelpButton"), myResources.getString("ResetButton"),
             myResources.getString("UndoButton"),
-            myResources.getString("PenUp")));
+            myResources.getString("PenUp"), myResources.getString("NewWindow")));
     group = new ButtonGroup(buttonNames);
     vBox.getChildren().add(group.getBoxes());
     buttonListeners(group);
@@ -184,7 +185,19 @@ public class SubSceneRight extends SubScene {
     buttons.get(0).setOnAction(event -> setTurtleImage());
     buttons.get(1).setOnAction(event -> displayPopUp());
     buttons.get(4).setOnAction(event -> setPenUp());
+    buttons.get(5).setOnAction(event -> setWindowBoolean());
   }
+
+  private void setWindowBoolean(){
+    this.window = true;
+  }
+
+  public boolean getWindowBoolean(){
+    boolean temp = window;
+    window = false;
+    return temp;
+  }
+
 
   private void setPenUp() {
     markerClickedColor = null;
