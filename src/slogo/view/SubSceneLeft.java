@@ -1,20 +1,32 @@
 package slogo.view;
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Queue;
+import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import slogo.controller.listings.MovingObjectProperties;
@@ -22,6 +34,7 @@ import slogo.controller.scripting.Script;
 
 public class SubSceneLeft extends SubScene {
 
+  private static final double ANGLE_CORRECTION = 90;
   private static int INITIAL_TURTLE_X; // = 300
   private static int INITIAL_TURTLE_Y; //  = 250
   private final double TURTLE_SIZE = 60; // turtle is 60 px x 60 px
@@ -33,7 +46,7 @@ public class SubSceneLeft extends SubScene {
   private final Circle pen = new Circle(0, 0, 2);
 
   private ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
-  private Turtle turtle = new Turtle(res.getString("Turtle"), 0);
+  private Turtle turtle = new Turtle(res.getString("Turtle"), 1);
 
   private Rectangle rect;
   private Slider turtleSpeed;
@@ -56,10 +69,8 @@ public class SubSceneLeft extends SubScene {
   private Label theLabel;
   private TextArea scriptTextArea;
   private TextField scriptName;
-  private Button scriptSave;
-  private static final int SPACING = 30;
 
-  private ButtonG group;
+  private ButtonG groupOfButtons;
 
   public SubSceneLeft(String[] dispCommands) {
     markerThickness = 2;
@@ -71,57 +82,54 @@ public class SubSceneLeft extends SubScene {
     root.getChildren().add(vBox);
     createRectangle();
     INITIAL_TURTLE_X = (int) Math
-        .round(rect.getX() + rect.getWidth() / 2 - SPACING);
+        .round(rect.getX() + rect.getWidth() / 2 - TURTLE_SIZE / 2);
     INITIAL_TURTLE_Y = (int) Math
-        .round(rect.getY() + rect.getHeight() / 2 - SPACING);
-
-    createAddLabel(res.getString("TurtleSpeedLabel"));
+        .round(rect.getY() + rect.getHeight() / 2 - TURTLE_SIZE / 2);
+    vBox.getChildren().add(createLabel(res.getString("TurtleSpeedLabel")));
     turtleSpeed = createSlider();
     vBox.getChildren().add(turtleSpeed);
-
-    createAddLabel(res.getString("MarkerThicknessLabel"));
+    vBox.getChildren().add(createLabel(res.getString("MarkerThicknessLabel")));
     thick = createSlider();
     vBox.getChildren().add(thick);
-    group = new ButtonG(dispCommands);
+    groupOfButtons = new ButtonG(dispCommands);
 
-    for (int i = 0; i < group.getButtons().size(); i++) {
-      Button button = group.getButtons().get(i);
+    for (int i = 0; i < groupOfButtons.getButtons().size(); i++) {
+      Button button = groupOfButtons.getButtons().get(i);
       String commando = button.getText();
       button.setOnAction(e -> setCommand(commando));
     }
 
     commandEntered = false;
-    vBox.getChildren().add(group.getBoxes());
+    vBox.getChildren().add(groupOfButtons.getBoxes());
     root.getChildren().add(createTurtle());
 
     turtleStatsPopUp();
     scriptPopUp();
   }
 
-  private void createAddLabel(String displayLabel){
-    Label aLabel = new Label(displayLabel);
-    vBox.getChildren().add(aLabel);
-  }
-
-  private void turtleStatsPopUp(){
+  private void turtleStatsPopUp() {
     ScrollPane statsRoot = new ScrollPane();
     Stage statsStage = new Stage();
     statsStage.setTitle(res.getString("StatsStageTitle"));
     VBox vb = new VBox();
 
-    theLabel = new Label(res.getString("TurtleID") + statID +  res.getString("TurtleX") + statX
-    + res.getString("TurtleY") + statY + res.getString("TurtleHead") + statHeading
-    + res.getString("TurtlePen") +  statPen +  res.getString("TurtleThick") + statThickness);
+    theLabel = new Label(
+        res.getString("TurtleID") + ' ' + statID + res.getString("TurtleX") + ' ' + (int) statX
+            + res.getString("TurtleY") + ' ' + (int) statY + res.getString("TurtleHead") + ' '
+            + statHeading
+            + res.getString("TurtlePen") + ' ' + statPen + res.getString("TurtleThick") + ' '
+            + statThickness);
 
     vb.getChildren().addAll(theLabel);
     statsRoot.setContent(vb);
 
-    Scene statsScene = new Scene(statsRoot, 400, 400, Color.LIGHTBLUE);
+    Scene statsScene = new Scene(statsRoot);
+    statsScene.getStylesheets().add("stats.css");
     statsStage.setScene(statsScene);
     statsStage.show();
   }
 
-  private void scriptPopUp(){ // @TODO make pretty?
+  private void scriptPopUp() { // @TODO make pretty?
     ScrollPane scriptRoot = new ScrollPane();
     Stage scriptStage = new Stage();
     // scriptStage.setTitle(myResources.getString("ScriptStageTitle")); @TODO attach to resource file so language changes
@@ -130,17 +138,17 @@ public class SubSceneLeft extends SubScene {
 
     scriptName = new TextField();
     scriptTextArea = new TextArea();
-    scriptTextArea.setPrefWidth(SCRIPT_WIDTH);
-    scriptTextArea.setPrefHeight(SCRIPT_WIDTH*2);
-    scriptSave = new Button();
+    scriptTextArea.getStyleClass().add("text-area");
+    Button scriptSave = new Button();
     scriptSave.setText("Save"); // @TODO attach to resource file so language changes
     scriptSave.setOnAction(event -> saveNewScript());
 
     vb.getChildren().addAll(scriptSave, scriptName, scriptTextArea);
     scriptRoot.setContent(vb);
 
-    Scene statsScene = new Scene(scriptRoot, SCRIPT_WIDTH, SCRIPT_HEIGHT, Color.LIGHTBLUE);
-    scriptStage.setScene(statsScene);
+    Scene scriptScene = new Scene(scriptRoot);
+    scriptScene.getStylesheets().add("script.css");
+    scriptStage.setScene(scriptScene);
     scriptStage.show();
   }
 
@@ -149,24 +157,28 @@ public class SubSceneLeft extends SubScene {
     script.addAll(scriptTextArea.getText());
   }
 
- private void updateStatsPopUp(){
-   theLabel.setText(res.getString("TurtleID") + statID +  res.getString("TurtleX") + statX
-           + res.getString("TurtleY") + statY + res.getString("TurtleHead") + statHeading
-           + res.getString("TurtlePen") +  statPen +  res.getString("TurtleThick") + statThickness);
+  private void updateStatsPopUp() {
+    theLabel.setText(
+        res.getString("TurtleID") + ' ' + statID + res.getString("TurtleX") + ' ' + (int) statX
+            + res.getString("TurtleY") + ' ' + (int) statY + res.getString("TurtleHead") + ' '
+            + statHeading
+            + res.getString("TurtlePen") + ' ' + statPen + res.getString("TurtleThick") + ' '
+            + statThickness);
   }
 
   private Animation clipAnimation(Path path) {
     Pane clip = new Pane();
     path.clipProperty().set(clip);
 
-    ChangeListener pen_Listener = (o1,o2,o3) -> {
+    ChangeListener pen_Listener = (o1, o2, o3) -> {
       Circle clip_eraser = new Circle(pen.getTranslateX(), pen.getTranslateY(), pen.getRadius());
       clip.getChildren().add(clip_eraser);
     };
 
     pen.translateXProperty().addListener(pen_Listener);
     pen.translateYProperty().addListener(pen_Listener);
-    PathTransition pathTransition = new PathTransition(Duration.seconds(turtleSpeed.getValue()), path, pen);
+    PathTransition pathTransition = new PathTransition(Duration.seconds(turtleSpeed.getValue()),
+        path, pen);
     pathTransition.setOnFinished(t -> {
       path.setClip(null);
       clip.getChildren().clear();
@@ -193,6 +205,7 @@ public class SubSceneLeft extends SubScene {
       tf.setEditable(true);
     }
   }
+
   private TranslateTransition move() {
     Map<MovingObjectProperties, Object> movements = queue.remove();
     statID = (Integer) movements.get(MovingObjectProperties.ID);
@@ -201,20 +214,20 @@ public class SubSceneLeft extends SubScene {
     statHeading = (Double) movements.get(MovingObjectProperties.HEADING);
     statThickness = markerThickness;
     statPen = penUpDown();
-    TranslateTransition t1 = moveTurtle(statX,-1 * statY,statHeading * -1 + 90);
+    TranslateTransition t1 = moveTurtle(statX, -statY, -statHeading + ANGLE_CORRECTION);
     t1.play();
     return t1;
   }
 
   public void updateButtons(String[] displayCo) {
-    vBox.getChildren().remove(group.getBoxes());
-    group = new ButtonG(displayCo);
-    for (int i = 0; i < group.getButtons().size(); i++) {
-      Button button = group.getButtons().get(i);
+    vBox.getChildren().remove(groupOfButtons.getBoxes());
+    groupOfButtons = new ButtonG(displayCo);
+    for (int i = 0; i < groupOfButtons.getButtons().size(); i++) {
+      Button button = groupOfButtons.getButtons().get(i);
       String commando = button.getText();
       button.setOnAction(e -> setCommand(commando));
     }
-    vBox.getChildren().add(group.getBoxes());
+    vBox.getChildren().add(groupOfButtons.getBoxes());
   }
 
   private void setCommand(String command) {
@@ -222,7 +235,7 @@ public class SubSceneLeft extends SubScene {
     commandEntered = true;
   }
 
-  public String getCommand(){
+  public String getCommand() {
     String temp = theText;
     theText = null;
     return temp;
@@ -230,7 +243,8 @@ public class SubSceneLeft extends SubScene {
 
   private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading) {
     turtle.changeHeading(heading);
-    TranslateTransition trans = new TranslateTransition(Duration.seconds(turtleSpeed.getValue()), turtle);
+    TranslateTransition trans = new TranslateTransition(Duration.seconds(turtleSpeed.getValue()),
+        turtle);
     trans.setFromX(initialX);
     trans.setFromY(initialY);
     trans.setToX(xFinal);
@@ -286,8 +300,8 @@ public class SubSceneLeft extends SubScene {
     rect.getStyleClass().add(res.getString("StyleClass"));
   }
 
-  private String penUpDown(){
-    if (markerColor == null){
+  private String penUpDown() {
+    if (markerColor == null) {
       return "Pen Up";
     }
     return "Pen Down";

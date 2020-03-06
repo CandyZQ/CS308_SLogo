@@ -179,32 +179,6 @@ public class SubSceneRight extends SubScene {
     vBox.getChildren().addAll(group.getBoxes());
   }
 
-//  private Control createTable(TableView<VariableItems> table) {
-//    TableColumn<VariableItems, String> column1 = new TableColumn<>("First Name");
-//    column1.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-//
-//    TableColumn<VariableItems, String> column2 = new TableColumn<>("Last Name");
-//    column2.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-//
-//    table.getColumns().add(column1);
-//    table.getColumns().add(column2);
-//    ObservableList<VariableItems> data =
-//        FXCollections.observableArrayList(
-//            new VariableItems("Jacob", "Smith"),
-//            new VariableItems("Isabella", "Johnson"),
-//            new VariableItems("Ethan", "Williams"),
-//            new VariableItems("Emma", "Jones"),
-//            new VariableItems("Michael", "Brown")
-//        );
-//    data.add(new VariableItems("One", "Two"));
-//    table.setItems(data);
-//    return table;
-//  }
-
-  private Region createLabel(String text) {
-    return new Label(text + ':');
-  }
-
   private void buttonListeners(ButtonGroup group) {
     List<Button> buttons = group.getButtons();
     buttons.get(0).setOnAction(event -> setTurtleImage());

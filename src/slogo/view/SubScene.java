@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.ResourceBundle;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javax.swing.plaf.IconUIResource;
 import slogo.controller.listings.MovingObjectProperties;
@@ -37,9 +39,13 @@ public abstract class SubScene {
   public abstract void update(Queue<Map<MovingObjectProperties, Object>> movements);
 
   public static void updateResourceBundle() {
-      myResources = ResourceBundle.getBundle("resources",
-          new Locale(languageLocation.get(language).get(0), languageLocation.get(language).get(1)));
+    myResources = ResourceBundle.getBundle("resources",
+        new Locale(languageLocation.get(language).get(0), languageLocation.get(language).get(1)));
   }
 
   public abstract void updateDisplayWords();
+
+  protected Region createLabel(String text) {
+    return new Label(text + ": ");
+  }
 }
