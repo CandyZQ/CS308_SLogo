@@ -35,14 +35,11 @@ import slogo.controller.scripting.Script;
 public class SubSceneLeft extends SubScene {
 
   private static final double ANGLE_CORRECTION = 90;
-  private static int INITIAL_TURTLE_X; // = 300
-  private static int INITIAL_TURTLE_Y; //  = 250
-  private final double TURTLE_SIZE = 60; // turtle is 60 px x 60 px
+  private static int INITIAL_TURTLE_X;
+  private static int INITIAL_TURTLE_Y;
   private static final double SLIDER_LOW_VALUE = 0.01;
   private static final double SLIDER_HIGH_VALUE = 10;
   private static final int SLIDER_STARTING_VALUE = 2;
-  private static final int SCRIPT_WIDTH = 400;
-  private static final int SCRIPT_HEIGHT = 400;
   private final Circle pen = new Circle(0, 0, 2);
 
   private ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
@@ -82,9 +79,9 @@ public class SubSceneLeft extends SubScene {
     root.getChildren().add(vBox);
     createRectangle();
     INITIAL_TURTLE_X = (int) Math
-        .round(rect.getX() + rect.getWidth() / 2 - TURTLE_SIZE / 2);
+        .round(rect.getX() + rect.getWidth() / 2 - Turtle.size / 2);
     INITIAL_TURTLE_Y = (int) Math
-        .round(rect.getY() + rect.getHeight() / 2 - TURTLE_SIZE / 2);
+        .round(rect.getY() + rect.getHeight() / 2 - Turtle.size / 2);
     vBox.getChildren().add(createLabel(res.getString("TurtleSpeedLabel")));
     turtleSpeed = createSlider();
     vBox.getChildren().add(turtleSpeed);
@@ -110,7 +107,6 @@ public class SubSceneLeft extends SubScene {
   private void turtleStatsPopUp() {
     ScrollPane statsRoot = new ScrollPane();
     Stage statsStage = new Stage();
-    statsStage.setTitle(res.getString("StatsStageTitle"));
     VBox vb = new VBox();
 
     theLabel = new Label(
@@ -127,6 +123,19 @@ public class SubSceneLeft extends SubScene {
     statsScene.getStylesheets().add("stats.css");
     statsStage.setScene(statsScene);
     statsStage.show();
+  }
+
+  private void makeOtherWindow(String title) {
+    Stage sideStage = new Stage();
+    ScrollPane scrollRoot = new ScrollPane();
+    sideStage.setTitle(res.getString(title));
+    VBox vb = new VBox();
+    vb.getChildren().addAll();
+    scrollRoot.setContent(vb);
+    Scene statsScene = new Scene(scrollRoot);
+    statsScene.getStylesheets().add("stats.css");
+    sideStage.setScene(statsScene);
+    sideStage.show();
   }
 
   private void scriptPopUp() { // @TODO make pretty?
@@ -219,26 +228,9 @@ public class SubSceneLeft extends SubScene {
     return t1;
   }
 
-  public void updateButtons(String[] displayCo) {
-    vBox.getChildren().remove(groupOfButtons.getBoxes());
-    groupOfButtons = new ButtonG(displayCo);
-    for (int i = 0; i < groupOfButtons.getButtons().size(); i++) {
-      Button button = groupOfButtons.getButtons().get(i);
-      String commando = button.getText();
-      button.setOnAction(e -> setCommand(commando));
-    }
-    vBox.getChildren().add(groupOfButtons.getBoxes());
-  }
-
   private void setCommand(String command) {
     theText = command;
     commandEntered = true;
-  }
-
-  public String getCommand() {
-    String temp = theText;
-    theText = null;
-    return temp;
   }
 
   private TranslateTransition moveTurtle(double xFinal, double yFinal, double heading) {
@@ -296,15 +288,32 @@ public class SubSceneLeft extends SubScene {
     updateStatsPopUp();
   }
 
-  public void updateDisplayWords() {
-    rect.getStyleClass().add(res.getString("StyleClass"));
-  }
-
   private String penUpDown() {
     if (markerColor == null) {
       return "Pen Up";
     }
     return "Pen Down";
+  }
+
+  public String getCommand() {
+    String temp = theText;
+    theText = null;
+    return temp;
+  }
+
+  public void updateButtons(String[] displayCo) {
+    vBox.getChildren().remove(groupOfButtons.getBoxes());
+    groupOfButtons = new ButtonG(displayCo);
+    for (int i = 0; i < groupOfButtons.getButtons().size(); i++) {
+      Button button = groupOfButtons.getButtons().get(i);
+      String commando = button.getText();
+      button.setOnAction(e -> setCommand(commando));
+    }
+    vBox.getChildren().add(groupOfButtons.getBoxes());
+  }
+
+  public void updateDisplayWords() {
+    rect.getStyleClass().add(res.getString("StyleClass"));
   }
 
   public void setTurtle(Image newTurtle) {
