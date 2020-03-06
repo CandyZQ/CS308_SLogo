@@ -45,7 +45,7 @@ public abstract class SubScene {
 
   public abstract void updateDisplayWords();
 
-  protected Region createLabel(String text) {
+  protected Label createLabel(String text) {
     return new Label(text + ": ");
   }
 }

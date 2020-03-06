@@ -1,6 +1,7 @@
 package slogo.view;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Queue;
@@ -20,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -100,65 +102,47 @@ public class SubSceneLeft extends SubScene {
     vBox.getChildren().add(groupOfButtons.getBoxes());
     root.getChildren().add(createTurtle());
 
-    turtleStatsPopUp();
-    scriptPopUp();
+    makeOtherWindow("Turtle Stats", true);
+    makeOtherWindow("New Script", false);
   }
 
-  private void turtleStatsPopUp() {
-    ScrollPane statsRoot = new ScrollPane();
-    Stage statsStage = new Stage();
-    VBox vb = new VBox();
-
-    theLabel = new Label(
-        res.getString("TurtleID") + ' ' + statID + res.getString("TurtleX") + ' ' + (int) statX
-            + res.getString("TurtleY") + ' ' + (int) statY + res.getString("TurtleHead") + ' '
-            + statHeading
-            + res.getString("TurtlePen") + ' ' + statPen + res.getString("TurtleThick") + ' '
-            + statThickness);
-
-    vb.getChildren().addAll(theLabel);
-    statsRoot.setContent(vb);
-
-    Scene statsScene = new Scene(statsRoot);
-    statsScene.getStylesheets().add("stats.css");
-    statsStage.setScene(statsScene);
-    statsStage.show();
-  }
-
-  private void makeOtherWindow(String title) {
+  private void makeOtherWindow(String title,
+      boolean whichToCreate) { //Bad code, get rid of boolean. Not extendable
     Stage sideStage = new Stage();
     ScrollPane scrollRoot = new ScrollPane();
-    sideStage.setTitle(res.getString(title));
+    sideStage.setTitle(title);     //res.getString(title)
     VBox vb = new VBox();
+    if (whichToCreate) {
+      theLabel = createLabel(
+          res.getString("TurtleID") + ' ' + statID + res.getString("TurtleX") + ' ' + (int) statX
+              + res.getString("TurtleY") + ' ' + (int) statY + res.getString("TurtleHead") + ' '
+              + statHeading
+              + res.getString("TurtlePen") + ' ' + statPen + res.getString("TurtleThick") + ' '
+              + statThickness);
+      vb.getChildren().add(theLabel);
+    } else {
+      vb.getChildren().addAll(scriptPopUp());
+    }
     vb.getChildren().addAll();
     scrollRoot.setContent(vb);
     Scene statsScene = new Scene(scrollRoot);
-    statsScene.getStylesheets().add("stats.css");
+    statsScene.getStylesheets().add("script.css");
     sideStage.setScene(statsScene);
     sideStage.show();
   }
 
-  private void scriptPopUp() { // @TODO make pretty?
-    ScrollPane scriptRoot = new ScrollPane();
-    Stage scriptStage = new Stage();
-    // scriptStage.setTitle(myResources.getString("ScriptStageTitle")); @TODO attach to resource file so language changes
-    scriptStage.setTitle("New Script");
-    VBox vb = new VBox();
-
+  private List<Region> scriptPopUp() {
+    List<Region> nodes = new ArrayList<>();
     scriptName = new TextField();
     scriptTextArea = new TextArea();
     scriptTextArea.getStyleClass().add("text-area");
     Button scriptSave = new Button();
     scriptSave.setText("Save"); // @TODO attach to resource file so language changes
     scriptSave.setOnAction(event -> saveNewScript());
-
-    vb.getChildren().addAll(scriptSave, scriptName, scriptTextArea);
-    scriptRoot.setContent(vb);
-
-    Scene scriptScene = new Scene(scriptRoot);
-    scriptScene.getStylesheets().add("script.css");
-    scriptStage.setScene(scriptScene);
-    scriptStage.show();
+    nodes.add(scriptSave);
+    nodes.add(scriptName);
+    nodes.add(scriptTextArea);
+    return nodes;
   }
 
   private void saveNewScript() {
@@ -166,13 +150,12 @@ public class SubSceneLeft extends SubScene {
     script.addAll(scriptTextArea.getText());
   }
 
-  private void updateStatsPopUp() {
-    theLabel.setText(
-        res.getString("TurtleID") + ' ' + statID + res.getString("TurtleX") + ' ' + (int) statX
-            + res.getString("TurtleY") + ' ' + (int) statY + res.getString("TurtleHead") + ' '
-            + statHeading
-            + res.getString("TurtlePen") + ' ' + statPen + res.getString("TurtleThick") + ' '
-            + statThickness);
+  private String statsString() {
+    return res.getString("TurtleID") + ' ' + statID + res.getString("TurtleX") + ' ' + (int) statX
+        + res.getString("TurtleY") + ' ' + (int) statY + res.getString("TurtleHead") + ' '
+        + statHeading
+        + res.getString("TurtlePen") + ' ' + statPen + res.getString("TurtleThick") + ' '
+        + statThickness;
   }
 
   private Animation clipAnimation(Path path) {
@@ -285,7 +268,7 @@ public class SubSceneLeft extends SubScene {
   public void update(Queue<Map<MovingObjectProperties, Object>> queue) {
     this.queue = queue;
     recurse();
-    updateStatsPopUp();
+    theLabel.setText(statsString());
   }
 
   private String penUpDown() {
