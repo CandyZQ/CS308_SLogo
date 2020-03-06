@@ -47,7 +47,7 @@ public class CommandsMapHelper {
         "Input language " + language.toUpperCase() + " is not supported!");
   }
 
-  public String[] getDisplayCommands(String filename) {
+  String[] getDisplayCommands(String filename) {
     var resources = ResourceBundle.getBundle(RESOURCE_DIR + filename);
     String[] displayCommands = {"fd 50", "bk 50", "left 50", "right 50"};
     for (var key : Collections.list(resources.getKeys())) {
