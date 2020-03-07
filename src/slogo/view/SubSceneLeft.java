@@ -41,7 +41,7 @@ public class SubSceneLeft extends SubScene {
   private static int INITIAL_TURTLE_Y;
   private final Circle pen = new Circle(0, 0, 2);
 
-  private Turtle turtle = new Turtle(myResources.getString("Turtle"), 1);
+  private Turtle turtle = new Turtle(res.getString("Turtle"), 1);
 
   private Rectangle rect;
   private Slider turtleSpeed;
@@ -72,17 +72,14 @@ public class SubSceneLeft extends SubScene {
     initialY = 0;
     root = new Group();
     vBox = new VBox();
-    vBox.getStyleClass().add(myResources.getString("VBoxStyle"));
+    vBox.getStyleClass().add(res.getString("VBoxStyle"));
     root.getChildren().add(vBox);
     createRectangle();
-    INITIAL_TURTLE_X = (int) Math
-        .round(rect.getX() + rect.getWidth() / 2 - Turtle.size / 2);
-    INITIAL_TURTLE_Y = (int) Math
-        .round(rect.getY() + rect.getHeight() / 2 - Turtle.size / 2);
-    vBox.getChildren().add(createLabel(myResources.getString("TurtleSpeedLabel")));
+    initialTurtlePositions();
+    vBox.getChildren().add(createLabel(res.getString("TurtleSpeedLabel")));
     turtleSpeed = createSlider();
     vBox.getChildren().add(turtleSpeed);
-    vBox.getChildren().add(createLabel(myResources.getString("MarkerThicknessLabel")));
+    vBox.getChildren().add(createLabel(res.getString("MarkerThicknessLabel")));
     thick = createSlider();
     vBox.getChildren().add(thick);
     groupOfButtons = new ButtonG(dispCommands);
@@ -97,23 +94,28 @@ public class SubSceneLeft extends SubScene {
     vBox.getChildren().add(groupOfButtons.getBoxes());
     root.getChildren().add(createTurtle());
 
-    makeOtherWindow(myResources.getString("StatsStageTitle"));
-    makeOtherWindow(myResources.getString("NewScript"));
+    makeOtherWindow(res.getString("StatsStageTitle"));
+    makeOtherWindow(res.getString("NewScript"));
+  }
+
+  private void initialTurtlePositions(){
+    INITIAL_TURTLE_X = (int) Math.round(rect.getX() + rect.getWidth() / 2 - Turtle.size / 2);
+    INITIAL_TURTLE_Y = (int) Math.round(rect.getY() + rect.getHeight() / 2 - Turtle.size / 2);
   }
 
   private void makeOtherWindow(String title) {
     Stage sideStage = new Stage();
     sideStage.setTitle(title);
     VBox vb = new VBox();
-    if (title.contentEquals(myResources.getString("StatsStageTitle"))) {
+    if (title.contentEquals(res.getString("StatsStageTitle"))) {
       theLabel = createLabel(statsString());
       vb.getChildren().add(theLabel);
-    } else if (title.contentEquals(myResources.getString("NewScript"))) {
+    } else if (title.contentEquals(res.getString("NewScript"))) {
       vb.getChildren().addAll(scriptPopUp());
     }
     vb.getChildren().addAll();
     Scene statsScene = new Scene(vb);
-    statsScene.getStylesheets().add(myResources.getString("WindowStyle"));
+    statsScene.getStylesheets().add(res.getString("WindowStyle"));
     sideStage.setScene(statsScene);
     sideStage.show();
   }
@@ -122,9 +124,9 @@ public class SubSceneLeft extends SubScene {
     List<Region> nodes = new ArrayList<>();
     scriptName = new TextField();
     scriptTextArea = new TextArea();
-    scriptTextArea.getStyleClass().add(myResources.getString("TextArea"));
+    scriptTextArea.getStyleClass().add(res.getString("TextArea"));
     Button scriptSave = new Button();
-    scriptSave.setText(myResources.getString("Save"));
+    scriptSave.setText(res.getString("Save"));
     scriptSave.setOnAction(event -> saveNewScript());
     nodes.add(scriptSave);
     nodes.add(scriptName);
@@ -138,12 +140,12 @@ public class SubSceneLeft extends SubScene {
   }
 
   private String statsString() {
-    return myResources.getString("TurtleID") + ' ' + statID + myResources.getString("TurtleX") + ' '
+    return res.getString("TurtleID") + ' ' + statID + res.getString("TurtleX") + ' '
         + (int) statX
-        + myResources.getString("TurtleY") + ' ' + (int) statY + myResources.getString("TurtleHead")
+        + res.getString("TurtleY") + ' ' + (int) statY + res.getString("TurtleHead")
         + ' '
         + statHeading
-        + myResources.getString("TurtlePen") + ' ' + statPen + myResources.getString("TurtleThick")
+        + res.getString("TurtlePen") + ' ' + statPen + res.getString("TurtleThick")
         + ' '
         + statThickness;
   }
@@ -239,7 +241,7 @@ public class SubSceneLeft extends SubScene {
   private void createRectangle() {
     rect = new Rectangle(ViewScreen.STAGE_WIDTH / 2, ViewScreen.STAGE_HEIGHT / 2,
         SubSceneRight.INITIAL_BACKGROUND_COLOR);
-    rect.getStyleClass().add(myResources.getString("StyleClass"));
+    rect.getStyleClass().add(res.getString("StyleClass"));
     vBox.getChildren().add(rect);
   }
 
@@ -249,11 +251,18 @@ public class SubSceneLeft extends SubScene {
 
   private String penUpDown() {
     if (markerColor == null) {
-      return myResources.getString("PenUp");
+      return res.getString("PenUp");
     }
-    return myResources.getString("PenDown");
+    return res.getString("PenDown");
   }
 
+  /**
+   * Updates the queue with all the relevant turtle information and executes the method to move the turtl
+   * based on the contents of the queue
+   *
+   * @param queue - the list of information passed from the backend which contains all the information about the turtle
+   * and the marker
+   */
   @Override
   public void update(Queue<Map<MovingObjectProperties, Object>> queue) {
     this.queue = queue;
@@ -261,6 +270,11 @@ public class SubSceneLeft extends SubScene {
     theLabel.setText(statsString());
   }
 
+  /**
+   * Return the fixed command which is created as a result of pressing one of the four buttons
+   *
+   * @return the string which represents the command which will be fed into a text field
+   */
   public String getCommand() {
     String temp = theText;
     theText = null;
@@ -272,6 +286,12 @@ public class SubSceneLeft extends SubScene {
     commandEntered = true;
   }
 
+
+  /**
+   * Return the fixed command which is created as a result of pressing one of the four buttons
+   *
+   * @return the string which represents the command which will be fed into a text field
+   */
   public void updateButtons(String[] displayCo) {
     vBox.getChildren().remove(groupOfButtons.getBoxes());
     groupOfButtons = new ButtonG(displayCo);
@@ -284,7 +304,7 @@ public class SubSceneLeft extends SubScene {
   }
 
   public void updateDisplayWords() {
-    rect.getStyleClass().add(myResources.getString("StyleClass"));
+    rect.getStyleClass().add(res.getString("StyleClass"));
   }
 
   public void setTurtle(Image newTurtle) {
@@ -297,10 +317,6 @@ public class SubSceneLeft extends SubScene {
 
   public void setMarkerColor(Color color) {
     markerColor = color;
-  }
-
-  public void setMarkerThickness(Double size) {
-    markerThickness = size;
   }
 
   public void listenToDisableTextField(TextField tf) {

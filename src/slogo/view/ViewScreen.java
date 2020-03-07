@@ -1,9 +1,8 @@
 package slogo.view;
 
 
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
+
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -12,10 +11,12 @@ import slogo.controller.listings.MovingObjectProperties;
 
 public class ViewScreen implements ExternalAPIViewable {
 
+
+  private static ResourceBundle myResources = ResourceBundle.getBundle("resources", Locale.getDefault());
   public static final double STAGE_HEIGHT = 800;
   public static final double STAGE_WIDTH = 1000;
-  public static final String STAGE_TITLE = "SLOGO";
-  public static final String STYLE_SHEET = "style.css";
+  public static final String STAGE_TITLE = myResources.getString("MainStageTitle");
+  public static final String STYLE_SHEET = myResources.getString("MainStyleSheet");
 
 
   private SubSceneLeft scLeft;
@@ -41,7 +42,8 @@ public class ViewScreen implements ExternalAPIViewable {
     scRight = new SubSceneRight();
     scRight.assignStage(stage);
     root.setRight(scRight.getRoot());
-    displayCommands = new String[]{"FD 50", "BK 50", "LT 50", "RT 50"};
+    displayCommands = new String[]{myResources.getString("FixedForward"), myResources.getString("FixedBackward"),
+            myResources.getString("FixedLeft"),  myResources.getString("FixedRight")};
     scLeft = new SubSceneLeft(displayCommands);
     root.setLeft(scLeft.getRoot());
     setAsScene(new Scene(root, ObjectsViewable.STAGE_WIDTH, ObjectsViewable.STAGE_HEIGHT));

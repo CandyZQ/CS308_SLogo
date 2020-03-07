@@ -237,7 +237,7 @@ public class SubSceneRight extends SubScene {
   private void scriptRunTextField() {
     scriptFile = new TextField();
     scriptFile.setPromptText(
-        "Enter file name of SLogo script"); // @TODO add to resource file so changes with language
+       myResources.getString("ScriptPrompt"));
     scriptFile.getText();
     vBox.getChildren().add(scriptFile);
   }
