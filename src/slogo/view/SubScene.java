@@ -18,7 +18,7 @@ public abstract class SubScene {
           List.of("en", "EN"), "Russian", List.of("ru", "RU"), "German", List.of("de", "DE"),
           "Chinese", List.of("zh", "CN"), "Italian", List.of("it", "IT"), "Portuguese",
           List.of("pt", "PT"));
-  protected static ResourceBundle myResources =
+  protected static ResourceBundle res =
       ResourceBundle.getBundle("resources", Locale.getDefault());
   protected static ResourceBundle myLanguages =
       ResourceBundle.getBundle("languages", Locale.getDefault());
@@ -29,7 +29,7 @@ public abstract class SubScene {
   private String previousLan = "";
 
   public static void updateResourceBundle() {
-    myResources = ResourceBundle.getBundle("resources",
+    res = ResourceBundle.getBundle("resources",
         new Locale(languageLocation.get(language).get(0), languageLocation.get(language).get(1)));
   }
 
