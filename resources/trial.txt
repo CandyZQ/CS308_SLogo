@@ -1,0 +1,9 @@
+fd 50
+fd 50
+left 80
+fd 50
+right 20
+bk 50
+left 30
+fd 50
+cs

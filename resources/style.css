@@ -1,6 +1,8 @@
 .root {
   -fx-background: LIGHTGRAY;
   -fx-padding: 10;
+  -fx-pref-width: 1000;
+  -fx-pref-height: 800;
 }
 
 .button {
@@ -13,6 +15,7 @@
   -fx-pref-height: 5;
   -fx-font-weight: bold;
   -fx-font-size: 10px;
+  -fx-wrap-text: true;
 }
 
 .label {
@@ -55,15 +58,18 @@
 
 .rectangle {
   -fx-alignment: center;
-
 }
 
 .leftvbox {
   -fx-alignment: center;
   -fx-padding: 10;
-  -fx-spacing: 5;
+  -fx-spacing: 15;
 }
 
 .thishbox {
   -fx-alignment: center;
+}
+
+.buttonvbox {
+  -fx-spacing: 10;
 }

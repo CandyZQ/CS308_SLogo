@@ -25,11 +25,9 @@ public class CommandsMapHelper {
   public static final String OPERATIONS_DIR = "slogo.controller.operations.";
   public static final int FIRST_NUM = 50;
   public static final int SECOND_NUM = 90;
-
+  private static Map<String, Pattern> syntaxMap;
   private List<Languages> supportedLanguages;
   private Languages currnetLan;
-
-  private static Map<String, Pattern> syntaxMap;
   private Map<String, Pattern> commandsMap;
 
   public CommandsMapHelper() {
@@ -76,7 +74,8 @@ public class CommandsMapHelper {
   }
 
   private String getText(String regex, int num) {
-    return String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE)).split("\\|")[0] + " " + num;
+    return String.valueOf(Pattern.compile(regex, Pattern.CASE_INSENSITIVE)).split("\\|")[0] + " "
+        + num;
   }
 
   private Map<String, Pattern> setUpCommandMap(String filename) {
@@ -112,7 +111,7 @@ public class CommandsMapHelper {
 
   private boolean findInSysCommands(String command) {
     Class<SystemCommands> c = SystemCommands.class;
-    for (Method m: c.getDeclaredMethods()) {
+    for (Method m : c.getDeclaredMethods()) {
       if (m.getName().equalsIgnoreCase(command)) {
         return true;
       }
@@ -135,8 +134,8 @@ public class CommandsMapHelper {
             "Internal Error: operation class name defined in CommandType but not implemented.");
       }
     }
-      throw new CommandDoesNotExistException(
-          "User input command \"" + commandName + "\" is not defined!");
+    throw new CommandDoesNotExistException(
+        "User input command \"" + commandName + "\" is not defined!");
   }
 
   private Method findMethod(Method[] commands, String commandName) {
@@ -149,7 +148,10 @@ public class CommandsMapHelper {
   }
 
   public static class SyntaxHelper {
-    private SyntaxHelper() {}
+
+    private SyntaxHelper() {
+    }
+
     public static boolean isType(String input, BasicSyntax type) throws InvalidArgumentException {
       try {
         return getInputType(input).equals(type);

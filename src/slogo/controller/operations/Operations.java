@@ -5,6 +5,7 @@ import slogo.controller.UserDefinedFields;
 import slogo.model.Turtle;
 
 public abstract class Operations {
+
   Turtle turtle;
   UserDefinedFields userDefinedFields;
   TurtleManager tm;

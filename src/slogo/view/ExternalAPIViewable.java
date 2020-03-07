@@ -1,6 +1,9 @@
 package slogo.view;
 
-import javafx.stage.Stage;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import slogo.controller.listings.MovingObjectProperties;
 
 /**
  * The purpose of this interface is to communicate between the controller package and the view
@@ -33,14 +36,6 @@ public interface ExternalAPIViewable {
   void exceptionHandling(String errorMessage);
 
   /**
-   * This method will be called by the controller to initialize and set the scene for the first time
-   * in the initial configuration.
-   *
-   * @return The Stage of the GUI
-   */
-  Stage setScene();
-
-  /**
    * This command will be called constantly in the loop from the controller to always check what
    * language the commands should be read in for error checking.
    *
@@ -49,7 +44,19 @@ public interface ExternalAPIViewable {
   String getLanguage();
 
   /**
+   *
+   */
+  void update(Queue<Map<MovingObjectProperties, Object>> commands,
+      Map<String, Double> variables,
+      Map<String, List<String>> functions,
+      List<String> dispCommands);
+
+  /**
    * @return
    */
   void getColor(String hexColor);
+
+  boolean getWindowBoolean();
+
+  boolean getRunScript();
 }

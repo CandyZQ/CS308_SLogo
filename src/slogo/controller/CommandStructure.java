@@ -50,7 +50,8 @@ class CommandStructure {
       paras.add(getNextParaType().getConstructor(String.class).newInstance(s));
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
       throw new InvalidArgumentException("Exception occurred when converting argument " + s
-          + " to the correct type of method call. Check whether arguments are of the correct type!", e);
+          + " to the correct type of method call. Check whether arguments are of the correct type!",
+          e);
     }
   }
 

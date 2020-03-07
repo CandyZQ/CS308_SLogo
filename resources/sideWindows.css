@@ -1,0 +1,18 @@
+.root {
+  -fx-pref-width: 400;
+  -fx-pref-height: 400;
+  -fx-background-color: LIGHTGRAY;
+  -fx-wrap-text: true;
+}
+
+.text-area {
+  -fx-pref-height: 400;
+  -fx-pref-width: 400;
+}
+
+.label {
+  -fx-text-fill: BLACK;
+  -fx-font-weight: bold;
+  -fx-font-size: 20px;
+  -fx-wrap-text: true;
+}

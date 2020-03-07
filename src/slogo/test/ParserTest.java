@@ -1,12 +1,11 @@
 package slogo.test;
 
 import java.util.Map;
-import java.util.Map;
 import java.util.Queue;
 import org.junit.Assert;
 import org.junit.Test;
-import slogo.controller.listings.MovingObjectProperties;
 import slogo.controller.Parser;
+import slogo.controller.listings.MovingObjectProperties;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
@@ -302,7 +301,8 @@ public class ParserTest {
       Map<MovingObjectProperties, Object> map = q.poll();
 
 //      System.out.println(map.get(MovingObjectProperties.HEADING));
-      System.out.println("ID: " + map.get(MovingObjectProperties.ID) + ", Return: " + map.get(MovingObjectProperties.RETURN_VALUE));
+      System.out.println("ID: " + map.get(MovingObjectProperties.ID) + ", Return: " + map
+          .get(MovingObjectProperties.RETURN_VALUE));
       System.out.println("Y: " + map.get(MovingObjectProperties.Y));
     }
   }
