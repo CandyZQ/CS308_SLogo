@@ -3,7 +3,6 @@ package slogo.view;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import javafx.stage.Stage;
 import slogo.controller.listings.MovingObjectProperties;
 
 /**
@@ -37,14 +36,6 @@ public interface ExternalAPIViewable {
   void exceptionHandling(String errorMessage);
 
   /**
-   * This method will be called by the controller to initialize and set the scene for the first time
-   * in the initial configuration.
-   *
-   * @return The Stage of the GUI
-   */
-  Stage setScene();
-
-  /**
    * This command will be called constantly in the loop from the controller to always check what
    * language the commands should be read in for error checking.
    *
@@ -66,4 +57,6 @@ public interface ExternalAPIViewable {
   void getColor(String hexColor);
 
   boolean getWindowBoolean();
+
+  boolean getRunScript();
 }

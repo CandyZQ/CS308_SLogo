@@ -1,8 +1,13 @@
 package slogo.view;
 
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Queue;
+import java.util.ResourceBundle;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -15,8 +20,8 @@ public class ViewScreen implements ExternalAPIViewable {
   private static ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
   public static final double STAGE_HEIGHT = 800;
   public static final double STAGE_WIDTH = 1000;
-  public static final String STAGE_TITLE = res.getString("MainStageTitle");
-  public static final String STYLE_SHEET = res.getString("MainStyleSheet");
+  public static String STAGE_TITLE = res.getString("MainStageTitle");
+  public static String STYLE_SHEET = res.getString("MainStyleSheet");
 
 
   private SubSceneLeft scLeft;
@@ -29,10 +34,6 @@ public class ViewScreen implements ExternalAPIViewable {
 
   public ViewScreen(Stage stage) {
     this.stage = stage;
-    stage.setMaxHeight(STAGE_HEIGHT);
-    stage.setMinHeight(STAGE_HEIGHT);
-    stage.setMaxWidth(STAGE_WIDTH);
-    stage.setMinWidth(STAGE_WIDTH);
     startView();
     stage.show();
   }
@@ -43,12 +44,12 @@ public class ViewScreen implements ExternalAPIViewable {
     scRight.assignStage(stage);
     root.setRight(scRight.getRoot());
     displayCommands = new ArrayList<>(
-            Arrays.asList(res.getString("FixedForward"),
-                    res.getString("FixedBackward"), res.getString("FixedLeft"),
-                    res.getString("FixedRight")));
+        Arrays.asList(res.getString("FixedForward"),
+            res.getString("FixedBackward"), res.getString("FixedLeft"),
+            res.getString("FixedRight")));
     scLeft = new SubSceneLeft(displayCommands);
     root.setLeft(scLeft.getRoot());
-    setAsScene(new Scene(root, ObjectsViewable.STAGE_WIDTH, ObjectsViewable.STAGE_HEIGHT));
+    setAsScene(new Scene(root));
     stage.setScene(scene);
     stage.setTitle(STAGE_TITLE);
     scene.getStylesheets().add(STYLE_SHEET);
@@ -68,14 +69,9 @@ public class ViewScreen implements ExternalAPIViewable {
     if (errorMessage != null) {
       scRight.setCommandText(errorMessage);
     }
-
   }
 
   @Override
-  public Stage setScene() {
-    return null;
-  }
-
   public boolean getRunScript() {
     return scRight.getRunScript();
   }

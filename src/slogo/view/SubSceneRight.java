@@ -21,7 +21,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -210,7 +209,7 @@ public class SubSceneRight extends SubScene {
         .addAll(helpImage0, helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6);
     helpRoot.setContent(vb);
     Scene errorScene = setUpPopUp(helpRoot);
-    errorScene.getStylesheets().add("HelpScene.css");
+    errorScene.getStylesheets().add(res.getString("HelpStyle"));
     helpStage.setScene(errorScene);
     helpStage.show();
   }

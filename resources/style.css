@@ -1,6 +1,8 @@
 .root {
   -fx-background: LIGHTGRAY;
   -fx-padding: 10;
+  -fx-pref-width: 1000;
+  -fx-pref-height: 800;
 }
 
 .button {
@@ -61,7 +63,7 @@
 .leftvbox {
   -fx-alignment: center;
   -fx-padding: 10;
-  -fx-spacing: 5;
+  -fx-spacing: 15;
 }
 
 .thishbox {

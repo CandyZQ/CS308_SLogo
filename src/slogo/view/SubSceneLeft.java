@@ -268,12 +268,17 @@ public class SubSceneLeft extends SubScene {
     return res.getString("PenDown");
   }
 
+  private void setCommand(String command) {
+    theText = command;
+    commandEntered = true;
+  }
+
   /**
-   * Updates the queue with all the relevant turtle information and executes the method to move the turtl
-   * based on the contents of the queue
+   * Updates the queue with all the relevant turtle information and executes the method to move the
+   * turtle based on the contents of the queue
    *
-   * @param queue - the list of information passed from the backend which contains all the information about the turtle
-   * and the marker
+   * @param queue - the list of information passed from the backend which contains all the
+   *              information about the turtle and the marker
    */
   @Override
   public void update(Queue<Map<MovingObjectProperties, Object>> queue) {
@@ -293,14 +298,8 @@ public class SubSceneLeft extends SubScene {
     return temp;
   }
 
-  private void setCommand(String command) {
-    theText = command;
-    commandEntered = true;
-  }
-
   /**
-   * Return the fixed command which is created as a result of pressing one of the four buttons
-   *
+   * Updates the language of the text shown on the buttons.
    */
   public void updateButtons(List<String> displayCo) {
     vBox.getChildren().remove(groupOfButtons.getBox());
