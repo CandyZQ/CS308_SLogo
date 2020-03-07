@@ -25,7 +25,7 @@ public class FileReader {
   private final Path filePath;
   private final static Charset ENCODING = StandardCharsets.UTF_8;
   private List<String> myCommands = new ArrayList<>();
-  private static final String DELIMITER = "no delimiters for each line";
+  public static final String DELIMITER = "no delimiters for each line";
 
   /**
    * Constructor.
