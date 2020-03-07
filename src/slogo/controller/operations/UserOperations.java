@@ -15,6 +15,10 @@ import slogo.model.Turtle;
 public class UserOperations extends Operations {
 
   public static final String LOOP_EXPR = ":repcount";
+  public static final int ONE = 1;
+  public static final int TWO = 2;
+  public static final int THREEE = 3;
+  public static final int FOUR = 4;
 
   public UserOperations(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {
     super(turtle, userDefinedFields, tm);
@@ -61,14 +65,14 @@ public class UserOperations extends Operations {
   }
 
   private void FOR(String loopCondition, String commands) throws InvalidArgumentException {
-    String variable = loopCondition.split(" ")[1];
-    checkType(variable, BasicSyntax.VARIABLE, 1);
-    String start = loopCondition.split(" ")[2];
-    checkType(start, BasicSyntax.CONSTANT, 2);
-    String end = loopCondition.split(" ")[3];
-    checkType(end, BasicSyntax.CONSTANT, 3);
-    String increment = loopCondition.split(" ")[4];
-    checkType(increment, BasicSyntax.CONSTANT, 4);
+    String variable = loopCondition.split(" ")[ONE];
+    checkType(variable, BasicSyntax.VARIABLE, ONE);
+    String start = loopCondition.split(" ")[TWO];
+    checkType(start, BasicSyntax.CONSTANT, TWO);
+    String end = loopCondition.split(" ")[THREEE];
+    checkType(end, BasicSyntax.CONSTANT, THREEE);
+    String increment = loopCondition.split(" ")[FOUR];
+    checkType(increment, BasicSyntax.CONSTANT, FOUR);
 
     loop(Integer.parseInt(start), Integer.parseInt(end), Integer.parseInt(increment), commands,
         variable);

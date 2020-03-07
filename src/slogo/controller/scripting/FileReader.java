@@ -9,7 +9,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 import slogo.controller.CommandsMapHelper.SyntaxHelper;
 import slogo.controller.listings.BasicSyntax;
 import slogo.exceptions.InvalidArgumentException;
@@ -21,7 +24,6 @@ public class FileReader {
 
   private final Path filePath;
   private final static Charset ENCODING = StandardCharsets.UTF_8;
-  private Scanner myScanner;
   private List<String> myCommands = new ArrayList<>();
   private static final String DELIMITER = "no delimiters for each line";
 
@@ -33,9 +35,6 @@ public class FileReader {
   public FileReader(String infileName) throws IOException {
     String fileName = "data/examples/" + infileName;
     filePath = Paths.get(fileName);
-    try (Scanner scanner = new Scanner(filePath, ENCODING.name())) {
-      myScanner = scanner;
-    }
   }
 
   /**
@@ -51,7 +50,7 @@ public class FileReader {
       }
     }
     combineLines();
-    return myCommands;
+    return Collections.unmodifiableList(myCommands);
   }
 
   private void combineLines() throws InvalidArgumentException {

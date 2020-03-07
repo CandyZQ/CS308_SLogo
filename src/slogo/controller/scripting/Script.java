@@ -6,13 +6,13 @@ package slogo.controller.scripting;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import slogo.exceptions.CompilerException;
 
 public class Script {
 
   private static final String ERROR_OPEN = "Cannot open file";
   private static final String ERROR_CLOSE = "Cannot close file";
   private static final String ERROR_ADD = "Cannot add command";
-  private File myFile;
   private FileWriter myScript;
 
   /**
@@ -23,7 +23,6 @@ public class Script {
    */
   public Script(String infilename) {
     String filename = "resources/" + infilename;
-    myFile = new java.io.File(filename);
     openFile(filename);
   }
 
@@ -31,7 +30,7 @@ public class Script {
     try {
       myScript = new FileWriter(filename);
     } catch (IOException e) {
-      System.out.println(ERROR_OPEN);
+      throw new CompilerException(ERROR_OPEN, e);
     }
   }
 
@@ -43,7 +42,7 @@ public class Script {
     try {
       myScript.close();
     } catch (IOException e) {
-      System.out.println(ERROR_CLOSE);
+      throw new CompilerException(ERROR_OPEN, e);
     }
   }
 
@@ -57,7 +56,7 @@ public class Script {
     try {
       myScript.write(command + "\n");
     } catch (IOException e) {
-      System.out.println(ERROR_ADD);
+      throw new CompilerException(ERROR_OPEN, e);
     }
   }
 
