@@ -83,23 +83,36 @@ public class ViewScreen implements ExternalAPIViewable {
       Map<String, List<String>> functions,
       List<String> dispCommands) {
     SubScene.updateResourceBundle();
-    scRight.updateDisplayWords();
-    scLeft.setRectangleColor(scRight.getClickedColor());
-    scLeft.setMarkerColor(scRight.getMarkerClickedColor());
-    scLeft.setTurtle(scRight.getTurtle());
-    scLeft.listenToDisableTextField(scRight.getTextField());
-    scRight.setTextAreas(variables, functions);
-    windowBoolean = scRight.getWindowBoolean();
-    scRight.execute(scLeft.getCommand());
+    updateLeft();
+    updateRight(variables, functions);
+    updateDispCommands(dispCommands);
     if (commands != null && commands.peek() != null) {
       scRight.setCommandText(scRight.getSuccessfulCommand());
       scLeft.update(commands);
       scRight.update(commands);
     }
+  }
+
+  private void updateDispCommands(List<String> dispCommands) {
     if (!dispCommands.get(0).equals(displayCommands.get(0))) {
       scLeft.updateButtons(dispCommands);
       displayCommands = dispCommands;
     }
+  }
+
+  private void updateRight(Map<String, Double> variables,
+      Map<String, List<String>> functions) {
+    scRight.updateDisplayWords();
+    scRight.setTextAreas(variables, functions);
+    windowBoolean = scRight.getWindowBoolean();
+    scRight.execute(scLeft.getCommand());
+  }
+
+  private void updateLeft() {
+    scLeft.setRectangleColor(scRight.getClickedColor());
+    scLeft.setMarkerColor(scRight.getMarkerClickedColor());
+    scLeft.setTurtle(scRight.getTurtle());
+    scLeft.listenToDisableTextField(scRight.getTextField());
   }
 
   @Override

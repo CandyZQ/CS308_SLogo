@@ -158,7 +158,7 @@ public class SubSceneRight extends SubScene {
           Arrays.asList(res.getString("LoadButton"),
               res.getString("HelpButton"), res.getString("ResetButton"),
               res.getString("UndoButton"),
-              res.getString("PenUp")));
+              res.getString("PenUp"), res.getString("NewWindow")));
       vBox.getChildren().remove(group.getBox());
       group.updateLang(buttonNames);
       vBox.getChildren().addAll(group.getBox());
@@ -170,8 +170,8 @@ public class SubSceneRight extends SubScene {
     List<Button> buttons = group.getButtons();
     buttons.get(0).setOnAction(event -> setTurtleImage());
     buttons.get(1).setOnAction(event -> displayPopUp());
-    buttons.get(4).setOnAction(event -> setPenUp());
-    buttons.get(5).setOnAction(event -> setWindowBoolean());
+    buttons.get(buttons.size() - 2).setOnAction(event -> setPenUp());
+    buttons.get(buttons.size() - 1).setOnAction(event -> setWindowBoolean());
   }
 
   private void setWindowBoolean() {
@@ -305,13 +305,6 @@ public class SubSceneRight extends SubScene {
 
   @Override
   public void update(Queue<Map<MovingObjectProperties, Object>> movements) {
-//    while(!movements.isEmpty()) {
-//      if (!(boolean) movements.remove().get(MovingObjectProperties.PEN) || (boolean) movements.remove()
-//          .get(MovingObjectProperties.CLEAR)) {
-//        markerClickedColor = null;
-//        markerColorPicker.setValue(null);
-//      }
-//    }
   }
 
   @Override
