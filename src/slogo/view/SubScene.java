@@ -24,8 +24,8 @@ public abstract class SubScene {
       ResourceBundle.getBundle("resources", Locale.getDefault());
   protected static ResourceBundle myLanguages =
       ResourceBundle.getBundle("languages", Locale.getDefault());
-  public boolean commandEntered = false;
-  public String theText;
+  protected boolean commandEntered = false;
+  protected String theText;
   protected Group root;
   protected VBox vBox;
   private String previousLan = "";

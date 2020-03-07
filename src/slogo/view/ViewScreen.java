@@ -16,13 +16,9 @@ import slogo.controller.listings.MovingObjectProperties;
 
 public class ViewScreen implements ExternalAPIViewable {
 
-
   private static ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
   public static final double STAGE_HEIGHT = 800;
   public static final double STAGE_WIDTH = 1000;
-  public static String STAGE_TITLE = res.getString("MainStageTitle");
-  public static String STYLE_SHEET = res.getString("MainStyleSheet");
-
 
   private SubSceneLeft scLeft;
   private SubSceneRight scRight;
@@ -51,8 +47,8 @@ public class ViewScreen implements ExternalAPIViewable {
     root.setLeft(scLeft.getRoot());
     setAsScene(new Scene(root));
     stage.setScene(scene);
-    stage.setTitle(STAGE_TITLE);
-    scene.getStylesheets().add(STYLE_SHEET);
+    stage.setTitle(res.getString("MainStageTitle"));
+    scene.getStylesheets().add(res.getString("MainStyleSheet"));
   }
 
   private void setAsScene(Scene scene) {
@@ -96,7 +92,7 @@ public class ViewScreen implements ExternalAPIViewable {
     windowBoolean = scRight.getWindowBoolean();
     scRight.execute(scLeft.getCommand());
     if (commands != null && commands.peek() != null) {
-      scRight.setCommandText(SubSceneRight.SUCCESSFUL_COMMAND);
+      scRight.setCommandText(SubSceneRight.getSuccessfulCommand());
       scLeft.update(commands);
       scRight.update(commands);
     }

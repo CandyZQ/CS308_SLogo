@@ -33,7 +33,6 @@ public class SubSceneRight extends SubScene {
   public static final Color INITIAL_BACKGROUND_COLOR = Color.WHITE;
   public static final Color INITIAL_MARKER_COLOR = null;
   private static final int ENGLISH_IN_LIST = 3;
-  public static String SUCCESSFUL_COMMAND = res.getString("SuccessCommand");
   private final ImageView helpImage0 = new ImageView(new Image(res.getString("HelpTitle")));
   private final ImageView helpImage1 = new ImageView(
       new Image(res.getString("BasicSyntax")));
@@ -49,6 +48,7 @@ public class SubSceneRight extends SubScene {
       new Image(res.getString("UserDefined")));
   private final FileChooser fileChooser = new FileChooser();
   private Turtle turtle = new Turtle(res.getString("Turtle"), 0);
+  private static String SUCCESSFUL_COMMAND = res.getString("SuccessCommand");
   private String NEW_MARKER_COLOR = res.getString("NewMarkerColor") + " ";
   private String NEW_LANGUAGE = res.getString("NewLanguage") + " ";
   private String NEW_BACKGROUND_COLOR =
@@ -364,4 +364,7 @@ public class SubSceneRight extends SubScene {
     return null;
   }
 
+  public static String getSuccessfulCommand() {
+    return SUCCESSFUL_COMMAND;
+  }
 }
