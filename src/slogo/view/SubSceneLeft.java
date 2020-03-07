@@ -53,7 +53,7 @@ public class SubSceneLeft extends SubScene {
   private double markerThickness;
 
   private Queue<Map<MovingObjectProperties, Object>> queue;
-
+  private Path path;
   private int statID;
   private double statX;
   private double statY;
@@ -185,6 +185,9 @@ public class SubSceneLeft extends SubScene {
 
   private void recurse() {
     if (!queue.isEmpty()) {
+      if ((boolean) queue.peek().get(MovingObjectProperties.CLEAR)) {
+        clearScreen();
+      }
       tf.setEditable(false);
       TranslateTransition firstTransition = move();
       firstTransition.setOnFinished(event -> {
@@ -198,6 +201,12 @@ public class SubSceneLeft extends SubScene {
     } else {
       tf.setEditable(true);
     }
+  }
+
+  private void clearScreen() {
+    //Place to write how to clear the marker from the screen, could not figure out how to remove it
+    //As the paths need to be garbage collected to work for some reason.
+    root.getChildren().remove(path);
   }
 
   private TranslateTransition move() {
@@ -222,8 +231,8 @@ public class SubSceneLeft extends SubScene {
     trans.setToX(xFinal);
     trans.setToY(yFinal);
 
-    Path path = new Path();
-    root.getChildren().addAll(path);
+    path = new Path();
+    root.getChildren().add(path);
 
     path.getElements().addAll(
 
@@ -241,6 +250,7 @@ public class SubSceneLeft extends SubScene {
 
     initialX = xFinal;
     initialY = yFinal;
+
     return trans;
   }
 
