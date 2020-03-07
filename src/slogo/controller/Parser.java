@@ -240,13 +240,15 @@ public class Parser implements BackEndExternalAPI {
     StringBuilder next = new StringBuilder(commandsLeft.pop());
 
     if (SyntaxHelper.isType(next.toString(), LISTSTART)) {
-      String s = next.toString();
-      while (!SyntaxHelper.isType(s, LISTEND)) {
-        s = commandsLeft.pop();
-        next.append(" ");
-        next.append(s);
+      int start = 1, end = 0;
+      while (start != end) {
+        String s = commandsLeft.pop();
+        next.append(" ").append(s);
+        start += (SyntaxHelper.isType(s, LISTSTART)) ? 1 : 0;
+        end += (SyntaxHelper.isType(s, LISTEND)) ? 1 : 0;
       }
     }
     return next.toString();
   }
+
 }

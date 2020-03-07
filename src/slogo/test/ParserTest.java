@@ -290,12 +290,13 @@ public class ParserTest {
 
     try {
       Queue<Map<MovingObjectProperties, Object>> q;
-      q = parser.execute("askwith [ equal? id 1 ] [ fd 50 ]");
+      q = parser.execute("repeat 2 [ repeat 2 [ fd 10 ] ]");
       printQueue(q);
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
       System.out.println(".");
     }
   }
+
   private void printQueue(Queue<Map<MovingObjectProperties, Object>> q) {
     while (!q.isEmpty()) {
       Map<MovingObjectProperties, Object> map = q.poll();
