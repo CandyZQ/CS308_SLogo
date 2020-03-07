@@ -120,19 +120,6 @@ public class SubSceneRight extends SubScene {
     vBox.getChildren().add(group.getBox());
   }
 
-  private void makeHBox(Region left, Region right, String style) {
-    HBox hBox = new HBox();
-    hBox.getStyleClass().add(style);
-    hBox.getChildren().addAll(left, right);
-    vBox.getChildren().addAll(hBox);
-  }
-
-  private Region makeVBox(Region top, Region bottom) {
-    VBox innerVBox = new VBox();
-    innerVBox.getChildren().addAll(top, bottom);
-    return innerVBox;
-  }
-
   private void listenForCommandSelection() {
     commandTextArea.setOnContextMenuRequested(arg0 -> {
       String selectedText = commandTextArea.getSelectedText();
@@ -241,8 +228,7 @@ public class SubSceneRight extends SubScene {
 
   private void scriptRunTextField() {
     scriptFile = new TextField();
-    scriptFile.setPromptText(
-        res.getString("ScriptPrompt"));
+    scriptFile.setPromptText(res.getString("ScriptPrompt"));
     scriptFile.getText();
     vBox.getChildren().add(scriptFile);
   }

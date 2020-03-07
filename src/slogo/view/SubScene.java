@@ -7,6 +7,8 @@ import java.util.Queue;
 import java.util.ResourceBundle;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import slogo.controller.listings.MovingObjectProperties;
 
@@ -57,4 +59,16 @@ public abstract class SubScene {
     return false;
   }
 
+  protected void makeHBox(Region left, Region right, String style) {
+    HBox hBox = new HBox();
+    hBox.getStyleClass().add(style);
+    hBox.getChildren().addAll(left, right);
+    vBox.getChildren().addAll(hBox);
+  }
+
+  protected Region makeVBox(Region top, Region bottom) {
+    VBox innerVBox = new VBox();
+    innerVBox.getChildren().addAll(top, bottom);
+    return innerVBox;
+  }
 }
