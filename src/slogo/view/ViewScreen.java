@@ -92,7 +92,7 @@ public class ViewScreen implements ExternalAPIViewable {
     windowBoolean = scRight.getWindowBoolean();
     scRight.execute(scLeft.getCommand());
     if (commands != null && commands.peek() != null) {
-      scRight.setCommandText(SubSceneRight.getSuccessfulCommand());
+      scRight.setCommandText(scRight.getSuccessfulCommand());
       scLeft.update(commands);
       scRight.update(commands);
     }

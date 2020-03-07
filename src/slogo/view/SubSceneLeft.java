@@ -37,8 +37,8 @@ public class SubSceneLeft extends SubScene {
   private static final double SLIDER_LOW_VALUE = 0.01;
   private static final double SLIDER_HIGH_VALUE = 10;
   private static final int SLIDER_STARTING_VALUE = 2;
-  private static int INITIAL_TURTLE_X;
-  private static int INITIAL_TURTLE_Y;
+  private int INITIAL_TURTLE_X;
+  private int INITIAL_TURTLE_Y;
   private final Circle pen = new Circle(0, 0, 2);
 
   private Turtle turtle = new Turtle(res.getString("Turtle"), 1);

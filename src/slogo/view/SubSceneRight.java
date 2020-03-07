@@ -48,7 +48,7 @@ public class SubSceneRight extends SubScene {
       new Image(res.getString("UserDefined")));
   private final FileChooser fileChooser = new FileChooser();
   private Turtle turtle = new Turtle(res.getString("Turtle"), 0);
-  private static String SUCCESSFUL_COMMAND = res.getString("SuccessCommand");
+  private String SUCCESSFUL_COMMAND = res.getString("SuccessCommand");
   private String NEW_MARKER_COLOR = res.getString("NewMarkerColor") + " ";
   private String NEW_LANGUAGE = res.getString("NewLanguage") + " ";
   private String NEW_BACKGROUND_COLOR =
@@ -364,7 +364,7 @@ public class SubSceneRight extends SubScene {
     return null;
   }
 
-  public static String getSuccessfulCommand() {
+  public String getSuccessfulCommand() {
     return SUCCESSFUL_COMMAND;
   }
 }

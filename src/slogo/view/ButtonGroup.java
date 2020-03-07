@@ -52,7 +52,7 @@ public class ButtonGroup {
     for (int i = 0; i < extent; i += 2) {
       Button alpha = buttons.get(i);
       Button beta = buttons.get(i + 1);
-      box = new HBox(30);
+      box = new HBox();
       box.getStyleClass().add(myResources.getString("HBox"));
       box.getChildren().addAll(alpha, beta);
       box.setAlignment(Pos.CENTER);
@@ -69,7 +69,7 @@ public class ButtonGroup {
 
   private void addOddBox() {
     Button alpha = buttons.get(buttons.size() - 1);
-    box = new HBox(30);
+    box = new HBox();
     box.getStyleClass().add(myResources.getString("HBox"));
     box.getChildren().addAll(alpha);
     box.setAlignment(Pos.CENTER);
