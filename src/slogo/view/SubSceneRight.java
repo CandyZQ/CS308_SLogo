@@ -34,18 +34,12 @@ public class SubSceneRight extends SubScene {
 
   private static final int ENGLISH_IN_LIST = 3;
   private final ImageView helpImage0 = new ImageView(new Image(myResources.getString("HelpTitle")));
-  private final ImageView helpImage1 = new ImageView(
-      new Image(myResources.getString("BasicSyntax")));
-  private final ImageView helpImage2 = new ImageView(
-      new Image(myResources.getString("TurtleCommands")));
-  private final ImageView helpImage3 = new ImageView(
-      new Image(myResources.getString("TurtleQueries")));
-  private final ImageView helpImage4 = new ImageView(
-      new Image(myResources.getString("MathOperations")));
-  private final ImageView helpImage5 = new ImageView(
-      new Image(myResources.getString("BooleanOperations")));
-  private final ImageView helpImage6 = new ImageView(
-      new Image(myResources.getString("UserDefined")));
+  private final ImageView helpImage1 = new ImageView(new Image(myResources.getString("BasicSyntax")));
+  private final ImageView helpImage2 = new ImageView(new Image(myResources.getString("TurtleCommands")));
+  private final ImageView helpImage3 = new ImageView(new Image(myResources.getString("TurtleQueries")));
+  private final ImageView helpImage4 = new ImageView(new Image(myResources.getString("MathOperations")));
+  private final ImageView helpImage5 = new ImageView(new Image(myResources.getString("BooleanOperations")));
+  private final ImageView helpImage6 = new ImageView(new Image(myResources.getString("UserDefined")));
 
 
   private Turtle turtle = new Turtle(myResources.getString("Turtle"), 0);
@@ -54,8 +48,7 @@ public class SubSceneRight extends SubScene {
   public static String SUCCESSFUL_COMMAND = myResources.getString("SuccessCommand");
   private String NEW_MARKER_COLOR = myResources.getString("NewMarkerColor") + " ";
   private String NEW_LANGUAGE = myResources.getString("NewLanguage") + " ";
-  private String NEW_BACKGROUND_COLOR =
-      myResources.getString("NewBackgroundColor") + " ";
+  private String NEW_BACKGROUND_COLOR = myResources.getString("NewBackgroundColor") + " ";
   private List<String> language_names = new ArrayList<>();
   private String MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
   private String CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
@@ -92,14 +85,13 @@ public class SubSceneRight extends SubScene {
     }
     // vBox.getChildren().add(createTable(new TableView<>()));
     makeHBox(createTextArea(variableTextArea = new TextArea(), VARIABLE_AREA_TEXT),
-        createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA), "thishbox");
+        createTextArea(userDefinedCommandsTextArea = new TextArea(), USER_TEXT_AREA), myResources.getString("ThisHBoxStyle"));
     String COMMAND_AREA_TEXT = myResources.getString("CommandArea");
     vBox.getChildren().add(makeVBox(createTextArea(commandTextArea = new TextArea(),
         COMMAND_AREA_TEXT), createTextField()));
     makeHBox(makeVBox(createLabel(CHANGE_LANGUAGE_LABEL), createComboBox()),
-        makeVBox(createLabel(MARKER_COLOR_LABEL), createMarkerColorPicker()), "hbox");
-    String BACKGROUND_COLOR_LABEL = myResources
-        .getString("BackgroundColorLabel");
+        makeVBox(createLabel(MARKER_COLOR_LABEL), createMarkerColorPicker()), myResources.getString("HBoxStyle"));
+    String BACKGROUND_COLOR_LABEL = myResources.getString("BackgroundColorLabel");
     vBox.getChildren().add(createLabel(BACKGROUND_COLOR_LABEL));
     createBackgroundColorPicker();
 
@@ -224,7 +216,7 @@ public class SubSceneRight extends SubScene {
         .addAll(helpImage0, helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6);
     helpRoot.setContent(vb);
     Scene errorScene = setUpPopUp(helpRoot);
-    errorScene.getStylesheets().add("HelpScene.css");
+    errorScene.getStylesheets().add(myResources.getString("HelpStyle"));
     helpStage.setScene(errorScene);
     helpStage.show();
   }
@@ -244,7 +236,7 @@ public class SubSceneRight extends SubScene {
   private void scriptRunTextField() {
     scriptFile = new TextField();
     scriptFile.setPromptText(
-        "Enter file name of SLogo script"); // @TODO add to resource file so changes with language
+       myResources.getString("ScriptPrompt"));
     scriptFile.getText();
     vBox.getChildren().add(scriptFile);
   }
