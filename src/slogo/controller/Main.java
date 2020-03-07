@@ -1,6 +1,7 @@
 package slogo.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Queue;
 import javafx.animation.KeyFrame;
@@ -66,7 +67,7 @@ public class Main extends Application {
     }
     //viewScreen.getColor(String);
     displayCommands = parser.setLanguage(viewScreen.getLanguage());
-    viewScreen.update(commands, parser.gerUserVars(), parser.getFunctions(), displayCommands);
+    viewScreen.update(commands, parser.gerUserVars(), parser.getFunctions(), Arrays.asList(displayCommands));
     if (viewScreen.getWindowBoolean()) {
       newWindow();
     }
