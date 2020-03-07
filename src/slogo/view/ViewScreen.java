@@ -12,11 +12,11 @@ import slogo.controller.listings.MovingObjectProperties;
 public class ViewScreen implements ExternalAPIViewable {
 
 
-  private static ResourceBundle myResources = ResourceBundle.getBundle("resources", Locale.getDefault());
+  private static ResourceBundle res = ResourceBundle.getBundle("resources", Locale.getDefault());
   public static final double STAGE_HEIGHT = 800;
   public static final double STAGE_WIDTH = 1000;
-  public static final String STAGE_TITLE = myResources.getString("MainStageTitle");
-  public static final String STYLE_SHEET = myResources.getString("MainStyleSheet");
+  public static final String STAGE_TITLE = res.getString("MainStageTitle");
+  public static final String STYLE_SHEET = res.getString("MainStyleSheet");
 
 
   private SubSceneLeft scLeft;
@@ -25,7 +25,7 @@ public class ViewScreen implements ExternalAPIViewable {
   private Scene scene;
   private boolean windowBoolean;
 
-  private String[] displayCommands;
+  private List<String> displayCommands;
 
   public ViewScreen(Stage stage) {
     this.stage = stage;
@@ -42,8 +42,10 @@ public class ViewScreen implements ExternalAPIViewable {
     scRight = new SubSceneRight();
     scRight.assignStage(stage);
     root.setRight(scRight.getRoot());
-    displayCommands = new String[]{myResources.getString("FixedForward"), myResources.getString("FixedBackward"),
-            myResources.getString("FixedLeft"),  myResources.getString("FixedRight")};
+    displayCommands = new ArrayList<>(
+            Arrays.asList(res.getString("FixedForward"),
+                    res.getString("FixedBackward"), res.getString("FixedLeft"),
+                    res.getString("FixedRight")));
     scLeft = new SubSceneLeft(displayCommands);
     root.setLeft(scLeft.getRoot());
     setAsScene(new Scene(root, ObjectsViewable.STAGE_WIDTH, ObjectsViewable.STAGE_HEIGHT));
@@ -87,7 +89,7 @@ public class ViewScreen implements ExternalAPIViewable {
       Queue<Map<MovingObjectProperties, Object>> commands,
       Map<String, Double> variables,
       Map<String, List<String>> functions,
-      String[] dispCommands) {
+      List<String> dispCommands) {
     SubScene.updateResourceBundle();
     scRight.updateDisplayWords();
     scLeft.setRectangleColor(scRight.getClickedColor());
@@ -102,7 +104,7 @@ public class ViewScreen implements ExternalAPIViewable {
       scLeft.update(commands);
       scRight.update(commands);
     }
-    if (!dispCommands[0].equals(displayCommands[0])) {
+    if (!dispCommands.get(0).equals(displayCommands.get(0))) {
       scLeft.updateButtons(dispCommands);
       displayCommands = dispCommands;
     }

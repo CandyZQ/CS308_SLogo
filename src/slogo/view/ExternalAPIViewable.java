@@ -58,7 +58,7 @@ public interface ExternalAPIViewable {
   void update(Queue<Map<MovingObjectProperties, Object>> commands,
       Map<String, Double> variables,
       Map<String, List<String>> functions,
-      String[] dispCommands);
+      List<String> dispCommands);
 
   /**
    * @return

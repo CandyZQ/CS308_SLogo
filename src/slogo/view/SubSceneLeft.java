@@ -64,15 +64,15 @@ public class SubSceneLeft extends SubScene {
   private TextArea scriptTextArea;
   private TextField scriptName;
 
-  private ButtonG groupOfButtons;
+  private ButtonGroup groupOfButtons;
 
-  public SubSceneLeft(String[] dispCommands) {
+  public SubSceneLeft(List<String> dispCommands) {
     root = new Group();
     vBox = new VBox();
     vBox.getStyleClass().add(res.getString("VBoxStyle"));
     root.getChildren().add(vBox);
     setInitialConditions();
-    groupOfButtons = new ButtonG(dispCommands);
+    groupOfButtons = new ButtonGroup(dispCommands);
     setUpDisplayObjects();
     initialTurtlePosition();
     root.getChildren().add(createTurtle());
@@ -107,7 +107,7 @@ public class SubSceneLeft extends SubScene {
       String commando = button.getText();
       button.setOnAction(e -> setCommand(commando));
     }
-    vBox.getChildren().add(groupOfButtons.getBoxes());
+    vBox.getChildren().add(groupOfButtons.getBox());
   }
 
   private void initialTurtlePosition() {
@@ -302,9 +302,9 @@ public class SubSceneLeft extends SubScene {
    * Return the fixed command which is created as a result of pressing one of the four buttons
    *
    */
-  public void updateButtons(String[] displayCo) {
-    vBox.getChildren().remove(groupOfButtons.getBoxes());
-    groupOfButtons = new ButtonG(displayCo);
+  public void updateButtons(List<String> displayCo) {
+    vBox.getChildren().remove(groupOfButtons.getBox());
+    groupOfButtons = new ButtonGroup(displayCo);
     makeButtons();
   }
 
