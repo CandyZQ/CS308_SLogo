@@ -278,6 +278,24 @@ public class ParserTest {
     }
   }
 
+  @Test
+  public void testRecursion() {
+    Parser parser = new Parser(1);
+
+    try {
+      parser.setLanguage("English");
+    } catch (LanguageIsNotSupportedException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      Queue<Map<MovingObjectProperties, Object>> q;
+      q = parser.execute("repeat 2 [ repeat 2 [ fd 10 ] ]");
+      printQueue(q);
+    } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
+      System.out.println(".");
+    }
+  }
 
   private void printQueue(Queue<Map<MovingObjectProperties, Object>> q) {
     while (!q.isEmpty()) {

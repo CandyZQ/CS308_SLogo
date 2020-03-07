@@ -25,6 +25,7 @@ public class CommandsMapHelper {
   public static final String OPERATIONS_DIR = "slogo.controller.operations.";
   public static final int FIRST_NUM = 50;
   public static final int SECOND_NUM = 90;
+  public static final int BUTTON_NUM = 4;
   private static Map<String, Pattern> syntaxMap;
   private List<Languages> supportedLanguages;
   private Languages currnetLan;
@@ -51,7 +52,7 @@ public class CommandsMapHelper {
 
   String[] getDisplayCommands(String filename) {
     var resources = ResourceBundle.getBundle(RESOURCE_DIR + filename);
-    String[] displayCommands = new String[4];
+    String[] displayCommands = new String[BUTTON_NUM];
 
     for (var key : Collections.list(resources.getKeys())) {
       String regex = resources.getString(key);
@@ -131,7 +132,7 @@ public class CommandsMapHelper {
         }
       } catch (ClassNotFoundException e) {
         throw new CompilerException(
-            "Internal Error: operation class name defined in CommandType but not implemented.");
+            "Internal Error: operation class name defined in CommandType but not implemented.", e);
       }
     }
     throw new CommandDoesNotExistException(
@@ -153,7 +154,11 @@ public class CommandsMapHelper {
     }
 
     public static boolean isType(String input, BasicSyntax type) throws InvalidArgumentException {
-      return getInputType(input).equals(type);
+      try {
+        return getInputType(input).equals(type);
+      } catch (InvalidArgumentException e) {
+        return false;
+      }
     }
 
     private static BasicSyntax getInputType(String input) throws InvalidArgumentException {
