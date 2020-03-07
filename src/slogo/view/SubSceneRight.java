@@ -104,7 +104,7 @@ public class SubSceneRight extends SubScene {
             myResources.getString("UndoButton"),
             myResources.getString("PenUp"), myResources.getString("NewWindow")));
     group = new ButtonGroup(buttonNames);
-    vBox.getChildren().add(group.getBoxes());
+    vBox.getChildren().add(group.getBox());
     buttonListeners(group);
 
     scriptRunTextField(); // added for scripting
@@ -143,9 +143,7 @@ public class SubSceneRight extends SubScene {
     ComboBox<String> combo_box = new ComboBox<>(FXCollections.observableArrayList(language_names));
     combo_box.setValue(language_names.get(ENGLISH_IN_LIST));
     language = combo_box.getValue();
-    combo_box.setOnAction(event -> {
-      comboBoxListener(combo_box);
-    });
+    combo_box.setOnAction(event -> comboBoxListener(combo_box));
     return combo_box;
   }
 
@@ -167,9 +165,9 @@ public class SubSceneRight extends SubScene {
               myResources.getString("HelpButton"), myResources.getString("ResetButton"),
               myResources.getString("UndoButton"),
               myResources.getString("PenUp")));
-      vBox.getChildren().remove(group.getBoxes());
+      vBox.getChildren().remove(group.getBox());
       group.updateLang(buttonNames);
-      vBox.getChildren().addAll(group.getBoxes());
+      vBox.getChildren().addAll(group.getBox());
       buttonListeners(group);
     }
   }
@@ -319,11 +317,15 @@ public class SubSceneRight extends SubScene {
 
   @Override
   public void update(Queue<Map<MovingObjectProperties, Object>> movements) {
-    if (!(boolean) movements.peek().get(MovingObjectProperties.PEN) || (boolean) movements.peek()
-        .get(MovingObjectProperties.CLEAR)) {
-      markerClickedColor = null;
-      markerColorPicker.setValue(null);
-    }
+//    System.out.println("a");
+//    while(!movements.isEmpty()) {
+//      if (!(boolean) movements.remove().get(MovingObjectProperties.PEN) || (boolean) movements.remove()
+//          .get(MovingObjectProperties.CLEAR)) {
+//        System.out.println("b");
+//        markerClickedColor = null;
+//        markerColorPicker.setValue(null);
+//      }
+//    }
   }
 
   @Override
@@ -336,6 +338,7 @@ public class SubSceneRight extends SubScene {
     MARKER_COLOR_LABEL = myResources.getString("MarkerColorLabel");
     CHANGE_LANGUAGE_LABEL = myResources.getString("ChangeLanguageLabel");
     TEXTFIELD_PROMPT_TEXT = myResources.getString("TextFieldPromptText");
+    name.setPromptText(TEXTFIELD_PROMPT_TEXT);
     USER_TEXT_AREA = myResources.getString("UserTextArea");
     for (String key : Collections.list(myLanguages.getKeys())) {
       language_names.add(myLanguages.getString(key));

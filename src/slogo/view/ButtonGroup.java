@@ -63,7 +63,7 @@ public class ButtonGroup {
     }
   }
 
-  public VBox getBoxes() {
+  public VBox getBox() {
     return vbox;
   }
 
