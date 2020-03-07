@@ -56,18 +56,18 @@ public class FileReader {
 
   private void combineLines() throws InvalidArgumentException {
     StringBuilder sb = new StringBuilder();
-      for (int i = 0, size = myCommands.size(); i < size; i++, size = myCommands.size()) {
-          if (isComment(i)) {
-              sb = new StringBuilder();
-              break;
-          }
-          if (sb.length() != 0) {
-              myCommands.remove(i - 1);
-              i--;
-          }
-          sb.append(myCommands.get(i).strip()).append(" ");
-          myCommands.set(i, sb.toString());
+    for (int i = 0, size = myCommands.size(); i < size; i++, size = myCommands.size()) {
+      if (isComment(i)) {
+        sb = new StringBuilder();
+        break;
       }
+      if (sb.length() != 0) {
+        myCommands.remove(i - 1);
+        i--;
+      }
+      sb.append(myCommands.get(i).strip()).append(" ");
+      myCommands.set(i, sb.toString());
+    }
   }
 
   private boolean isComment(int i) throws InvalidArgumentException {
