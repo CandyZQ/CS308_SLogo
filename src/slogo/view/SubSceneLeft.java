@@ -319,10 +319,6 @@ public class SubSceneLeft extends SubScene {
     markerColor = color;
   }
 
-  public void setMarkerThickness(Double size) {
-    markerThickness = size;
-  }
-
   public void listenToDisableTextField(TextField tf) {
     this.tf = tf;
   }
