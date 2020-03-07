@@ -13,6 +13,7 @@ import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
 
 public class SystemCommands extends Operations {
+
   public static final String INCREMENT_METHOD = "increment";
 
   public SystemCommands(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {
@@ -54,7 +55,8 @@ public class SystemCommands extends Operations {
     if (userDefinedFields.getUserVar(variable) <= end) {
       sb.append(as).append(" ");
       sb.append(INCREMENT_METHOD + " ").append(variable).append(" ").append(increment).append(" ");
-      sb.append(APPEND_METHOD).append(" ").append(variable).append(" ").append(end).append(" ").append(increment).append(" ").append(commands);
+      sb.append(APPEND_METHOD).append(" ").append(variable).append(" ").append(end).append(" ")
+          .append(increment).append(" ").append(commands);
       userDefinedFields.setExtraCommands(sb.toString());
     }
   }

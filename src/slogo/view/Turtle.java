@@ -6,26 +6,26 @@ import javafx.scene.image.ImageView;
 public class Turtle extends ImageView {
 
 
-    private int turtleID;
-    private Image turtleImage;
-    public static final double size = 60;
+  public static final double size = 60;
+  private int turtleID;
+  private Image turtleImage;
 
-    public Turtle(String imagePath, int ID){
-        turtleImage = new Image(imagePath);
-        this.turtleID = ID;
-    }
+  public Turtle(String imagePath, int ID) {
+    turtleImage = new Image(imagePath);
+    this.turtleID = ID;
+  }
 
 
-    public void changeHeading(double heading){
-        this.setRotate(heading);
-    }
+  public void changeHeading(double heading) {
+    this.setRotate(heading);
+  }
 
-    public int getTurtleID(){
-        return turtleID;
-    }
+  public int getTurtleID() {
+    return turtleID;
+  }
 
-    public Image getTurtleImage(){
-        return turtleImage;
-    }
+  public Image getTurtleImage() {
+    return turtleImage;
+  }
 
 }

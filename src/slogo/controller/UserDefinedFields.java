@@ -62,11 +62,6 @@ public class UserDefinedFields {
     return functions.get(name);
   }
 
-  public void setExtraCommands(String extraCommands) {
-    this.extraCommands = extraCommands;
-    hasReturned = false;
-  }
-
   String getExtraCommands() {
     // extra commands should have no [] around
     if (hasReturned) {
@@ -74,6 +69,11 @@ public class UserDefinedFields {
     }
     hasReturned = true;
     return extraCommands;
+  }
+
+  public void setExtraCommands(String extraCommands) {
+    this.extraCommands = extraCommands;
+    hasReturned = false;
   }
 
   boolean isFunction(String name) {

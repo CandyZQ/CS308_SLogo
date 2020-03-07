@@ -5,7 +5,7 @@ import slogo.controller.UserDefinedFields;
 import slogo.controller.listings.MovingObjectProperties;
 import slogo.model.Turtle;
 
-public class TurtleCommands extends Operations{
+public class TurtleCommands extends Operations {
 
   public TurtleCommands(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {
     super(turtle, userDefinedFields, tm);
@@ -66,7 +66,7 @@ public class TurtleCommands extends Operations{
 
   private void clearScreen() {
     // TODO: remove screen trails
-   turtle.reset();
-   turtle.clear();
+    turtle.reset();
+    turtle.clear();
   }
 }

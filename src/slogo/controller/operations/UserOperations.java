@@ -12,7 +12,7 @@ import slogo.controller.listings.MovingObjectProperties;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
 
-public class UserOperations extends Operations{
+public class UserOperations extends Operations {
 
   public static final String LOOP_EXPR = ":repcount";
 
@@ -58,9 +58,9 @@ public class UserOperations extends Operations{
     Integer limit = Integer.parseInt(l);
 
     loop(1, limit, 1, commands, variable);
-   }
+  }
 
-   private void FOR(String loopCondition, String commands) throws InvalidArgumentException {
+  private void FOR(String loopCondition, String commands) throws InvalidArgumentException {
     String variable = loopCondition.split(" ")[1];
     checkType(variable, BasicSyntax.VARIABLE, 1);
     String start = loopCondition.split(" ")[2];
@@ -70,14 +70,16 @@ public class UserOperations extends Operations{
     String increment = loopCondition.split(" ")[4];
     checkType(increment, BasicSyntax.CONSTANT, 4);
 
-    loop(Integer.parseInt(start), Integer.parseInt(end), Integer.parseInt(increment), commands, variable);
-   }
+    loop(Integer.parseInt(start), Integer.parseInt(end), Integer.parseInt(increment), commands,
+        variable);
+  }
 
-   private void checkType(String s, BasicSyntax type, int num) throws InvalidArgumentException {
-     if (!SyntaxHelper.isType(s, type)) {
-       throw new InvalidArgumentException("The " + num + " parameter in " + s + " is not a " + type.name() + " .");
-     }
-   }
+  private void checkType(String s, BasicSyntax type, int num) throws InvalidArgumentException {
+    if (!SyntaxHelper.isType(s, type)) {
+      throw new InvalidArgumentException(
+          "The " + num + " parameter in " + s + " is not a " + type.name() + " .");
+    }
+  }
 
   private void IF(Integer expr, String commands) {
     if (expr != 0) {
@@ -100,7 +102,8 @@ public class UserOperations extends Operations{
   private Integer makeUserInstruction(String commandName, String variables, String commands)
       throws InvalidArgumentException {
     List<String> current = new ArrayList<>(
-        Collections.singletonList(commands.substring(Parser.TRIM, commands.length() - Parser.TRIM)));
+        Collections
+            .singletonList(commands.substring(Parser.TRIM, commands.length() - Parser.TRIM)));
     if (isValidInsideBracket(variables)) {
       String[] vars = variables.substring(Parser.TRIM, variables.length() - Parser.TRIM).split(" ");
       for (String v : vars) {

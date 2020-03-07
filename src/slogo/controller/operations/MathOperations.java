@@ -10,7 +10,7 @@ import slogo.model.Turtle;
  * This class contains exclusively of static method that perform basic math and boolean operations.
  * The methods of this class throws any exceptions that can happen during a math operation.
  */
-public class MathOperations extends Operations{
+public class MathOperations extends Operations {
 
   public static final String NONNEGATIVE_ARG = "The argument should be non-negative!";
 

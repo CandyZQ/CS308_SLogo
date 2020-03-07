@@ -4,21 +4,11 @@
 
 package slogo.model;
 
-import slogo.controller.listings.MovingObjectProperties;
-
 import java.util.EnumMap;
 import java.util.Map;
+import slogo.controller.listings.MovingObjectProperties;
 
 public class Turtle implements MovingObject {
-
-  private EnumMap<MovingObjectProperties, Object> stateMap = new EnumMap<>(
-      MovingObjectProperties.class);
-  private Map<MovingObjectProperties, Object> defaultStateMap = Map
-      .of(MovingObjectProperties.CLEAR, false, MovingObjectProperties.X, 0.0D,
-          MovingObjectProperties.Y, 0.0D, MovingObjectProperties.HEADING, 90.0D,
-          MovingObjectProperties.VISIBILITY, true, MovingObjectProperties.PEN, true,
-          MovingObjectProperties.RETURN_VALUE, 0.0D);
-  private double myDistanceTravelled;
 
   public static final double UP_ANGLE = 90;
   public static final double LEFT_ANGLE = 180;
@@ -30,6 +20,14 @@ public class Turtle implements MovingObject {
   public static final double INF_ANGLE = 1000000;
   public static final boolean RESTRICT_HEADING = true;
   public static final String HEADING_TOO_LARGE = "New heading is too large";
+  private EnumMap<MovingObjectProperties, Object> stateMap = new EnumMap<>(
+      MovingObjectProperties.class);
+  private Map<MovingObjectProperties, Object> defaultStateMap = Map
+      .of(MovingObjectProperties.CLEAR, false, MovingObjectProperties.X, 0.0D,
+          MovingObjectProperties.Y, 0.0D, MovingObjectProperties.HEADING, 90.0D,
+          MovingObjectProperties.VISIBILITY, true, MovingObjectProperties.PEN, true,
+          MovingObjectProperties.RETURN_VALUE, 0.0D);
+  private double myDistanceTravelled;
   // Default for calculating rotation is difference moving counterclockwise
 
   /**
@@ -170,7 +168,7 @@ public class Turtle implements MovingObject {
 
   @Override
   public void clear() {
-      this.stateMap.put(MovingObjectProperties.CLEAR, true);
+    this.stateMap.put(MovingObjectProperties.CLEAR, true);
   }
 
   /**
