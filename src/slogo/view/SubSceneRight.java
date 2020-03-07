@@ -170,8 +170,8 @@ public class SubSceneRight extends SubScene {
     List<Button> buttons = group.getButtons();
     buttons.get(0).setOnAction(event -> setTurtleImage());
     buttons.get(1).setOnAction(event -> displayPopUp());
-    buttons.get(4).setOnAction(event -> setPenUp());
-    buttons.get(5).setOnAction(event -> setWindowBoolean());
+    buttons.get(buttons.size() - 2).setOnAction(event -> setPenUp());
+    buttons.get(buttons.size() - 1).setOnAction(event -> setWindowBoolean());
   }
 
   private void setWindowBoolean() {
