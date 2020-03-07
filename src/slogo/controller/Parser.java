@@ -72,6 +72,9 @@ public class Parser implements BackEndExternalAPI {
   public Queue<Map<MovingObjectProperties, Object>> execute(String command)
       throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException {
     initialize();
+    if (isComment(command)) {
+      return tm.getTurtleStates();
+    }
     fillStack(command);
 
     Stack<String> temp = cloneStack(commandsLeft);
@@ -82,6 +85,10 @@ public class Parser implements BackEndExternalAPI {
       }
     }
     return tm.getTurtleStates();
+  }
+
+  private boolean isComment(String command) throws InvalidArgumentException {
+    return SyntaxHelper.isType(command, COMMENT);
   }
 
   private Stack<String> cloneStack(Stack<String> stack) {
@@ -99,6 +106,7 @@ public class Parser implements BackEndExternalAPI {
     FileReader file = new FileReader(filename);
     List<String> commands = file.processScript();
     for (int i = 0; i < commands.size(); i++) {
+      System.out.println(commands.get(i));
       commandResult = execute(commands.get(i));
       while (!commandResult.isEmpty()) {
         turtleState = commandResult.remove();
@@ -133,18 +141,18 @@ public class Parser implements BackEndExternalAPI {
   private void executeNextCommand(Turtle t)
       throws CommandDoesNotExistException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException {
     String commandName = popNext();
-        CommandStructure current;
-        if (userDefinedFields.isFunction(commandName)) {
-          current = processFunction(commandName);
-        } else {
-          current = processDefinedCommands(commandName);
-          while (current.needMoreParas()) {
-            if (!canAddPara(current)) {
-              pausedCommands.add(current);
-              return;
-            }
+    CommandStructure current;
+    if (userDefinedFields.isFunction(commandName)) {
+        current = processFunction(commandName);
+      } else {
+        current = processDefinedCommands(commandName);
+        while (current.needMoreParas()) {
+          if (!canAddPara(current)) {
+            pausedCommands.add(current);
+            return;
+          }
+        }
       }
-    }
     pausedCommands.add(current);
     checkPausedCommands(tm, t);
   }
@@ -227,9 +235,6 @@ public class Parser implements BackEndExternalAPI {
 
   private String popNext() throws InvalidArgumentException {
     StringBuilder next = new StringBuilder(commandsLeft.pop());
-    while (!commandsLeft.isEmpty() && SyntaxHelper.isType(next.toString(), COMMENT)) {
-      next = new StringBuilder(commandsLeft.pop());
-    }
 
     if (SyntaxHelper.isType(next.toString(), LISTSTART)) {
       String s = next.toString();

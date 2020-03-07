@@ -151,7 +151,11 @@ public class CommandsMapHelper {
   public static class SyntaxHelper {
     private SyntaxHelper() {}
     public static boolean isType(String input, BasicSyntax type) throws InvalidArgumentException {
-      return getInputType(input).equals(type);
+      try {
+        return getInputType(input).equals(type);
+      } catch (InvalidArgumentException e) {
+        return false;
+      }
     }
 
     private static BasicSyntax getInputType(String input) throws InvalidArgumentException {

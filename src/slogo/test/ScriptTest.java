@@ -5,6 +5,7 @@ import slogo.controller.scripting.*;
 
 import java.io.IOException;
 import java.util.List;
+import slogo.exceptions.InvalidArgumentException;
 
 public class ScriptTest {
 
@@ -26,7 +27,7 @@ public class ScriptTest {
     }
 
     @Test
-    public void shouldReadFromFile() throws IOException {
+    public void shouldReadFromFile() throws IOException, InvalidArgumentException {
         FileReader myScriptFile = new FileReader(myFileName);
         List<String> commands = myScriptFile.processScript();
         for (int i = 0; i < commands.size(); i++) {
