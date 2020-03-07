@@ -20,10 +20,10 @@ public class SystemCommands extends Operations {
     super(turtle, userDefinedFields, tm);
   }
 
-  private void doFunction(List<String> info)
+  private void doFunction(List<?> info)
       throws CommandDoesNotExistException, InvalidArgumentException {
     // info: the first String is function name, and then follows all parameters
-    String funcName = info.get(0);
+    String funcName = (String) info.get(0);
     List<String> variables = userDefinedFields.getFunctionContent(funcName);
 
     if (info.size() != variables.size()) {
@@ -33,11 +33,11 @@ public class SystemCommands extends Operations {
     }
 
     for (int i = 1; i < info.size(); i++) {
-      if (!SyntaxHelper.isType(info.get(i), BasicSyntax.CONSTANT)) {
+      if (!SyntaxHelper.isType(Integer.toString((Integer) info.get(i)), BasicSyntax.CONSTANT)) {
         throw new InvalidArgumentException(
             "The " + i + "th argument passed in of " + funcName + " is not a constant!");
       }
-      userDefinedFields.putUserVar(variables.get(i), Double.valueOf(info.get(i)));
+      userDefinedFields.putUserVar(variables.get(i), Double.valueOf((Integer) info.get(i)));
     }
 
     String commands = userDefinedFields.getFunctionContent(funcName).get(0);

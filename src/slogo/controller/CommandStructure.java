@@ -4,6 +4,7 @@ import static slogo.controller.listings.BasicSyntax.CONSTANT;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.DrbgParameters.Instantiation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,8 +48,11 @@ class CommandStructure {
 
   void addPara(String s) throws InvalidArgumentException {
     try {
+      if (getNextParaType() == Integer.class && s.length() > 1) {
+        s = s.substring(0, s.indexOf("."));
+      }
       paras.add(getNextParaType().getConstructor(String.class).newInstance(s));
-    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+    } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
       throw new InvalidArgumentException("Exception occurred when converting argument " + s
           + " to the correct type of method call. Check whether arguments are of the correct type!",
           e);

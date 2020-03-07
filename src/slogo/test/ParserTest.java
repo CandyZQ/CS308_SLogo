@@ -250,11 +250,16 @@ public class ParserTest {
 
     try {
       Queue<Map<MovingObjectProperties, Object>> q;
-      q = parser.execute("for [ :v 0 5 0 ] [ fd 1 set :v ycor ]");
+      q = parser.execute("make :distance 100 "
+          + "make :angle 90 "
+          + "repeat quotient 360 :angle [ "
+          + "  fd :distance "
+          + "  rt :angle "
+          + "]");
       printQueue(q);
 
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
-      System.out.println(".");
+      e.printStackTrace();
     }
   }
 
@@ -290,7 +295,7 @@ public class ParserTest {
 
     try {
       Queue<Map<MovingObjectProperties, Object>> q;
-      q = parser.execute("repeat 2 [ repeat 2 [ fd 10 ] ]");
+      q = parser.execute("to example [ :x ] [ if greater? :x 10 [ example difference :x 10 ] fd 50 right 100 ] example 20");
       printQueue(q);
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
       System.out.println(".");

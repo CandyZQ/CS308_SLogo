@@ -17,7 +17,10 @@ public class FunctionStructure extends CommandStructure {
     if (paras.size() == numOfPara) {
       return null;
     }
-    return String.class;
+    if (paras.size() == 0) {
+      return String.class;
+    }
+    return Integer.class;
   }
 
   @Override
