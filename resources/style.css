@@ -1,8 +1,6 @@
 .root {
   -fx-background: LIGHTGRAY;
   -fx-padding: 10;
-  -fx-pref-width: 1000;
-  -fx-pref-height: 800;
 }
 
 .button {
