@@ -109,7 +109,6 @@ public class Parser implements BackEndExternalAPI {
     FileReader file = new FileReader(filename);
     List<String> commands = file.processScript();
     for (int i = 0; i < commands.size(); i++) {
-      System.out.println(commands.get(i));
       commandResult = execute(commands.get(i));
       while (!commandResult.isEmpty()) {
         turtleState = commandResult.remove();
@@ -182,17 +181,21 @@ public class Parser implements BackEndExternalAPI {
       throws InvalidArgumentException, WrongCommandFormatException {
     String returnVal = null;
     boolean hasExtra = false;
+    boolean canReturn = false;
     while (!pausedCommands.isEmpty()) {
       if (!pausedCommands.peek().needMoreParas()) {
+        canReturn = false;
         returnVal = pausedCommands.pop().execute(tm, userDefinedFields, t).toString();
         String extra = userDefinedFields.getExtraCommands();
         hasExtra = addExtra(extra);
       } else if (!hasExtra) {
+        if (canReturn) break;
         if (returnVal != null) {
           pausedCommands.peek().addPara(returnVal);
         }
         while (!commandsLeft.empty() && pausedCommands.peek().needMoreParas()) {
           if (!canAddPara(pausedCommands.peek())) {
+            canReturn = true;
             break;
           }
         }

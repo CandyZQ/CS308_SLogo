@@ -295,7 +295,7 @@ public class ParserTest {
 
     try {
       Queue<Map<MovingObjectProperties, Object>> q;
-      q = parser.execute("to example [ :x ] [ if greater? :x 10 [ example difference :x 10 ] fd 50 right 100 ] example 20");
+      q = parser.execute("to example [ :x ] [ if greater? :x 10 [ example difference :x 10 ] fd 50 ] example 20");
       printQueue(q);
     } catch (CommandDoesNotExistException | LanguageIsNotSupportedException | WrongCommandFormatException | InvalidArgumentException e) {
       System.out.println(".");

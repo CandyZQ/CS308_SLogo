@@ -48,7 +48,7 @@ class CommandStructure {
 
   void addPara(String s) throws InvalidArgumentException {
     try {
-      if (getNextParaType() == Integer.class && s.length() > 1) {
+      if (getNextParaType() == Integer.class && s.contains(".")) {
         s = s.substring(0, s.indexOf("."));
       }
       paras.add(getNextParaType().getConstructor(String.class).newInstance(s));
