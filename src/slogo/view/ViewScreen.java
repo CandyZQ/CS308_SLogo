@@ -82,6 +82,7 @@ public class ViewScreen implements ExternalAPIViewable {
     return scRight.getScript();
   }
 
+  @Override
   public void update(
       Queue<Map<MovingObjectProperties, Object>> commands,
       Map<String, Double> variables,
@@ -93,9 +94,7 @@ public class ViewScreen implements ExternalAPIViewable {
     scLeft.setMarkerColor(scRight.getMarkerClickedColor());
     scLeft.setTurtle(scRight.getTurtle());
     scLeft.listenToDisableTextField(scRight.getTextField());
-    scRight.setVariableTextArea(variables);
-    scRight.setUserTextArea(functions);
-    scRight.updateButtonLan();
+    scRight.setTextAreas(variables, functions);
     windowBoolean = scRight.getWindowBoolean();
     scRight.execute(scLeft.getCommand());
     if (commands != null && commands.peek() != null) {
@@ -119,6 +118,7 @@ public class ViewScreen implements ExternalAPIViewable {
     scLeft.setMarkerColor(Color.web(hexColor));
   }
 
+  @Override
   public boolean getWindowBoolean() {
     return windowBoolean;
   }

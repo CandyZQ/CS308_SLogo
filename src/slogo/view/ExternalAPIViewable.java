@@ -1,6 +1,10 @@
 package slogo.view;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import javafx.stage.Stage;
+import slogo.controller.listings.MovingObjectProperties;
 
 /**
  * The purpose of this interface is to communicate between the controller package and the view
@@ -49,7 +53,17 @@ public interface ExternalAPIViewable {
   String getLanguage();
 
   /**
+   *
+   */
+  void update(Queue<Map<MovingObjectProperties, Object>> commands,
+      Map<String, Double> variables,
+      Map<String, List<String>> functions,
+      String[] dispCommands);
+
+  /**
    * @return
    */
   void getColor(String hexColor);
+
+  boolean getWindowBoolean();
 }

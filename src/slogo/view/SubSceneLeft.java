@@ -67,38 +67,50 @@ public class SubSceneLeft extends SubScene {
   private ButtonG groupOfButtons;
 
   public SubSceneLeft(String[] dispCommands) {
-    markerThickness = 2;
-    initialX = 0;
-    initialY = 0;
     root = new Group();
     vBox = new VBox();
     vBox.getStyleClass().add(res.getString("VBoxStyle"));
     root.getChildren().add(vBox);
-    createRectangle();
-    initialTurtlePositions();
-    vBox.getChildren().add(createLabel(res.getString("TurtleSpeedLabel")));
-    turtleSpeed = createSlider();
-    vBox.getChildren().add(turtleSpeed);
-    vBox.getChildren().add(createLabel(res.getString("MarkerThicknessLabel")));
-    thick = createSlider();
-    vBox.getChildren().add(thick);
+    setInitialConditions();
     groupOfButtons = new ButtonG(dispCommands);
-
-    for (int i = 0; i < groupOfButtons.getButtons().size(); i++) {
-      Button button = groupOfButtons.getButtons().get(i);
-      String commando = button.getText();
-      button.setOnAction(e -> setCommand(commando));
-    }
-
-    commandEntered = false;
-    vBox.getChildren().add(groupOfButtons.getBoxes());
+    setUpDisplayObjects();
+    initialTurtlePosition();
     root.getChildren().add(createTurtle());
 
     makeOtherWindow(res.getString("StatsStageTitle"));
     makeOtherWindow(res.getString("NewScript"));
   }
 
-  private void initialTurtlePositions(){
+  private void setInitialConditions() {
+    markerThickness = 2;
+    initialX = 0;
+    initialY = 0;
+    commandEntered = false;
+  }
+
+  @Override
+  protected void setUpDisplayObjects() {
+    createRectangle();
+    vBox.getChildren().add(createLabel(res.getString("TurtleSpeedLabel")));
+    turtleSpeed = createSlider();
+    vBox.getChildren().add(turtleSpeed);
+    vBox.getChildren().add(createLabel(res.getString("MarkerThicknessLabel")));
+    thick = createSlider();
+    vBox.getChildren().add(thick);
+    makeButtons();
+  }
+
+  @Override
+  protected void makeButtons() {
+    for (int i = 0; i < groupOfButtons.getButtons().size(); i++) {
+      Button button = groupOfButtons.getButtons().get(i);
+      String commando = button.getText();
+      button.setOnAction(e -> setCommand(commando));
+    }
+    vBox.getChildren().add(groupOfButtons.getBoxes());
+  }
+
+  private void initialTurtlePosition() {
     INITIAL_TURTLE_X = (int) Math.round(rect.getX() + rect.getWidth() / 2 - Turtle.size / 2);
     INITIAL_TURTLE_Y = (int) Math.round(rect.getY() + rect.getHeight() / 2 - Turtle.size / 2);
   }
@@ -286,21 +298,14 @@ public class SubSceneLeft extends SubScene {
     commandEntered = true;
   }
 
-
   /**
    * Return the fixed command which is created as a result of pressing one of the four buttons
    *
-   * @return the string which represents the command which will be fed into a text field
    */
   public void updateButtons(String[] displayCo) {
     vBox.getChildren().remove(groupOfButtons.getBoxes());
     groupOfButtons = new ButtonG(displayCo);
-    for (int i = 0; i < groupOfButtons.getButtons().size(); i++) {
-      Button button = groupOfButtons.getButtons().get(i);
-      String commando = button.getText();
-      button.setOnAction(e -> setCommand(commando));
-    }
-    vBox.getChildren().add(groupOfButtons.getBoxes());
+    makeButtons();
   }
 
   public void updateDisplayWords() {

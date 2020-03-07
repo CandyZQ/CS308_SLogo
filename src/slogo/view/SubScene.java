@@ -12,12 +12,12 @@ import slogo.controller.listings.MovingObjectProperties;
 
 public abstract class SubScene {
 
-  protected static String language;
-  protected static Map<String, List<String>> languageLocation = Map
+  protected static final Map<String, List<String>> languageLocation = Map
       .of("French", List.of("fr", "FR"), "Spanish", List.of("es", "ES"), "English",
           List.of("en", "EN"), "Russian", List.of("ru", "RU"), "German", List.of("de", "DE"),
           "Chinese", List.of("zh", "CN"), "Italian", List.of("it", "IT"), "Portuguese",
           List.of("pt", "PT"));
+  protected static String language;
   protected static ResourceBundle res =
       ResourceBundle.getBundle("resources", Locale.getDefault());
   protected static ResourceBundle myLanguages =
@@ -32,6 +32,10 @@ public abstract class SubScene {
     res = ResourceBundle.getBundle("resources",
         new Locale(languageLocation.get(language).get(0), languageLocation.get(language).get(1)));
   }
+
+  protected abstract void setUpDisplayObjects();
+
+  protected abstract void makeButtons();
 
   public Group getRoot() {
     return root;
