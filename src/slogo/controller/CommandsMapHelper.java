@@ -18,6 +18,19 @@ import slogo.exceptions.CompilerException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.LanguageIsNotSupportedException;
 
+/**
+ * This class loads available commands each time the language is changed from resource files into a
+ * {@link Map}. Given user inputs, this class is able to convert those user inputs into callable
+ * methods by comparing that input with entries of this map. The return value will be a {@link
+ * CommandStructure} (or a {@link FunctionStructure} depending on the input).
+ * <p>
+ * A static inner class is created to provide information on the type of user input.
+ *
+ * @author Cady
+ * @author Sarah
+ * @version 1.1
+ * @since 1.1
+ */
 public class CommandsMapHelper {
 
   public static final String RESOURCE_DIR = "resources/languages/";
@@ -148,12 +161,18 @@ public class CommandsMapHelper {
     return null;
   }
 
+  /**
+   * This static class is created to provide information on user input. {@link #isType(String,
+   * BasicSyntax)} is able to indicate if the input is one of the types in {@link BasicSyntax}.
+   *
+   * @author Cady
+   */
   public static class SyntaxHelper {
 
     private SyntaxHelper() {
     }
 
-    public static boolean isType(String input, BasicSyntax type) throws InvalidArgumentException {
+    public static boolean isType(String input, BasicSyntax type) {
       try {
         return getInputType(input).equals(type);
       } catch (InvalidArgumentException e) {
