@@ -1,5 +1,3 @@
-package slogo.controller;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
@@ -10,6 +8,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import slogo.controller.Parser;
 import slogo.controller.listings.MovingObjectProperties;
 import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;

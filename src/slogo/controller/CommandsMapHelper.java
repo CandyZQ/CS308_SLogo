@@ -44,6 +44,10 @@ public class CommandsMapHelper {
   private Languages currnetLan;
   private Map<String, Pattern> commandsMap;
 
+  /**
+   * Creates a new instance of commands map helper. Language should be set before using this
+   * instance.
+   */
   public CommandsMapHelper() {
     supportedLanguages = Arrays.asList(Languages.values());
     currnetLan = null;
@@ -172,6 +176,13 @@ public class CommandsMapHelper {
     private SyntaxHelper() {
     }
 
+    /**
+     * Evaluate whether a string is of certain {@link BasicSyntax}
+     *
+     * @param input a string
+     * @param type  a {@link BasicSyntax} defined in resource file
+     * @return whether this input is of this type
+     */
     public static boolean isType(String input, BasicSyntax type) {
       try {
         return getInputType(input).equals(type);
