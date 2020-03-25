@@ -52,7 +52,7 @@ public class MultiTurtleOperations extends Operations {
 
     StringBuilder sb = new StringBuilder();
     sb.append(CONDITION_METHOD).append(" ")
-        .append(condition.substring(TRIM, condition.length() - TRIM)).append(" ").append(commands);
+        .append(condition, TRIM, condition.length() - TRIM).append(" ").append(commands);
     userDefinedFields.setExtraCommands(sb.toString());
   }
 }

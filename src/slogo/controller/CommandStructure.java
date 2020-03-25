@@ -106,8 +106,7 @@ class CommandStructure {
     return res != null ? res : t.getState().get(MovingObjectProperties.RETURN_VALUE);
   }
 
-  private void storeTurtleStates(Object returnVal, TurtleManager tm, Turtle t)
-      throws InvalidArgumentException {
+  private void storeTurtleStates(Object returnVal, TurtleManager tm, Turtle t) {
     if (returnVal != null && SyntaxHelper.isType(returnVal.toString(), CONSTANT)) {
       tm.putReturnValue(returnVal, t);
     }
