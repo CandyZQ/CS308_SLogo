@@ -28,7 +28,7 @@ import slogo.exceptions.WrongCommandFormatException;
  *
  * @author Cady
  */
-public interface BackEndExternalMainAPI {
+public interface BackEndExternalAPI {
 
   /**
    * Sets the desired language commands the user passed will be interpreted in. This method can be

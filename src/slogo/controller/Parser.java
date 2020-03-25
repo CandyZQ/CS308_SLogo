@@ -7,7 +7,7 @@ import static slogo.controller.listings.BasicSyntax.LISTEND;
 import static slogo.controller.listings.BasicSyntax.LISTSTART;
 import static slogo.controller.listings.BasicSyntax.VARIABLE;
 
-import APIs.BackEndExternalMainAPI;
+import APIs.BackEndExternalAPI;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +25,7 @@ import slogo.model.Turtle;
 
 /**
  * This class parses all SLogo commands to methods that will modify turtle states or perform
- * calculations. It also implements {@link BackEndExternalMainAPI} and is responsible
+ * calculations. It also implements {@link BackEndExternalAPI} and is responsible
  * to communicate with frontend.
  *
  * @author Cady
@@ -33,7 +33,7 @@ import slogo.model.Turtle;
  * @version 1.1
  * @since 1.1
  */
-public class Parser implements BackEndExternalMainAPI {
+public class Parser implements BackEndExternalAPI {
 
   public static final int TRIM = 2;
   public static final String FUNCTION_METHOD = "doFunction";

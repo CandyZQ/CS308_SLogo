@@ -15,7 +15,7 @@ import slogo.model.Turtle;
  *
  * @author cady
  */
-public class MultiTurtleOperations extends Operations {
+public class MultiTurtleOperations extends Operations{
 
   public static final String LEFT_SQUARE_BRACKET = "[";
   public static final String RIGHT_SQUARE_BRACKET = "]";
