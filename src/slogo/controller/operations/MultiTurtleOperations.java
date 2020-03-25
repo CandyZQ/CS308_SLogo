@@ -10,6 +10,11 @@ import slogo.controller.listings.MovingObjectProperties;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
 
+/**
+ * This class contains all operations require multiple turtles.
+ *
+ * @author cady
+ */
 public class MultiTurtleOperations extends Operations {
 
   public static final String LEFT_SQUARE_BRACKET = "[";

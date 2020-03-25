@@ -12,6 +12,11 @@ import slogo.controller.listings.MovingObjectProperties;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
 
+/**
+ * This class contains all user operations (logical statments).
+ *
+ * @author cady
+ */
 public class UserOperations extends Operations {
 
   public static final String LOOP_EXPR = ":repcount";

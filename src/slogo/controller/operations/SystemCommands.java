@@ -12,6 +12,11 @@ import slogo.exceptions.CommandDoesNotExistException;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
 
+/**
+ * This class contains all operations for system use. Users should not use any of these commands.
+ *
+ * @author cady
+ */
 public class SystemCommands extends Operations {
 
   public static final String INCREMENT_METHOD = "increment";
