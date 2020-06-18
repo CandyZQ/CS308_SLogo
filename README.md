@@ -2,6 +2,7 @@ parser
 ====
 
 This project implements a development environment that helps users write SLogo programs.
+> This is the link to the [assignment](http://www.cs.duke.edu/courses/compsci308/current/assign/03_parser/)
 
 Names:
 - Cady Zhou (zz160)
