@@ -4,7 +4,6 @@ import static slogo.controller.listings.BasicSyntax.CONSTANT;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.security.DrbgParameters.Instantiation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +14,16 @@ import slogo.exceptions.InvalidArgumentException;
 import slogo.exceptions.WrongCommandFormatException;
 import slogo.model.Turtle;
 
+/**
+ * This class holds a single command in a different format so that it can be easily called by the
+ * Reflection API method revoker. It is able to read method heads from classes under {@link
+ * slogo.controller.operations} and extract useful information from there. That information will be
+ * used to request information from the Parser.
+ *
+ * @author Cady
+ * @version 1.1
+ * @since 1.1
+ */
 class CommandStructure {
 
   Class<?> c;
@@ -23,6 +32,12 @@ class CommandStructure {
   List<Class<?>> paraTypes;
   int numOfPara;
 
+  /**
+   * Creates a new instance with the class and method name correspond to that command.
+   *
+   * @param c the class in which this method will be invoked at
+   * @param m the method that will be called
+   */
   public CommandStructure(Class<?> c, Method m) {
     this.c = c;
     this.m = m;
@@ -91,8 +106,7 @@ class CommandStructure {
     return res != null ? res : t.getState().get(MovingObjectProperties.RETURN_VALUE);
   }
 
-  private void storeTurtleStates(Object returnVal, TurtleManager tm, Turtle t)
-      throws InvalidArgumentException {
+  private void storeTurtleStates(Object returnVal, TurtleManager tm, Turtle t) {
     if (returnVal != null && SyntaxHelper.isType(returnVal.toString(), CONSTANT)) {
       tm.putReturnValue(returnVal, t);
     }

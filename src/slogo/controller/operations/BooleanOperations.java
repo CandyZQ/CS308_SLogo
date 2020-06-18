@@ -4,6 +4,11 @@ import slogo.controller.TurtleManager;
 import slogo.controller.UserDefinedFields;
 import slogo.model.Turtle;
 
+/**
+ * This class contains all boolean operations.
+ *
+ * @author cady
+ */
 public class BooleanOperations extends Operations {
 
   public BooleanOperations(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {

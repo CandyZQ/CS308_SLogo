@@ -9,6 +9,8 @@ import slogo.model.Turtle;
 /**
  * This class contains exclusively of static method that perform basic math and boolean operations.
  * The methods of this class throws any exceptions that can happen during a math operation.
+ *
+ * @author Cady
  */
 public class MathOperations extends Operations {
 

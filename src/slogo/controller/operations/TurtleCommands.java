@@ -5,6 +5,11 @@ import slogo.controller.UserDefinedFields;
 import slogo.controller.listings.MovingObjectProperties;
 import slogo.model.Turtle;
 
+/**
+ * This class contains all turtle commands.
+ *
+ * @author cady
+ */
 public class TurtleCommands extends Operations {
 
   public TurtleCommands(Turtle turtle, UserDefinedFields userDefinedFields, TurtleManager tm) {

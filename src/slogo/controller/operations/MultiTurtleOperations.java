@@ -10,7 +10,12 @@ import slogo.controller.listings.MovingObjectProperties;
 import slogo.exceptions.InvalidArgumentException;
 import slogo.model.Turtle;
 
-public class MultiTurtleOperations extends Operations {
+/**
+ * This class contains all operations require multiple turtles.
+ *
+ * @author cady
+ */
+public class MultiTurtleOperations extends Operations{
 
   public static final String LEFT_SQUARE_BRACKET = "[";
   public static final String RIGHT_SQUARE_BRACKET = "]";
@@ -47,7 +52,7 @@ public class MultiTurtleOperations extends Operations {
 
     StringBuilder sb = new StringBuilder();
     sb.append(CONDITION_METHOD).append(" ")
-        .append(condition.substring(TRIM, condition.length() - TRIM)).append(" ").append(commands);
+        .append(condition, TRIM, condition.length() - TRIM).append(" ").append(commands);
     userDefinedFields.setExtraCommands(sb.toString());
   }
 }

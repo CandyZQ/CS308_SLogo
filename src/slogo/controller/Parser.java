@@ -7,6 +7,7 @@ import static slogo.controller.listings.BasicSyntax.LISTEND;
 import static slogo.controller.listings.BasicSyntax.LISTSTART;
 import static slogo.controller.listings.BasicSyntax.VARIABLE;
 
+import APIs.BackEndExternalAPI;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +23,16 @@ import slogo.exceptions.LanguageIsNotSupportedException;
 import slogo.exceptions.WrongCommandFormatException;
 import slogo.model.Turtle;
 
+/**
+ * This class parses all SLogo commands to methods that will modify turtle states or perform
+ * calculations. It also implements {@link BackEndExternalAPI} and is responsible
+ * to communicate with frontend.
+ *
+ * @author Cady
+ * @author Sarah
+ * @version 1.1
+ * @since 1.1
+ */
 public class Parser implements BackEndExternalAPI {
 
   public static final int TRIM = 2;
@@ -36,6 +47,11 @@ public class Parser implements BackEndExternalAPI {
   private Stack<String> commandsLeft;
   private Stack<CommandStructure> pausedCommands;
 
+  /**
+   * Creates an instance of Parser
+   *
+   * @param turtleNumber the number of turtles that initially appear on the screen
+   */
   public Parser(int turtleNumber) {
     commandsMapHelper = new CommandsMapHelper();
     userDefinedFields = new UserDefinedFields();
@@ -54,7 +70,8 @@ public class Parser implements BackEndExternalAPI {
    * loop.
    *
    * @param language the language user inputs will be in, not case-sensitive
-   * @throws LanguageIsNotSupportedException
+   * @return a String array of texts displayed on buttons
+   * @throws LanguageIsNotSupportedException if the language resource file does not exist
    */
   @Override
   public String[] setLanguage(String language) throws LanguageIsNotSupportedException {
@@ -62,14 +79,14 @@ public class Parser implements BackEndExternalAPI {
   }
 
   /**
-   * Executes the command from user input
+   * Executes one command from the user input
    *
    * @param command the command that the user inputs
    * @return a {@link Queue} of status of existed turtles
-   * @throws CommandDoesNotExistException
-   * @throws LanguageIsNotSupportedException
-   * @throws WrongCommandFormatException
-   * @throws InvalidArgumentException
+   * @throws CommandDoesNotExistException    if the command is not defined
+   * @throws LanguageIsNotSupportedException if the language resource file does not exist
+   * @throws WrongCommandFormatException     if the command name exists but the format is wrong
+   * @throws InvalidArgumentException        if the argument type of the command is not correct
    */
   @Override
   public Queue<Map<MovingObjectProperties, Object>> execute(String command)
@@ -100,6 +117,17 @@ public class Parser implements BackEndExternalAPI {
     return res;
   }
 
+  /**
+   * Run a script of commands
+   *
+   * @param filename the file in which the script in
+   * @return a {@link Queue} of status of existed turtles
+   * @throws IOException                     if fails to open the file
+   * @throws WrongCommandFormatException     if the command name exists but the format is wrong
+   * @throws InvalidArgumentException        if the argument type of the command is not correct
+   * @throws CommandDoesNotExistException    if the command is not defined
+   * @throws LanguageIsNotSupportedException if the language resource file does not exist
+   */
   @Override
   public Queue<Map<MovingObjectProperties, Object>> runScript(String filename)
       throws IOException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException {
@@ -128,14 +156,19 @@ public class Parser implements BackEndExternalAPI {
   }
 
   /**
-   * Gets the user defined variables
+   * Gets the user-defined variables
    *
-   * @return
+   * @return  a map of user-defined variables
    */
   public Map<String, Double> gerUserVars() {
     return userDefinedFields.getUserVars();
   }
 
+  /**
+   * Gets the user-defined commands
+   *
+   * @return  a map of user-defined commands
+   */
   public Map<String, List<String>> getFunctions() {
     return userDefinedFields.getFunctions();
   }
@@ -145,16 +178,16 @@ public class Parser implements BackEndExternalAPI {
     String commandName = popNext();
     CommandStructure current;
     if (userDefinedFields.isFunction(commandName)) {
-        current = processFunction(commandName);
-      } else {
-        current = processDefinedCommands(commandName);
-        while (current.needMoreParas()) {
-          if (!canAddPara(current)) {
-            pausedCommands.add(current);
-            return;
-          }
+      current = processFunction(commandName);
+    } else {
+      current = processDefinedCommands(commandName);
+      while (current.needMoreParas()) {
+        if (!canAddPara(current)) {
+          pausedCommands.add(current);
+          return;
         }
       }
+    }
     pausedCommands.add(current);
     checkPausedCommands(tm, t);
   }
@@ -189,7 +222,9 @@ public class Parser implements BackEndExternalAPI {
         String extra = userDefinedFields.getExtraCommands();
         hasExtra = addExtra(extra);
       } else if (!hasExtra) {
-        if (canReturn) break;
+        if (canReturn) {
+          break;
+        }
         if (returnVal != null) {
           pausedCommands.peek().addPara(returnVal);
         }

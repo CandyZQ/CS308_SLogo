@@ -1,4 +1,4 @@
-package slogo.controller;
+package APIs;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +11,7 @@ import slogo.exceptions.LanguageIsNotSupportedException;
 import slogo.exceptions.WrongCommandFormatException;
 
 /**
- * This is the backend external API for the slogo project.
+ * This is the backend external API that communicates with the main class for this slogo project.
  * <p></p>
  * This class takes user inputs in a specific language as a String and interpret it as one of the
  * pre-set commands, which give specific instructions of on how the backend states need to be
@@ -25,11 +25,10 @@ import slogo.exceptions.WrongCommandFormatException;
  * <p></p>
  * User inputs will be checked to see whether commands are recognizable, and if yes, whether the
  * format fulfills the format of that command. Multiple exceptions can be thrown in this process.
+ *
+ * @author Cady
  */
 public interface BackEndExternalAPI {
-
-  Queue<Map<MovingObjectProperties, Object>> runScript(String command)
-      throws IOException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException;
 
   /**
    * Sets the desired language commands the user passed will be interpreted in. This method can be
@@ -49,10 +48,25 @@ public interface BackEndExternalAPI {
       throws CommandDoesNotExistException, LanguageIsNotSupportedException, WrongCommandFormatException, InvalidArgumentException;
 
   /**
-   * Gets all variables users have created.
+   * Loads and runs a script of commands
    *
-   * @return a Map whose key is the variable names and value is the value
+   * @param filename the file in which the script in
+   * @return a {@link Queue} of status of existed turtles
+   * @throws IOException                     if fails to open the file
+   * @throws WrongCommandFormatException     if the command name exists but the format is wrong
+   * @throws InvalidArgumentException        if the argument type of the command is not correct
+   * @throws CommandDoesNotExistException    if the command is not defined
+   * @throws LanguageIsNotSupportedException if the language resource file does not exist
    */
+  Queue<Map<MovingObjectProperties, Object>> runScript(String filename)
+      throws IOException, WrongCommandFormatException, InvalidArgumentException, LanguageIsNotSupportedException, CommandDoesNotExistException;
+
+
+    /**
+     * Gets all variables users have created.
+     *
+     * @return a Map whose key is the variable names and value is the value
+     */
   Map<String, Double> gerUserVars();
 
   /**
